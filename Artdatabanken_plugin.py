@@ -22,9 +22,12 @@
  ***************************************************************************/
 """
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.core import QgsPoint, QgsFeature, QgsGeometry, QgsVectorLayer, QgsField,QgsRectangle
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 from qgis.core import QgsProject, QgsVectorLayer
+from PyQt5.QtCore import QVariant
+from qgis.core import QgsProject
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -70,8 +73,8 @@ class Artdatabanken:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
         # Initialize the APIClient with your API key and the base URL of the API
-        self.api_key = "a4e9e43ebf06456a86523532d082ed4b"  # Replace with your actual API key
-        self.base_url = "https://api.artdatabanken.se/information/v1/speciesdataservice/v1/"  # Base URL of the API
+        self.api_key = "5044b6436a6b4814b9689cd6fac542f0"  # Replace with your actual API key
+        self.base_url = "https://api.artdatabanken.se/species-observation-system/v1/"  # Base URL of the API
 
         # Create an instance of APIClient
         self.api_client = APIClient(self.api_key, self.base_url)
@@ -214,27 +217,67 @@ class Artdatabanken:
         """Fetch all data from the API and add it to the QGIS map."""
         try:
             # Fetch the data from the API
-            endpoint = "speciesdata?taxa=1"  # Modify this as needed
+            endpoint = "Areas/Municipality/1465"  # Modify this as needed
             data = self.api_client.fetch_data(endpoint)  # Use the instance variable here
 
-            # Assuming the API returns JSON
-            json = data.get("json")
-            if not json:
+            # Check if data is returned as expected
+            if not data:
                 self.iface.messageBar().pushMessage(
-                    "Error", "No JSON found in API response.", level=3
+                    "Error", "No data returned from the API.", level=3
                 )
                 return
 
-            # Add data as a new layer
-            layer = QgsVectorLayer(json, "Artdatabanken Data", "ogr")
-            if not layer.isValid():
-                self.iface.messageBar().pushMessage("Error", "Invalid layer.", level=3)
-                return
+            # If response contains valid data, process it
+            if isinstance(data, dict) and "name" in data:
+                # For example, you could use bounding box to visualize the area
+                bounding_box = data.get("boundingBox")
+                if bounding_box:
+                    # You can use the bounding box to create a rectangular layer or display
+                    min_lon = bounding_box["bottomRight"]["longitude"]
+                    min_lat = bounding_box["bottomRight"]["latitude"]
+                    max_lon = bounding_box["topLeft"]["longitude"]
+                    max_lat = bounding_box["topLeft"]["latitude"]
 
-            QgsProject.instance().addMapLayer(layer)
-            self.iface.messageBar().pushMessage("Success", "Data loaded successfully.", level=1)
+                    center_lon = (min_lon + max_lon) / 2
+                    center_lat = (min_lat + max_lat) / 2
+
+                    point = QgsPoint(center_lon, center_lat)
+
+                    # Example: create a rectangle (bounding box) layer in QGIS
+                    # Note: You will need to adapt this to the actual spatial data format you need
+
+
+                    # Create a new vector layer for the bounding box (just an example)
+                    layer = QgsVectorLayer("Point?crs=EPSG:4326", "BoundingBox Layer", "memory")
+                    provider = layer.dataProvider()
+                    provider.addAttributes([QgsField("Name", QVariant.String)])
+                    layer.updateFields()
+
+                    # Create a feature for the bounding box
+                    feature = QgsFeature()
+                    feature.setGeometry(QgsGeometry.fromRect(QgsRectangle(min_lon, min_lat, max_lon, max_lat)))
+                    feature.setAttributes([data["name"]])
+
+                    # Add feature to the layer
+                    provider.addFeature(feature)
+                    layer.updateExtents()
+
+                    # Add the layer to the QGIS project
+                    QgsProject.instance().addMapLayer(layer)
+
+                    self.iface.messageBar().pushMessage("Success", "Data loaded successfully.", level=1)
+                else:
+                    self.iface.messageBar().pushMessage(
+                        "Error", "Bounding box data missing in the API response.", level=3
+                    )
+            else:
+                self.iface.messageBar().pushMessage(
+                    "Error", "Unexpected response format from the API.", level=3
+                )
 
         except Exception as e:
             self.iface.messageBar().pushMessage(
                 "Error", f"Failed to load data: {str(e)}", level=3
             )
+
+        print(data)  #see if data is loaded in python-console
