@@ -13,8 +13,9 @@ class APIClient():
 
             # Add the API key to the request headers
             headers = {
+                'X-Api-Version': '1.5',
                 'Cache-Control': 'no-cache',
-                'Ocp-Apim-Subscription-Key': 'a4e9e43ebf06456a86523532d082ed4b',
+                'Ocp-Apim-Subscription-Key': '5044b6436a6b4814b9689cd6fac542f0',
             }
 
             # Create the request with headers
