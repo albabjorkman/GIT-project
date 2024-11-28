@@ -231,6 +231,7 @@ class Artdatabanken:
             if isinstance(data, dict) and "name" in data:
                 # For example, you could use bounding box to visualize the area
                 bounding_box = data.get("boundingBox")
+                point = data.get("featureId")
                 if bounding_box:
                     # You can use the bounding box to create a rectangular layer or display
                     min_lon = bounding_box["bottomRight"]["longitude"]
@@ -248,15 +249,23 @@ class Artdatabanken:
 
 
                     # Create a new vector layer for the bounding box (just an example)
-                    layer = QgsVectorLayer("Point?crs=EPSG:4326", "BoundingBox Layer", "memory")
+                    # Create a new vector layer for the bounding box
+                    layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "BoundingBox Layer", "memory")
                     provider = layer.dataProvider()
-                    provider.addAttributes([QgsField("Name", QVariant.String)])
+
+                    # Define the fields (attributes) for the layer
+                    provider.addAttributes([
+                        QgsField("Name", QVariant.String),
+                        QgsField("FeatureID", QVariant.String)
+                    ])
                     layer.updateFields()
 
                     # Create a feature for the bounding box
                     feature = QgsFeature()
                     feature.setGeometry(QgsGeometry.fromRect(QgsRectangle(min_lon, min_lat, max_lon, max_lat)))
-                    feature.setAttributes([data["name"]])
+
+                    # Set attributes matching the fields
+                    feature.setAttributes([data.get("name", "Unknown"), data.get("featureId", "Unknown")])
 
                     # Add feature to the layer
                     provider.addFeature(feature)
@@ -265,6 +274,7 @@ class Artdatabanken:
                     # Add the layer to the QGIS project
                     QgsProject.instance().addMapLayer(layer)
 
+                   
                     self.iface.messageBar().pushMessage("Success", "Data loaded successfully.", level=1)
                 else:
                     self.iface.messageBar().pushMessage(
