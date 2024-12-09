@@ -56,5 +56,5 @@ class FirstPopupDialog(QtWidgets.QDialog, FIRST_POP):
 
 class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super(ArtTypeDialog, self).__init__(parent)
         self.setupUi(self)

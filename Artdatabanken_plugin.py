@@ -216,6 +216,7 @@ class Artdatabanken:
             self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_area)
             self.dlg.show()
             self.art = ArtTypeDialog()
+            self.art_type()
             self.art.show()
         elif area_info_checked:
             # Close the first popup
@@ -333,8 +334,9 @@ class Artdatabanken:
 
 
     def art_type(self):
-        art_type_data=["hej"]
-        self.art.areaType.clear()
-        self.art.areaType.addItems(art_type_data)
+        art_type_data=["Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
+                       "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
+        self.art.artType.clear()
+        self.art.artType.addItems(art_type_data)
 
 
