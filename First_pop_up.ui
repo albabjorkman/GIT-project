@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ArtdatabankenDialogBase</class>
- <widget class="QDialog" name="ArtdatabankenDialogBase">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,15 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Artdatabanken</string>
+   <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="button_box">
+  <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>240</y>
-     <width>340</width>
-     <height>30</height>
+     <y>220</y>
+     <width>341</width>
+     <height>32</height>
     </rect>
    </property>
    <property name="orientation">
@@ -29,39 +29,36 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="lableAreaType">
+  <widget class="QCheckBox" name="form_class">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>90</y>
-     <width>130</width>
-     <height>30</height>
+     <x>210</x>
+     <y>60</y>
+     <width>101</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select area type:</string>
+    <string>Area information</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="areaType">
+  <widget class="QCheckBox" name="checkBox_2">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>90</y>
-     <width>130</width>
-     <height>30</height>
+     <x>210</x>
+     <y>80</y>
+     <width>131</width>
+     <height>31</height>
     </rect>
    </property>
-   <property name="editable">
-    <bool>false</bool>
-   </property>
-   <property name="currentIndex">
-    <number>-1</number>
+   <property name="text">
+    <string>Art information</string>
    </property>
   </widget>
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>210</x>
      <y>130</y>
      <width>130</width>
      <height>30</height>
@@ -75,34 +72,34 @@
  <resources/>
  <connections>
   <connection>
-   <sender>button_box</sender>
+   <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>ArtdatabankenDialogBase</receiver>
+   <receiver>Dialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>248</x>
+     <y>254</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>157</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>button_box</sender>
+   <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>ArtdatabankenDialogBase</receiver>
+   <receiver>Dialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>316</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>286</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>
