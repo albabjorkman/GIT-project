@@ -208,16 +208,23 @@ class Artdatabanken:
     def show_second_dialog(self):
         """Show the second dialog after the first one."""
         area_info_checked = self.Fpop.form_class.isChecked()
-        art_info_checked = self.Fpop.checkBox_2.isChecked()
-        if art_info_checked and art_info_checked:
+        art_info_checked = self.Fpop.art_info.isChecked()
+
+        if art_info_checked and area_info_checked:
+            # If both are checked, close the first popup and open both dialogs
             self.Fpop.close()
+
+            # Open the ArtdatabankenDialog and populate the area types
             self.dlg = ArtdatabankenDialog()
             self.populate_area_types()
             self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_area)
             self.dlg.show()
+
+            # Open the ArtTypeDialog
             self.art = ArtTypeDialog()
-            self.art_type()
+            self.art_type()  # Populate the art types dropdown
             self.art.show()
+
         elif area_info_checked:
             # Close the first popup
             self.Fpop.close()
