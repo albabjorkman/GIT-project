@@ -12,7 +12,7 @@ def from_wfs(self):
     """Fetch data from the WFS service and load it as points on the map."""
     try:
         # Define the WFS URL
-        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=100"
+        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=10"
 
         # Send a GET request to fetch the data
         response = requests.get(url)
@@ -29,7 +29,7 @@ def from_wfs(self):
 
             # Define the fields (attributes) for the layer
             provider.addAttributes([
-                QgsField("url", QVariant.String),
+                QgsField("vernacularName", QVariant.String),
                 QgsField("ObservationID", QVariant.String),
                 QgsField("Location", QVariant.String),
             ])
@@ -37,6 +37,7 @@ def from_wfs(self):
 
             # Set to track unique points with some precision tolerance
             processed_points = set()
+            print(data)
 
             # Function to round coordinates for comparison
             def round_coordinates(lon, lat, precision=5):
@@ -71,8 +72,8 @@ def from_wfs(self):
 
                         # Set attributes (example: species and observation ID)
                         qgis_feature.setAttributes([
-                            feature.get("url", ""),
-                            feature.get("properties", {}).get("observationID", "Unknown"),
+                            feature.get("vernacularName", ""),
+                            feature.get("vernacularName", {}).get("vernacularName", "Unknown"),
                             f"Lat: {lat}, Lon: {lon}",
                         ])
 
