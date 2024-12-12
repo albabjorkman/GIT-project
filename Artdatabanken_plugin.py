@@ -72,12 +72,15 @@ class Artdatabanken:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
+
         # Initialize the APIClient with your API key and the base URL of the API
         self.api_key = "5044b6436a6b4814b9689cd6fac542f0"  # Replace with your actual API key
-        self.base_url = "https://api.artdatabanken.se/species-observation-system/v1/Areas"  # Base URL of the API
+        self.base_url_area = "https://api.artdatabanken.se/species-observation-system/v1/Areas"  # Base URL of the API, area
+        self.base_url_art = "https://api.artdatabanken.se/species-observation-system/v1/Observations/Search/DwC"  # Base URL of the API, art
 
         # Create an instance of APIClient
-        self.api_client = APIClient(self.api_key, self.base_url)
+        self.api_client_area = APIClient(self.api_key, self.base_url_area)
+        self.api_client_art = APIClient(self.api_key, self.base_url_art)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -196,7 +199,7 @@ class Artdatabanken:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.Fpop=FirstPopupDialog()
+            self.Fpop = FirstPopupDialog()
 
         self.Fpop.show()
         # Run the dialog event loop
@@ -204,27 +207,22 @@ class Artdatabanken:
         self.Fpop.loadDataButton.clicked.connect(self.show_second_dialog)
         # See if OK was pressed
 
-
     def show_second_dialog(self):
         """Show the second dialog after the first one."""
         area_info_checked = self.Fpop.form_class.isChecked()
         art_info_checked = self.Fpop.art_info.isChecked()
 
         if art_info_checked and area_info_checked:
-            # If both are checked, close the first popup and open both dialogs
             self.Fpop.close()
-
-            # Open the ArtdatabankenDialog and populate the area types
             self.dlg = ArtdatabankenDialog()
             self.populate_area_types()
-            self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_area)
+            self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_art)
             self.dlg.show()
 
-            # Open the ArtTypeDialog
             self.art = ArtTypeDialog()
-            self.art_type()  # Populate the art types dropdown
+            self.art_type()
+            self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)  # Ensure connection
             self.art.show()
-
         elif area_info_checked:
             # Close the first popup
             self.Fpop.close()
@@ -238,9 +236,9 @@ class Artdatabanken:
             self.dlg.show()
         elif art_info_checked:
             self.Fpop.close()
-            self.art=ArtTypeDialog()
+            self.art = ArtTypeDialog()
             self.art_type()
-            #self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)
+            self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)
             self.art.show()
         else:
             self.iface.messageBar().pushMessage(
@@ -257,7 +255,7 @@ class Artdatabanken:
                 return
 
             # Define query parameters
-            params = {
+            params_area = {
                 "areaTypes": selected_area_type,
                 "searchString": "",
                 "skip": 0,
@@ -266,7 +264,7 @@ class Artdatabanken:
 
             # Fetch data from the API
             endpoint = ""
-            data = self.api_client.fetch_data(endpoint="", params=params)
+            data = self.api_client_area.fetch_data(endpoint=endpoint, params=params_area)
 
             if not data or "records" not in data:
                 self.iface.messageBar().pushMessage(
@@ -328,6 +326,93 @@ class Artdatabanken:
             )
             print("Error:", str(e))
 
+    def load_data_to_map_art(self):
+        try:
+            # Select art type from the drop-down menu
+            selected_art_type = self.art.artType.currentText()
+            print(f"Selected art type: {selected_art_type}")
+
+            if not selected_art_type:
+                self.iface.messageBar().pushMessage(
+                    "Error", "Please select an art type.", level=3
+                )
+                return
+
+            # Define query parameters
+            params_art = {
+                "kingdom": selected_art_type,  # Ensure `selected_art_type` matches allowed values
+                "skip": 0,
+                "take": 100,  # Limit to a maximum of 100 records
+            }
+
+            # Fetch data from the API
+            endpoint = ""
+
+
+            try:
+                data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
+
+
+            except Exception as fetch_error:
+                self.iface.messageBar().pushMessage(
+                    "Error", f"Failed to fetch data: {str(fetch_error)}", level=3
+                )
+                print(f"Error: Failed to fetch data: {str(fetch_error)}")
+                print(f"API Response: {data}")
+                return
+
+            if not data or not isinstance(data, list):
+                self.iface.messageBar().pushMessage(
+                    "Error", "Invalid or empty response from the API.", level=3
+                )
+                return
+
+            print(f"Fetched {len(data)} records from the API.")
+
+            # Create a new vector layer for points
+            layer = QgsVectorLayer("Point?crs=EPSG:4326", "Species Observations", "memory")
+            provider = layer.dataProvider()
+
+            # Define the fields (attributes) for the layer
+            provider.addAttributes([
+                QgsField("organismName", QVariant.String),
+                QgsField("identificationID", QVariant.String),
+                QgsField("kingdom", QVariant.String),
+            ])
+            layer.updateFields()
+
+            # Process each record and add a point feature
+            for record in data:
+                try:
+                    lat = record.get("decimalLatitude")
+                    lon = record.get("decimalLongitude")
+
+                    if lat is not None and lon is not None:
+                        feature = QgsFeature()
+                        feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
+                        feature.setAttributes([
+                            record.get("eventID", ""),
+                            record.get("location", ""),
+                            record.get("kingdom", ""),
+                        ])
+                        provider.addFeature(feature)
+                except Exception as feature_error:
+                    print(f"Error processing record: {record}, Error: {feature_error}")
+
+            # Update layer extents and add to QGIS project
+            layer.updateExtents()
+            QgsProject.instance().addMapLayer(layer)
+
+            self.iface.messageBar().pushMessage(
+                "Success", "Data loaded successfully as points.", level=1
+            )
+
+        except Exception as e:
+            self.iface.messageBar().pushMessage(
+                "Error", f"Failed to load data: {str(e)}", level=3
+            )
+            print(f"Error: {str(e)}")
+
     def populate_area_types(self):
         area_types_data = [
             "Municipality", "Community", "Sea", "CountryRegion", "NatureType",
@@ -339,11 +424,8 @@ class Artdatabanken:
         self.dlg.areaType.clear()  # Clear any existing items
         self.dlg.areaType.addItems(area_types_data)  # Add area types to the dropdown
 
-
     def art_type(self):
-        art_type_data=["Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
-                       "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
+        art_type_data = ["Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
+                         "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
-
-
