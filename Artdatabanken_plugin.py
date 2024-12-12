@@ -214,47 +214,28 @@ class Artdatabanken:
         art_info_checked = self.Fpop.art_info.isChecked()
         wfs_info_checked = self.Fpop.WFS_info.isChecked()
 
-        if art_info_checked and area_info_checked and wfs_info_checked:
-            self.Fpop.close()
+        if area_info_checked:
             self.dlg = ArtdatabankenDialog()
             self.populate_area_types()
-            self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_art)
-            self.dlg.show()
-
-            self.art = ArtTypeDialog()
-            self.art_type()
-            self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)  # Ensure connection
-            self.art.show()
-
-            self.wfs=WFSInfoDialog()
-            self.wfs.loadDataButton.clicked.connect(self.load_data_from_wfs)
-            self.wfs.show()
-
-        elif area_info_checked:
-            # Close the first popup
-            self.Fpop.close()
-            # Initialize the second dialog if not already done
-            self.dlg = ArtdatabankenDialog()
-            # Populate the area types dropdown in the second dialog
-            self.populate_area_types()
-            # Connect the "Load Data" button to its functionality
             self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_area)
-            # Show the second dialog
             self.dlg.show()
-        elif art_info_checked:
-            self.Fpop.close()
+
+        if art_info_checked:
             self.art = ArtTypeDialog()
             self.art_type()
             self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)
             self.art.show()
 
-        elif wfs_info_checked:
+        if wfs_info_checked:
             self.wfs = WFSInfoDialog()
             self.wfs.loadDataButton.clicked.connect(self.load_data_from_wfs)
             self.wfs.show()
-        else:
+
+        if not (area_info_checked or art_info_checked or wfs_info_checked):
             self.iface.messageBar().pushMessage(
                 "Select a type of data", level=3)
+
+        self.Fpop.close()
 
     def load_data_to_map_area(self):
         try:
@@ -271,7 +252,7 @@ class Artdatabanken:
                 "areaTypes": selected_area_type,
                 "searchString": "",
                 "skip": 0,
-                "take": 100,
+                "take": 10,
             }
 
             # Fetch data from the API
@@ -288,7 +269,7 @@ class Artdatabanken:
             print(f"Fetched {len(records)} records from the API.")
 
             # Create a new vector layer for points
-            layer = QgsVectorLayer("Point?crs=EPSG:4326", "API Data Points", "memory")
+            layer = QgsVectorLayer("Point?crs=EPSG:4326", "Area Data Points", "memory")
             provider = layer.dataProvider()
 
             # Define the fields (attributes) for the layer
