@@ -247,6 +247,11 @@ class Artdatabanken:
             self.art_type()
             self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)
             self.art.show()
+
+        elif wfs_info_checked:
+            self.wfs = WFSInfoDialog()
+            self.wfs.loadDataButton.clicked.connect(self.load_data_from_wfs)
+            self.wfs.show()
         else:
             self.iface.messageBar().pushMessage(
                 "Select a type of data", level=3)
@@ -427,8 +432,8 @@ class Artdatabanken:
     def load_data_from_wfs(self):
         """Fetch data from the WFS service and load it as points on the map."""
         try:
-            # Define the WFS URL (same as provided)
-            url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=10"
+            # Define the WFS URL
+            url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=100"
 
             # Send a GET request to fetch the data
             response = requests.get(url)
@@ -436,17 +441,27 @@ class Artdatabanken:
             if response.status_code == 200:
                 data = response.json()  # Parse the JSON response
 
+                # Log the full response to inspect the data
+                print("Response data:", data)
+
                 # Create a new vector layer for points
                 layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
                 provider = layer.dataProvider()
 
                 # Define the fields (attributes) for the layer
                 provider.addAttributes([
-                    QgsField("Species", QVariant.String),
+                    QgsField("url", QVariant.String),
                     QgsField("ObservationID", QVariant.String),
                     QgsField("Location", QVariant.String),
                 ])
                 layer.updateFields()
+
+                # Set to track unique points with some precision tolerance
+                processed_points = set()
+
+                # Function to round coordinates for comparison
+                def round_coordinates(lon, lat, precision=5):
+                    return (round(lon, precision), round(lat, precision))
 
                 # Process each record and add a point feature
                 for feature in data.get("features", []):
@@ -456,6 +471,20 @@ class Artdatabanken:
                         if len(coords) >= 2:  # Assuming coordinates are [longitude, latitude]
                             lon, lat = coords[0], coords[1]
 
+                            # Round the coordinates for comparison
+                            point_key = round_coordinates(lon, lat)
+
+                            # Log detailed data about each feature
+                            print(
+                                f"Processing Point: {lon}, {lat} - project1Id: {feature.get('project1Id', "")}")
+
+                            # Skip if the point has already been processed
+                            if point_key in processed_points:
+                                continue
+
+                            # Mark this point as processed
+                            processed_points.add(point_key)
+
                             # Create a feature for the point
                             point = QgsPointXY(lon, lat)
                             qgis_feature = QgsFeature()
@@ -463,7 +492,7 @@ class Artdatabanken:
 
                             # Set attributes (example: species and observation ID)
                             qgis_feature.setAttributes([
-                                feature.get("properties", {}).get("species", "Unknown"),
+                                feature.get("url", ""),
                                 feature.get("properties", {}).get("observationID", "Unknown"),
                                 f"Lat: {lat}, Lon: {lon}",
                             ])
