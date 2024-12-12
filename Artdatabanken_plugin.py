@@ -28,12 +28,13 @@ from qgis.PyQt.QtWidgets import QAction, QMessageBox
 from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
 from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
-import urllib.request
+import requests
+
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog
+from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog
 import os.path
 from .api_handler import APIClient
 
@@ -211,8 +212,9 @@ class Artdatabanken:
         """Show the second dialog after the first one."""
         area_info_checked = self.Fpop.form_class.isChecked()
         art_info_checked = self.Fpop.art_info.isChecked()
+        wfs_info_checked = self.Fpop.WFS_info.isChecked()
 
-        if art_info_checked and area_info_checked:
+        if art_info_checked and area_info_checked and wfs_info_checked:
             self.Fpop.close()
             self.dlg = ArtdatabankenDialog()
             self.populate_area_types()
@@ -223,6 +225,11 @@ class Artdatabanken:
             self.art_type()
             self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)  # Ensure connection
             self.art.show()
+
+            self.wfs=WFSInfoDialog()
+            self.wfs.loadDataButton.clicked.connect(self.load_data_from_wfs)
+            self.wfs.show()
+
         elif area_info_checked:
             # Close the first popup
             self.Fpop.close()
@@ -342,7 +349,7 @@ class Artdatabanken:
             params_art = {
                 "kingdom": selected_art_type,  # Ensure `selected_art_type` matches allowed values
                 "skip": 0,
-                "take": 100,  # Limit to a maximum of 100 records
+                "take": 10,  # Limit to a maximum of 100 records
             }
 
             # Fetch data from the API
@@ -375,9 +382,11 @@ class Artdatabanken:
 
             # Define the fields (attributes) for the layer
             provider.addAttributes([
-                QgsField("organismName", QVariant.String),
+                QgsField("eventID", QVariant.String),
                 QgsField("identificationID", QVariant.String),
+                QgsField("continent", QVariant.String),
                 QgsField("kingdom", QVariant.String),
+                QgsField("scientificName", QVariant.String),
             ])
             layer.updateFields()
 
@@ -391,9 +400,11 @@ class Artdatabanken:
                         feature = QgsFeature()
                         feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
                         feature.setAttributes([
-                            record.get("eventID", ""),
-                            record.get("location", ""),
+                            str(record.get("eventID", "")),
+                            record.get("identificationID", ""),
+                            record.get("continent", ""),
                             record.get("kingdom", ""),
+                            record.get("scientificName", ""),
                         ])
                         provider.addFeature(feature)
                 except Exception as feature_error:
@@ -407,6 +418,67 @@ class Artdatabanken:
                 "Success", "Data loaded successfully as points.", level=1
             )
 
+        except Exception as e:
+            self.iface.messageBar().pushMessage(
+                "Error", f"Failed to load data: {str(e)}", level=3
+            )
+            print(f"Error: {str(e)}")
+
+    def load_data_from_wfs(self):
+        """Fetch data from the WFS service and load it as points on the map."""
+        try:
+            # Define the WFS URL (same as provided)
+            url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=10"
+
+            # Send a GET request to fetch the data
+            response = requests.get(url)
+
+            if response.status_code == 200:
+                data = response.json()  # Parse the JSON response
+
+                # Create a new vector layer for points
+                layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
+                provider = layer.dataProvider()
+
+                # Define the fields (attributes) for the layer
+                provider.addAttributes([
+                    QgsField("Species", QVariant.String),
+                    QgsField("ObservationID", QVariant.String),
+                    QgsField("Location", QVariant.String),
+                ])
+                layer.updateFields()
+
+                # Process each record and add a point feature
+                for feature in data.get("features", []):
+                    geometry = feature.get("geometry")
+                    if geometry:
+                        coords = geometry.get("coordinates", [])
+                        if len(coords) >= 2:  # Assuming coordinates are [longitude, latitude]
+                            lon, lat = coords[0], coords[1]
+
+                            # Create a feature for the point
+                            point = QgsPointXY(lon, lat)
+                            qgis_feature = QgsFeature()
+                            qgis_feature.setGeometry(QgsGeometry.fromPointXY(point))
+
+                            # Set attributes (example: species and observation ID)
+                            qgis_feature.setAttributes([
+                                feature.get("properties", {}).get("species", "Unknown"),
+                                feature.get("properties", {}).get("observationID", "Unknown"),
+                                f"Lat: {lat}, Lon: {lon}",
+                            ])
+
+                            # Add feature to the provider
+                            provider.addFeature(qgis_feature)
+
+                # Update layer extents and add to QGIS project
+                layer.updateExtents()
+                QgsProject.instance().addMapLayer(layer)
+
+                self.iface.messageBar().pushMessage("Success", "WFS data loaded successfully as points.", level=1)
+            else:
+                self.iface.messageBar().pushMessage("Error", "Failed to retrieve data from WFS.", level=3)
+                print(f"Failed to retrieve data. Status code: {response.status_code}")
         except Exception as e:
             self.iface.messageBar().pushMessage(
                 "Error", f"Failed to load data: {str(e)}", level=3
@@ -429,3 +501,6 @@ class Artdatabanken:
                          "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
+
+
+

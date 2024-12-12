@@ -37,6 +37,10 @@ FIRST_POP, _ = uic.loadUiType(os.path.join(
 ART_TYPE, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'Art_type.ui'))
 
+
+WFS_INFO, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'WFS.ui'))
+
 class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
@@ -57,4 +61,9 @@ class FirstPopupDialog(QtWidgets.QDialog, FIRST_POP):
 class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
     def __init__(self, parent=None):
         super(ArtTypeDialog, self).__init__(parent)
+        self.setupUi(self)
+
+class WFSInfoDialog(QtWidgets.QDialog, WFS_INFO):
+    def __init__(self, parent=None):
+        super(WFSInfoDialog, self).__init__(parent)
         self.setupUi(self)

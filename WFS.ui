@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>220</y>
+     <y>240</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -29,56 +29,17 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QCheckBox" name="form_class">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>60</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Area information</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="art_info">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>80</y>
-     <width>131</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Art information</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>130</y>
+     <x>220</x>
+     <y>90</y>
      <width>130</width>
      <height>30</height>
     </rect>
    </property>
    <property name="text">
     <string>Load data</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="WFS_info">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>40</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>WFS information</string>
    </property>
   </widget>
  </widget>
