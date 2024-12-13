@@ -12,7 +12,7 @@ def from_wfs(self):
     """Fetch data from the WFS service and load it as points on the map."""
     try:
         # Define the WFS URL
-        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=10"
+        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=100"
 
         # Send a GET request to fetch the data
         response = requests.get(url)
@@ -53,10 +53,6 @@ def from_wfs(self):
 
                         # Round the coordinates for comparison
                         point_key = round_coordinates(lon, lat)
-
-                        # Log detailed data about each feature
-                        print(
-                            f"Processing Point: {lon}, {lat} - project1Id: {feature.get('project1Id', "")}")
 
                         # Skip if the point has already been processed
                         if point_key in processed_points:
