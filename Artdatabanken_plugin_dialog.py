@@ -26,6 +26,8 @@ import os
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
+from PyQt5.QtWidgets import QDialog, QCheckBox
+
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -62,6 +64,19 @@ class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
     def __init__(self, parent=None):
         super(ArtTypeDialog, self).__init__(parent)
         self.setupUi(self)
+        self.selectAll.clicked.connect(self.select_all)
+        self.clearAll.clicked.connect(self.clear_all)
+
+        # Find all checkboxes (assuming they are within a specific container)
+        self.checkboxes = self.findChildren(QCheckBox)
+
+    def select_all(self):
+        for checkbox in self.checkboxes:
+            checkbox.setChecked(True)
+
+    def clear_all(self):
+        for checkbox in self.checkboxes:
+            checkbox.setChecked(False)
 
 class WFSInfoDialog(QtWidgets.QDialog, WFS_INFO):
     def __init__(self, parent=None):
