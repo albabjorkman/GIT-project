@@ -68,7 +68,7 @@ def from_wfs(self):
 
                         # Set attributes (example: species and observation ID)
                         qgis_feature.setAttributes([
-                            feature.get("vernacularName", ""),
+                            feature.get("properties", {}).get("vernacularName", ""),
                             feature.get("vernacularName", {}).get("vernacularName", "Unknown"),
                             f"Lat: {lat}, Lon: {lon}",
                         ])
