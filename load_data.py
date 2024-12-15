@@ -235,11 +235,6 @@ def to_map_area(self):
             if checkbox.isChecked()
         ]
 
-        if not selected_attributes:
-            self.iface.messageBar().pushMessage(
-                "Error", "Please select at least one attribute.", level=3
-            )
-            return
 
         print(f"Selected attributes: {selected_attributes}")
 
