@@ -153,7 +153,7 @@ def to_map_art(self):
         # Get selected attributes from checkboxes (the text of each checkbox)
         selected_attributes = [
             checkbox.text()  # This will fetch the name set in the <string> property of QCheckBox
-            for checkbox in self.art.checkboxes
+            for checkbox in self.attA.checkboxes
             if checkbox.isChecked()
         ]
         print(selected_attributes)

@@ -34,7 +34,8 @@ from qgis.core import QgsProject
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog
+from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
+    ArtAttDialog
 from .load_data import from_wfs, to_map_art, to_map_area
 import os.path
 from .api_handler import APIClient
@@ -224,8 +225,9 @@ class Artdatabanken:
         if art_info_checked:
             self.art = ArtTypeDialog()
             self.art_type()
-            self.art.loadDataButton.clicked.connect(lambda: to_map_art(self))
+            self.art.loadDataButton.clicked.connect(lambda: self.on_art_load())
             self.art.show()
+
 
         if wfs_info_checked:
             self.wfs = WFSInfoDialog()
@@ -238,7 +240,10 @@ class Artdatabanken:
 
         self.Fpop.close()
 
-
+    def on_art_load(self):
+        self.attA = ArtAttDialog()
+        self.attA.loadDataButton.clicked.connect(lambda: to_map_art(self))
+        self.attA.show()
     def populate_area_types(self):
         area_types_data = [
             "Municipality", "Community", "Sea", "CountryRegion", "NatureType",
