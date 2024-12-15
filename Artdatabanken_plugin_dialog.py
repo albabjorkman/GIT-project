@@ -82,3 +82,16 @@ class WFSInfoDialog(QtWidgets.QDialog, WFS_INFO):
     def __init__(self, parent=None):
         super(WFSInfoDialog, self).__init__(parent)
         self.setupUi(self)
+        self.selectAll.clicked.connect(self.select_all)
+        self.clearAll.clicked.connect(self.clear_all)
+
+        # Find all checkboxes (assuming they are within a specific container)
+        self.checkboxes = self.findChildren(QCheckBox)
+
+    def select_all(self):
+        for checkbox in self.checkboxes:
+            checkbox.setChecked(True)
+
+    def clear_all(self):
+        for checkbox in self.checkboxes:
+            checkbox.setChecked(False)

@@ -7,14 +7,12 @@ from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
 import requests
 
-from .Artdatabanken_plugin_dialog import ArtTypeDialog
-
 
 def from_wfs(self):
-    """Fetch data from the WFS service and load it as points on the map."""
+    """Fetch data from the WFS service and load it as points on the map with selectable attributes."""
     try:
         # Define the WFS URL
-        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=100"
+        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=5"
 
         # Send a GET request to fetch the data
         response = requests.get(url)
@@ -29,17 +27,27 @@ def from_wfs(self):
             layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
             provider = layer.dataProvider()
 
-            # Define the fields (attributes) for the layer
-            provider.addAttributes([
-                QgsField("vernacularName", QVariant.String),
-                QgsField("ObservationID", QVariant.String),
-                QgsField("Location", QVariant.String),
-            ])
+            # Get selected attributes from checkboxes (the text of each checkbox)
+            selected_attributes = [
+                checkbox.text()  # This will fetch the name set in the <string> property of QCheckBox
+                for checkbox in self.wfs.checkboxes
+                if checkbox.isChecked()
+            ]
+            print(f"Selected attributes: {selected_attributes}")
+
+            if not selected_attributes:
+                self.iface.messageBar().pushMessage(
+                    "Error", "Please select at least one attribute.", level=3
+                )
+                return
+
+            # Dynamically create the fields based on selected attributes
+            fields = [QgsField(attr, QVariant.String) for attr in selected_attributes]
+            provider.addAttributes(fields)
             layer.updateFields()
 
             # Set to track unique points with some precision tolerance
             processed_points = set()
-            print(data)
 
             # Function to round coordinates for comparison
             def round_coordinates(lon, lat, precision=5):
@@ -63,26 +71,28 @@ def from_wfs(self):
                         # Mark this point as processed
                         processed_points.add(point_key)
 
-                        # Create a feature for the point
+                        # Create feature geometry (point)
                         point = QgsPointXY(lon, lat)
                         qgis_feature = QgsFeature()
                         qgis_feature.setGeometry(QgsGeometry.fromPointXY(point))
 
-                        # Set attributes (example: species and observation ID)
-                        qgis_feature.setAttributes([
-                            feature.get("properties", {}).get("vernacularName", ""),
-                            feature.get("vernacularName", {}).get("vernacularName", "Unknown"),
-                            f"Lat: {lat}, Lon: {lon}",
-                        ])
+                        # Collect attributes based on selected fields
+                        attributes = [
+                            feature.get("properties", {}).get(attr, "Unknown") for attr in selected_attributes
+                        ]
+                        qgis_feature.setAttributes(attributes)
 
                         # Add feature to the provider
                         provider.addFeature(qgis_feature)
 
-            # Update layer extents and add to QGIS project
+            # Finalize the layer and add it to the QGIS project
             layer.updateExtents()
             QgsProject.instance().addMapLayer(layer)
 
-            self.iface.messageBar().pushMessage("Success", "WFS data loaded successfully as points.", level=1)
+            # Notify the user of success
+            self.iface.messageBar().pushMessage(
+                "Success", "WFS data loaded successfully as points.", level=1
+            )
         else:
             self.iface.messageBar().pushMessage("Error", "Failed to retrieve data from WFS.", level=3)
             print(f"Failed to retrieve data. Status code: {response.status_code}")

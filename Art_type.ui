@@ -474,7 +474,7 @@
     <string>decimalLongitude</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="selectAll">
    <property name="geometry">
     <rect>
      <x>60</x>
