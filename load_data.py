@@ -229,6 +229,20 @@ def to_map_area(self):
             )
             return
 
+        selected_attributes = [
+            checkbox.text()
+            for checkbox in self.dlg.checkboxes
+            if checkbox.isChecked()
+        ]
+
+        if not selected_attributes:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please select at least one attribute.", level=3
+            )
+            return
+
+        print(f"Selected attributes: {selected_attributes}")
+
         # Define query parameters
         params_area = {
             "areaTypes": selected_area_type,
@@ -254,12 +268,10 @@ def to_map_area(self):
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "Area Data Points", "memory")
         provider = layer.dataProvider()
 
-        # Define the fields (attributes) for the layer
-        provider.addAttributes([
-            QgsField("Name", QVariant.String),
-            QgsField("FeatureID", QVariant.String),
-            QgsField("AreaType", QVariant.String),
-        ])
+        # Create all fields upfront: AreaType + selected dynamic attributes
+        fields = [QgsField("AreaType", QVariant.String)]  # Static field "AreaType"
+        fields += [QgsField(attr, QVariant.String) for attr in selected_attributes]  # Dynamic fields
+        provider.addAttributes(fields)  # Add all fields at once
         layer.updateFields()
 
         # Process each record and add a point feature
@@ -279,14 +291,10 @@ def to_map_area(self):
                 feature = QgsFeature()
                 feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(center_lon, center_lat)))
 
-                # Set attributes for the feature
-                feature.setAttributes([
-                    record.get("name", "Unknown"),
-                    record.get("featureId", "Unknown"),
-                    record.get("areaType", "Unknown"),
-                ])
+                # Set feature attributes: first set AreaType, then set the selected attributes from the record
+                feature.setAttributes([selected_area_type] + [record.get(attr, "") for attr in selected_attributes])
 
-                # Add feature to the provider
+                # Add the feature to the layer
                 provider.addFeature(feature)
 
         # Update layer extents and add to QGIS project

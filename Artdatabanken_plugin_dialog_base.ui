@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>524</width>
     <height>300</height>
    </rect>
   </property>
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>240</y>
+     <x>100</x>
+     <y>260</y>
      <width>340</width>
      <height>30</height>
     </rect>
@@ -61,14 +61,92 @@
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>130</y>
+     <x>300</x>
+     <y>230</y>
      <width>130</width>
      <height>30</height>
     </rect>
    </property>
    <property name="text">
     <string>Load data</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="name">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>130</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>name</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="featureId">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>130</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>featureId</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Select">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>130</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select attribute to show: </string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="clearAll">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="selectAll">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select all</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Select_2">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>150</y>
+     <width>171</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>(Area type will be showed always)</string>
    </property>
   </widget>
  </widget>

@@ -53,11 +53,25 @@ class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.selectAll.clicked.connect(self.select_all)
+        self.clearAll.clicked.connect(self.clear_all)
+
+        # Find all checkboxes (assuming they are within a specific container)
+        self.checkboxes = self.findChildren(QCheckBox)
+
+    def select_all(self):
+        for checkbox in self.checkboxes:
+            checkbox.setChecked(True)
+
+    def clear_all(self):
+        for checkbox in self.checkboxes:
+            checkbox.setChecked(False)
 
 class FirstPopupDialog(QtWidgets.QDialog, FIRST_POP):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+
 
 
 class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
