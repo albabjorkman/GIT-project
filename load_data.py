@@ -7,6 +7,8 @@ from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
 import requests
 
+from .Artdatabanken_plugin_dialog import ArtTypeDialog
+
 
 def from_wfs(self):
     """Fetch data from the WFS service and load it as points on the map."""
@@ -111,19 +113,15 @@ def to_map_art(self):
         }
 
         # Fetch data from the API
-        endpoint = ""
-
+        endpoint = ""  # Specify your API endpoint here
 
         try:
             data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
-
-
         except Exception as fetch_error:
             self.iface.messageBar().pushMessage(
                 "Error", f"Failed to fetch data: {str(fetch_error)}", level=3
             )
             print(f"Error: Failed to fetch data: {str(fetch_error)}")
-            print(f"API Response: {data}")
             return
 
         if not data or not isinstance(data, list):
@@ -133,54 +131,83 @@ def to_map_art(self):
             return
 
         print(f"Fetched {len(data)} records from the API.")
+        print(f"Fetched data: {data}")
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "Species Observations", "memory")
         provider = layer.dataProvider()
+        print(f"Layer valid: {layer.isValid()}")
 
-        # Define the fields (attributes) for the layer
-        provider.addAttributes([
-            QgsField("eventID", QVariant.String),
-            QgsField("identificationID", QVariant.String),
-            QgsField("continent", QVariant.String),
-            QgsField("kingdom", QVariant.String),
-            QgsField("scientificName", QVariant.String),
-        ])
+
+
+        # Get selected attributes from checkboxes (the text of each checkbox)
+        selected_attributes = [
+            checkbox.text()  # This will fetch the name set in the <string> property of QCheckBox
+            for checkbox in self.art.checkboxes
+            if checkbox.isChecked()
+        ]
+        print(selected_attributes)
+
+        if not selected_attributes:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please select at least one attribute.", level=3
+            )
+            return
+
+        print(f"Selected attributes: {selected_attributes}")
+
+        # Update the fields dynamically based on selected attributes
+        fields = [QgsField(attr, QVariant.String) for attr in selected_attributes]
+        provider.addAttributes(fields)
         layer.updateFields()
 
-        # Process each record and add a point feature
+
         for record in data:
+            print(f"Processing record: {record}")  # Log to inspect the data
+
             try:
+                # Extract latitude and longitude
                 lat = record.get("decimalLatitude")
                 lon = record.get("decimalLongitude")
 
-                if lat is not None and lon is not None:
-                    feature = QgsFeature()
-                    feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
-                    feature.setAttributes([
-                        str(record.get("eventID", "")),
-                        record.get("identificationID", ""),
-                        record.get("continent", ""),
-                        record.get("kingdom", ""),
-                        record.get("scientificName", ""),
-                    ])
-                    provider.addFeature(feature)
+                # Check if lat and lon are valid
+                if lat is None or lon is None:
+                    print(f"Skipping record due to missing coordinates: {record}")
+                    continue  # Skip this record if coordinates are missing
+
+                print(f"Adding feature with coordinates: {lon}, {lat}")  # Debugging print statement
+
+                # Create feature geometry (point)
+                feature = QgsFeature()
+                feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
+
+                # Collect attributes based on selected fields
+                attributes = [
+                    record.get(attr, "Unknown") for attr in selected_attributes
+                ]
+                feature.setAttributes(attributes)
+
+                # Add the feature to the provider
+                provider.addFeature(feature)
+
             except Exception as feature_error:
                 print(f"Error processing record: {record}, Error: {feature_error}")
 
-        # Update layer extents and add to QGIS project
+        # Finalize the layer and add it to the QGIS project
         layer.updateExtents()
         QgsProject.instance().addMapLayer(layer)
 
+
+        # Notify the user of success
         self.iface.messageBar().pushMessage(
             "Success", "Data loaded successfully as points.", level=1
         )
-
     except Exception as e:
         self.iface.messageBar().pushMessage(
             "Error", f"Failed to load data: {str(e)}", level=3
         )
         print(f"Error: {str(e)}")
+
 
 def to_map_area(self):
     try:
