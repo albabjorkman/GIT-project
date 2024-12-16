@@ -42,7 +42,7 @@
     <string>Select area type:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="areaType">
+  <widget class="QComboBox" name="areaType_2">
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -87,7 +87,7 @@
   <widget class="QCheckBox" name="featureId">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>340</x>
      <y>130</y>
      <width>101</width>
      <height>20</height>
@@ -146,7 +146,20 @@
     </rect>
    </property>
    <property name="text">
-    <string>(Area type will be showed always)</string>
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="areaTypes">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>130</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>areaType</string>
    </property>
   </widget>
  </widget>

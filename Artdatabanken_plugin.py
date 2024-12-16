@@ -250,15 +250,14 @@ class Artdatabanken:
         self.wfs.show()
 
     def populate_area_types(self):
-        area_types_data = [
-            "Municipality", "Community", "Sea", "CountryRegion", "NatureType",
+        area_types_data = ["","Municipality", "Community", "Sea", "CountryRegion", "NatureType",
             "Province", "Ramsar", "BirdValidationArea", "Parish", "Spa",
             "County", "ProtectedNature", "SwedishForestAgencyDistricts",
             "Sci", "WaterArea", "Atlas5x5", "Atlas10x10", "SfvDistricts", "Campus"
         ]
 
-        self.dlg.areaType.clear()  # Clear any existing items
-        self.dlg.areaType.addItems(area_types_data)  # Add area types to the dropdown
+        self.dlg.areaType_2.clear()  # Clear any existing items
+        self.dlg.areaType_2.addItems(area_types_data)  # Add area types to the dropdown
 
     def art_type(self):
         art_type_data = ["","Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",

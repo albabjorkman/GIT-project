@@ -157,8 +157,6 @@ def to_map_art(self):
         provider = layer.dataProvider()
         print(f"Layer valid: {layer.isValid()}")
 
-
-
         # Get selected attributes from checkboxes (the text of each checkbox)
         selected_attributes = [
             checkbox.text()  # This will fetch the name set in the <string> property of QCheckBox
@@ -231,33 +229,33 @@ def to_map_art(self):
 def to_map_area(self):
     try:
         # Select area type from the drop-down menu
-        selected_area_type = self.dlg.areaType.currentText()
-        if not selected_area_type:
-            self.iface.messageBar().pushMessage(
-                "Error", "Please select an area type.", level=3
-            )
-            return
+        selected_area_type = self.dlg.areaType_2.currentText().strip()
 
         selected_attributes = [
             checkbox.text()
             for checkbox in self.dlg.checkboxes
             if checkbox.isChecked()
         ]
-
-
         print(f"Selected attributes: {selected_attributes}")
 
         # Define query parameters
         params_area = {
-            "areaTypes": selected_area_type,
             "searchString": "",
             "skip": 0,
             "take": 10,
         }
 
+        # Add areaTypes only if it's not empty
+        if selected_area_type:
+            params_area["areaType_2"] = selected_area_type
+
+        print(f"Sending API Request with parameters: {params_area}")
+
         # Fetch data from the API
         endpoint = ""
+
         data = self.api_client_area.fetch_data(endpoint=endpoint, params=params_area)
+
 
         if not data or "records" not in data:
             self.iface.messageBar().pushMessage(
@@ -268,17 +266,17 @@ def to_map_area(self):
         records = data["records"]
         print(f"Fetched {len(records)} records from the API.")
 
+
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "Area Data Points", "memory")
         provider = layer.dataProvider()
 
-        # Create all fields upfront: AreaType + selected dynamic attributes
-        fields = [QgsField("AreaType", QVariant.String)]  # Static field "AreaType"
-        fields += [QgsField(attr, QVariant.String) for attr in selected_attributes]  # Dynamic fields
-        provider.addAttributes(fields)  # Add all fields at once
+        # Create fields
+        fields = [QgsField(attr, QVariant.String) for attr in selected_attributes]
+        provider.addAttributes(fields)
         layer.updateFields()
 
-        # Process each record and add a point feature
+        # Process records
         for record in records:
             if "boundingBox" in record and "featureId" in record:
                 bbox = record["boundingBox"]
@@ -287,24 +285,16 @@ def to_map_area(self):
                 max_lon = bbox["topLeft"]["longitude"]
                 max_lat = bbox["topLeft"]["latitude"]
 
-                # Calculate center of the bounding box
                 center_lon = (min_lon + max_lon) / 2
                 center_lat = (min_lat + max_lat) / 2
 
-                # Create a feature for the center point
                 feature = QgsFeature()
                 feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(center_lon, center_lat)))
-
-                # Set feature attributes: first set AreaType, then set the selected attributes from the record
-                feature.setAttributes([selected_area_type] + [record.get(attr, "") for attr in selected_attributes])
-
-                # Add the feature to the layer
+                feature.setAttributes([record.get(attr, "") for attr in selected_attributes])
                 provider.addFeature(feature)
 
-        # Update layer extents and add to QGIS project
         layer.updateExtents()
         QgsProject.instance().addMapLayer(layer)
-
         self.iface.messageBar().pushMessage("Success", "Data loaded successfully as points.", level=1)
 
     except Exception as e:
@@ -312,3 +302,4 @@ def to_map_area(self):
             "Error", f"Failed to load data: {str(e)}", level=3
         )
         print("Error:", str(e))
+
