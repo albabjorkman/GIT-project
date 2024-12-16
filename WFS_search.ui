@@ -65,6 +65,19 @@
     </rect>
    </property>
   </widget>
+  <widget class="QLabel" name="lableAreaType_3">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>50</y>
+     <width>130</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Be careful with the spelling</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>

@@ -12,10 +12,21 @@ def from_wfs(self):
     """Fetch data from the WFS service and load it as points on the map with selectable attributes."""
     try:
         # Define the WFS URL
-        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=5"
+        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=5&CQL_Filter="
+
+        selected_scientific_name = self.wfsS.scientificName.text()
+        print(f"Selected scientific name: {selected_scientific_name}")
+
+        # Construct the endpoint dynamically based on scientific name input
+        if selected_scientific_name:
+            endpoint = f"scientificName='{selected_scientific_name}'"
+        else:
+            endpoint = ""  # No filter if no scientific name is provided
+
+
 
         # Send a GET request to fetch the data
-        response = requests.get(url)
+        response = requests.get(url+endpoint)
 
         if response.status_code == 200:
             data = response.json()  # Parse the JSON response
@@ -121,7 +132,7 @@ def to_map_art(self):
         }
 
         # Fetch data from the API
-        endpoint = ""  # Specify your API endpoint here
+        endpoint = ""
 
         try:
             data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
