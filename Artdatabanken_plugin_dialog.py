@@ -43,6 +43,9 @@ ART_TYPE, _ = uic.loadUiType(os.path.join(
 WFS_INFO, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'WFS.ui'))
 
+WFS_SEARCH, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'WFS_search.ui'))
+
 ATT_ART, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'attribut_art.ui'))
 class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):
@@ -98,6 +101,11 @@ class ArtAttDialog(QtWidgets.QDialog, ATT_ART):
     def clear_all(self):
         for checkbox in self.checkboxes:
             checkbox.setChecked(False)
+
+class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
+    def __init__(self, parent=None):
+        super(WFSSearchDialog, self).__init__(parent)
+        self.setupUi(self)
 
 class WFSInfoDialog(QtWidgets.QDialog, WFS_INFO):
     def __init__(self, parent=None):
