@@ -28,12 +28,15 @@ from qgis.PyQt.QtWidgets import QAction, QMessageBox
 from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
 from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
-import urllib.request
+
+
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog
+from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
+    ArtAttDialog, WFSSearchDialog
+from .load_data import from_wfs, to_map_art, to_map_area
 import os.path
 from .api_handler import APIClient
 
@@ -72,12 +75,12 @@ class Artdatabanken:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
-        
+
         # Initialize the APIClient with your API key and the base URL of the API
         self.api_key = "5044b6436a6b4814b9689cd6fac542f0"  # Replace with your actual API key
         self.base_url_area = "https://api.artdatabanken.se/species-observation-system/v1/Areas"  # Base URL of the API, area
-        self.base_url_art = "https://api.artdatabanken.se/species-observation-system/v1/Observations/Search/DwC" #Base URL of the API, art
-        
+        self.base_url_art = "https://api.artdatabanken.se/species-observation-system/v1/Observations/Search/DwC"  # Base URL of the API, art
+
         # Create an instance of APIClient
         self.api_client_area = APIClient(self.api_key, self.base_url_area)
         self.api_client_art = APIClient(self.api_key, self.base_url_art)
@@ -199,7 +202,7 @@ class Artdatabanken:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.Fpop=FirstPopupDialog()
+            self.Fpop = FirstPopupDialog()
 
         self.Fpop.show()
         # Run the dialog event loop
@@ -207,219 +210,57 @@ class Artdatabanken:
         self.Fpop.loadDataButton.clicked.connect(self.show_second_dialog)
         # See if OK was pressed
 
-
     def show_second_dialog(self):
         """Show the second dialog after the first one."""
         area_info_checked = self.Fpop.form_class.isChecked()
-        art_info_checked = self.Fpop.checkBox_2.isChecked()
-        
-        if art_info_checked and area_info_checked:
-            self.Fpop.close()
+        art_info_checked = self.Fpop.art_info.isChecked()
+        wfs_info_checked = self.Fpop.WFS_info.isChecked()
+
+        if area_info_checked:
             self.dlg = ArtdatabankenDialog()
             self.populate_area_types()
-            self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_art)
+            self.dlg.loadDataButton.clicked.connect(lambda: to_map_area(self))
             self.dlg.show()
-            
+
+        if art_info_checked:
             self.art = ArtTypeDialog()
             self.art_type()
-            self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)  # Ensure connection
+            self.art.loadDataButton.clicked.connect(lambda: self.on_art_load())
             self.art.show()
-        elif area_info_checked:
-            # Close the first popup
-            self.Fpop.close()
-            # Initialize the second dialog if not already done
-            self.dlg = ArtdatabankenDialog()
-            # Populate the area types dropdown in the second dialog
-            self.populate_area_types()
-            # Connect the "Load Data" button to its functionality
-            self.dlg.loadDataButton.clicked.connect(self.load_data_to_map_area)
-            # Show the second dialog
-            self.dlg.show()
-        elif art_info_checked:
-            self.Fpop.close()
-            self.art=ArtTypeDialog()
-            self.art_type()
-            self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)
-            self.art.show()
-        else:
+
+        if wfs_info_checked:
+            self.wfsS = WFSSearchDialog()
+            self.wfsS.loadDataButton.clicked.connect(lambda: self.on_WFS_search())
+            self.wfsS.show()
+
+        if not (area_info_checked or art_info_checked or wfs_info_checked):
             self.iface.messageBar().pushMessage(
                 "Select a type of data", level=3)
 
-    def load_data_to_map_area(self):
-        try:
-            # Select area type from the drop-down menu
-            selected_area_type = self.dlg.areaType.currentText()
-            if not selected_area_type:
-                self.iface.messageBar().pushMessage(
-                    "Error", "Please select an area type.", level=3
-                )
-                return
+        self.Fpop.close()
 
-            # Define query parameters
-            params_area = {
-                "areaTypes": selected_area_type,
-                "searchString": "",
-                "skip": 0,
-                "take": 100,
-            }
+    def on_art_load(self):
+        self.attA = ArtAttDialog()
+        self.attA.loadDataButton.clicked.connect(lambda: to_map_art(self))
+        self.attA.show()
 
-            # Fetch data from the API
-            endpoint = ""
-            data = self.api_client_area.fetch_data(endpoint=endpoint, params=params_area)
+    def on_WFS_search(self):
+        self.wfs = WFSInfoDialog()
+        self.wfs.loadDataButton.clicked.connect(lambda: from_wfs(self))
+        self.wfs.show()
 
-            if not data or "records" not in data:
-                self.iface.messageBar().pushMessage(
-                    "Error", "Invalid or empty response from the API.", level=3
-                )
-                return
-
-            records = data["records"]
-            print(f"Fetched {len(records)} records from the API.")
-
-            # Create a new vector layer for points
-            layer = QgsVectorLayer("Point?crs=EPSG:4326", "API Data Points", "memory")
-            provider = layer.dataProvider()
-
-            # Define the fields (attributes) for the layer
-            provider.addAttributes([
-                QgsField("Name", QVariant.String),
-                QgsField("FeatureID", QVariant.String),
-                QgsField("AreaType", QVariant.String),
-            ])
-            layer.updateFields()
-
-            # Process each record and add a point feature
-            for record in records:
-                if "boundingBox" in record and "featureId" in record:
-                    bbox = record["boundingBox"]
-                    min_lon = bbox["bottomRight"]["longitude"]
-                    min_lat = bbox["bottomRight"]["latitude"]
-                    max_lon = bbox["topLeft"]["longitude"]
-                    max_lat = bbox["topLeft"]["latitude"]
-
-                    # Calculate center of the bounding box
-                    center_lon = (min_lon + max_lon) / 2
-                    center_lat = (min_lat + max_lat) / 2
-
-                    # Create a feature for the center point
-                    feature = QgsFeature()
-                    feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(center_lon, center_lat)))
-
-                    # Set attributes for the feature
-                    feature.setAttributes([
-                        record.get("name", "Unknown"),
-                        record.get("featureId", "Unknown"),
-                        record.get("areaType", "Unknown"),
-                    ])
-
-                    # Add feature to the provider
-                    provider.addFeature(feature)
-
-            # Update layer extents and add to QGIS project
-            layer.updateExtents()
-            QgsProject.instance().addMapLayer(layer)
-
-            self.iface.messageBar().pushMessage("Success", "Data loaded successfully as points.", level=1)
-
-        except Exception as e:
-            self.iface.messageBar().pushMessage(
-                "Error", f"Failed to load data: {str(e)}", level=3
-            )
-            print("Error:", str(e))
-    
-    def load_data_to_map_art(self):
-        try:
-            # Select area type from the drop-down menu
-            selected_art_type = self.art.artType.currentText()
-            print(selected_art_type)
-            if not selected_art_type:
-                self.iface.messageBar().pushMessage(
-                    "Error", "Please select an art type.", level=3
-                )
-                return
-            # Define query parameters
-            params_art = {
-                "kingdom": "Plantae",  # Ensure `selected_art_type` matches allowed values
-                "translationCultureCode": "en-GB",  
-                "sensitiveObservations=false": False,
-                "skip": 0,
-                "take": 100,  # Limit to a maximum of 100
-            }
-
-            # Fetch data from the API
-            endpoint = "https://api.artdatabanken.se/species-observation-system/v1/Observations/Search/DwC"
-
-            data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
-
-            if not data:
-                self.iface.messageBar().pushMessage(
-                    "Error", "Invalid or empty response from the API.", level=3
-                )
-                return
-
-            records = data if isinstance(data, list) else []
-            if not records:
-                self.iface.messageBar().pushMessage(
-                    "No Data", f"No records found for kingdom: {selected_art_type}.", level=1
-            )
-            return
-            print(f"Fetched {len(records)} records from the API.")
-
-            # Create a new vector layer for points
-            layer = QgsVectorLayer("Point?crs=EPSG:4326", "API Data Points for species", "memory")
-            provider = layer.dataProvider()
-
-            # Define the fields (attributes) for the layer
-            provider.addAttributes([
-                 QgsField("organismName", QVariant.String),
-                 QgsField("identificationID", QVariant.String),
-                 QgsField("kingdom", QVariant.String),
-            ])
-            layer.updateFields()
-
-            # Process each record and add a point feature
-            for record in records:
-                if "decimalLatitude" in record and "decimalLongitude" in record:
-                    lat = record["decimalLatitude"]
-                    lon = record["decimalLongitude"]
-                    if lat is not None and lon is not None:
-                        feature = QgsFeature()
-                        feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
-                        feature.setAttributes([
-                            record.get("organismName", ""),
-                            record.get("identificationID", ""),
-                            record.get("kingdom", ""),
-                    ])
-                    provider.addFeature(feature)
-
-
-            # Update layer extents and add to QGIS project
-            layer.updateExtents()
-            QgsProject.instance().addMapLayer(layer)
-
-            self.iface.messageBar().pushMessage("Success", "Data loaded successfully as points.", level=1)
-
-        except Exception as e:
-            self.iface.messageBar().pushMessage(
-                "Error", f"Failed to load data: {str(e)}", level=3
-            )
-            print("Error:", str(e))
-            
     def populate_area_types(self):
-        area_types_data = [
-            "Municipality", "Community", "Sea", "CountryRegion", "NatureType",
+        area_types_data = ["","Municipality", "Community", "Sea", "CountryRegion", "NatureType",
             "Province", "Ramsar", "BirdValidationArea", "Parish", "Spa",
             "County", "ProtectedNature", "SwedishForestAgencyDistricts",
             "Sci", "WaterArea", "Atlas5x5", "Atlas10x10", "SfvDistricts", "Campus"
         ]
 
-        self.dlg.areaType.clear()  # Clear any existing items
-        self.dlg.areaType.addItems(area_types_data)  # Add area types to the dropdown
-
+        self.dlg.areaType_2.clear()  # Clear any existing items
+        self.dlg.areaType_2.addItems(area_types_data)  # Add area types to the dropdown
 
     def art_type(self):
-        art_type_data=["Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
-                       "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
+        art_type_data = ["","Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
+                         "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
-        self.art.loadDataButton.clicked.connect(self.load_data_to_map_art)  # Connect button
