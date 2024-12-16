@@ -71,7 +71,7 @@
     <string>Next</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="vernacularName_2">
+  <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
      <x>210</x>
@@ -91,7 +91,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Select vernacularName</string>
+    <string>Select scientificName</string>
    </property>
   </widget>
  </widget>

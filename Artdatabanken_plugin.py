@@ -256,10 +256,8 @@ class Artdatabanken:
         self.dlg.areaType.addItems(area_types_data)  # Add area types to the dropdown
 
     def art_type(self):
-        art_type_data = ["Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
+        art_type_data = ["","Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
                          "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
-
-
 

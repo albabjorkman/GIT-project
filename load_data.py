@@ -109,15 +109,13 @@ def to_map_art(self):
         selected_art_type = self.art.artType.currentText()
         print(f"Selected art type: {selected_art_type}")
 
-        if not selected_art_type:
-            self.iface.messageBar().pushMessage(
-                "Error", "Please select an art type.", level=3
-            )
-            return
+        selected_scientific_name = self.art.scientificName.text()
+        print(f"Selected scientific name: {selected_scientific_name}")
 
         # Define query parameters
         params_art = {
             "kingdom": selected_art_type,  # Ensure `selected_art_type` matches allowed values
+            "scientificName": selected_scientific_name,
             "skip": 0,
             "take": 10,  # Limit to a maximum of 100 records
         }
