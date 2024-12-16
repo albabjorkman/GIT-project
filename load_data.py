@@ -12,21 +12,30 @@ def from_wfs(self):
     """Fetch data from the WFS service and load it as points on the map with selectable attributes."""
     try:
         # Define the WFS URL
-        url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=5&CQL_Filter="
+        base_url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=5&CQL_Filter="
 
-        selected_scientific_name = self.wfsS.scientificName.text()
-        print(f"Selected scientific name: {selected_scientific_name}")
+        selected_scientific_names = self.wfsS.scientificName.text()
+        print(f"Selected scientific name: {selected_scientific_names}")
 
         # Construct the endpoint dynamically based on scientific name input
-        if selected_scientific_name:
-            endpoint = f"scientificName='{selected_scientific_name}'"
+        if selected_scientific_names:
+            names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
+            if not names:
+                self.iface.messageBar().pushMessage(
+                    "Error", "Please provide valid scientific names.", level=3
+                )
+                return
+
+            # Create CQL filter for multiple names
+            filters = " OR ".join([f"scientificName='{name}'" for name in names])
+            endpoint = f"{base_url}{filters}"
         else:
-            endpoint = ""  # No filter if no scientific name is provided
+            endpoint = base_url  #  name is provided
 
 
 
         # Send a GET request to fetch the data
-        response = requests.get(url+endpoint)
+        response = requests.get(endpoint)
 
         if response.status_code == 200:
             data = response.json()  # Parse the JSON response
@@ -120,13 +129,20 @@ def to_map_art(self):
         selected_art_type = self.art.artType.currentText()
         print(f"Selected art type: {selected_art_type}")
 
-        selected_scientific_name = self.art.scientificName.text()
-        print(f"Selected scientific name: {selected_scientific_name}")
+        selected_scientific_names = self.art.scientificName.text()
+        print(f"Selected scientific names: {selected_scientific_names}")
 
-        # Define query parameters
+        names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
+        if not names:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please provide at least one valid scientific name.", level=3
+            )
+            return
+
+        # Construct the query parameters
         params_art = {
             "kingdom": selected_art_type,  # Ensure `selected_art_type` matches allowed values
-            "scientificName": selected_scientific_name,
+            "scientificName": ",".join(names),  # API accepts comma-separated names
             "skip": 0,
             "take": 10,  # Limit to a maximum of 100 records
         }
