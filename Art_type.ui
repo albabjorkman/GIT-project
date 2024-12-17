@@ -6,43 +6,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>447</width>
-    <height>233</height>
+    <width>509</width>
+    <height>376</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>180</y>
-     <width>341</width>
-     <height>32</height>
+     <x>70</x>
+     <y>9</y>
+     <width>130</width>
+     <height>41</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   <property name="text">
+    <string>Select scientificName</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="artType">
+  <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>60</y>
-     <width>130</width>
-     <height>30</height>
+     <y>20</y>
+     <width>113</width>
+     <height>20</height>
     </rect>
-   </property>
-   <property name="editable">
-    <bool>false</bool>
-   </property>
-   <property name="currentIndex">
-    <number>-1</number>
    </property>
   </widget>
   <widget class="QLabel" name="lableAreaType">
@@ -58,11 +49,34 @@
     <string>Select art type</string>
    </property>
   </widget>
+  <widget class="QLabel" name="maxNbr_artLabel">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>240</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Max number points:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="maxNbr_art">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>240</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>150</y>
+     <x>320</x>
+     <y>280</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -71,63 +85,17 @@
     <string>Next</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="scientificName">
+  <widget class="QListWidget" name="artType">
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>20</y>
-     <width>113</width>
-     <height>20</height>
+     <y>61</y>
+     <width>231</width>
+     <height>171</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lableAreaType_2">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>9</y>
-     <width>130</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select scientificName</string>
    </property>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
