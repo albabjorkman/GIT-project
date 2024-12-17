@@ -16,7 +16,7 @@
   </property>
   
   <!-- areaType Label -->
-  <widget class="QLabel" name="lableAreaType">
+  <widget class="QLabel" name="labelAreaType">
    <property name="geometry">
     <rect>
      <x>80</x>
@@ -73,6 +73,30 @@
      <height>30</height>
     </rect>
    </property>
+  </widget>
+  
+  <!-- Warning text: Limit reached for max number points -->
+  <widget class="QLabel" name="maxLimitReachedLabel">
+    <property name="geometry">
+        <rect>
+            <x>380</x>
+            <y>80</y>
+            <width>250</width>
+            <height>30</height>
+        </rect>
+    </property>
+    <property name="text">
+        <string/>
+    </property>
+    <property name="alignment">
+        <set>Qt::AlignLeft</set>
+    </property>
+    <property name="visible">
+        <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+        <string>color: red;</string> <!-- Red is more suitable for warnings -->
+    </property>
   </widget>
   
   <!-- Attribute selection label -->
