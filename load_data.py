@@ -124,6 +124,7 @@ def from_wfs(self):
 
 
 def to_map_art(self):
+
     try:
         # Select art type from the drop-down menu
         selected_art_type = self.art.artType.currentText()
@@ -139,34 +140,63 @@ def to_map_art(self):
             )
             return
 
-        # Construct the query parameters
-        params_art = {
-            "kingdom": selected_art_type,  # Ensure `selected_art_type` matches allowed values
-            "scientificName": ",".join(names),  # API accepts comma-separated names
-            "skip": 0,
-            "take": 10,  # Limit to a maximum of 100 records
-        }
+        #Selected number of takes (points) and checked if correctly written before converting to int
+        selected_nbrPoints = self.art.maxNbr_art.text()
+        
+        if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please input a positive numerical value.", level=3
+            )
+            return
+        
+        nbr_points = int(selected_nbrPoints)
 
         # Fetch data from the API
-        endpoint = ""
+        endpoint = "" 
+        
+        #To handle requests with more than 1000 takes
+        skips = 0
+        nbr_points_left = nbr_points
+        all_data=[]
+        
+        # Construct the query parameters and run API depending on the number of takes 
+        while nbr_points_left > 0:
+            params_art = {
+                "kingdom": selected_art_type,
+                "scientificName": ",".join(names),
+                "skip": skips,
+                "take": min(1000, nbr_points_left),  # Take up to 1000 records
+            }
 
-        try:
-            data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
-        except Exception as fetch_error:
+            try:
+                data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
+            except Exception as fetch_error:
+                self.iface.messageBar().pushMessage(
+                    "Error", f"Failed to fetch data: {str(fetch_error)}", level=3
+                )
+                print(f"Error: Failed to fetch data: {str(fetch_error)}")
+                return
+
+            if not data or not isinstance(data, list):
+                self.iface.messageBar().pushMessage(
+                    "Error", "Invalid or empty response from the API.", level=3
+                )
+                return
+        
+            all_data.extend(data)  # Add the new data to the existing data list
+
+            # Update remaining points and skip for the next API call
+            nbr_points_left -= len(data)  # Adjust remaining points
+            skips += len(data)  # Increase skip based on the amount of data received
+
+
+        # Now we have all data in `all_data`, proceed to create the QGIS layer
+        if not all_data:
             self.iface.messageBar().pushMessage(
-                "Error", f"Failed to fetch data: {str(fetch_error)}", level=3
-            )
-            print(f"Error: Failed to fetch data: {str(fetch_error)}")
-            return
-
-        if not data or not isinstance(data, list):
-            self.iface.messageBar().pushMessage(
-                "Error", "Invalid or empty response from the API.", level=3
+                "Error", "No data returned from the API.", level=3
             )
             return
-
-        print(f"Fetched {len(data)} records from the API.")
-        print(f"Fetched data: {data}")
+                        
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "Species Observations", "memory")
@@ -195,7 +225,7 @@ def to_map_art(self):
         layer.updateFields()
 
 
-        for record in data:
+        for record in all_data:
             print(f"Processing record: {record}")  # Log to inspect the data
 
             try:
@@ -277,10 +307,11 @@ def to_map_area(self):
             "SfvDistricts": (1,4),
             "Campus": (1,5)
             }
-    
+        
+        #Selected number of takes (points)
         selected_nbrPoints = self.dlg.maxNbr_area.text()
         
-        if selected_nbrPoints.isnumeric == False or int(selected_nbrPoints) <= 0:
+        if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
                 "Error", "Please input a positive numerical value.", level=3
             )
