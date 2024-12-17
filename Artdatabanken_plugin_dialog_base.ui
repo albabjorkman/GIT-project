@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+
  <class>ArtdatabankenDialogBase</class>
  <widget class="QDialog" name="ArtdatabankenDialogBase">
   <property name="geometry">
@@ -13,6 +14,214 @@
   <property name="windowTitle">
    <string>Artdatabanken</string>
   </property>
+
+  <!-- areaType Label -->
+  <widget class="QLabel" name="labelAreaType">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>30</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select area type:</string>
+   </property>
+  </widget>
+
+  <!-- Dropdown menu areaType -->
+  <widget class="QComboBox" name="areaType_2">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>30</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="editable">
+    <bool>false</bool>
+   </property>
+   <property name="currentIndex">
+    <number>-1</number>
+   </property>
+  </widget>
+
+  <!-- Max number label -->
+  <widget class="QLabel" name="maxNbr_areaLabel">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>80</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Max number points:</string>
+   </property>
+  </widget>
+
+  <!-- Max number QLineEdit -->
+  <widget class="QLineEdit" name="maxNbr_area">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>80</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+
+  <!-- Warning text: Limit reached for max number points -->
+  <widget class="QLabel" name="maxLimitReachedLabel">
+    <property name="geometry">
+        <rect>
+            <x>380</x>
+            <y>80</y>
+            <width>250</width>
+            <height>30</height>
+        </rect>
+    </property>
+    <property name="text">
+        <string/>
+    </property>
+    <property name="alignment">
+        <set>Qt::AlignLeft</set>
+    </property>
+    <property name="visible">
+        <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+        <string>color: red;</string> <!-- Red is more suitable for warnings -->
+    </property>
+  </widget>
+
+  <!-- Attribute selection label -->
+  <widget class="QLabel" name="Select">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>130</y>
+     <width>130</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select attribute to show: </string>
+   </property>
+  </widget>
+
+  <!-- Checkbox areaTypes -->
+  <widget class="QCheckBox" name="areaTypes">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>130</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>areaType</string>
+   </property>
+  </widget>
+
+  <!-- Checkbox name -->
+  <widget class="QCheckBox" name="name">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>130</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>name</string>
+   </property>
+  </widget>
+
+  <!-- Checkbox featureId-->
+  <widget class="QCheckBox" name="featureId">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>130</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>featureId</string>
+   </property>
+  </widget>
+
+  <!-- ? -->
+  <widget class="QLabel" name="Select_2">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>150</y>
+     <width>171</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+
+
+
+  <!-- selectAll button -->
+  <widget class="QPushButton" name="selectAll">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select all</string>
+   </property>
+  </widget>
+
+  <!-- ClearAll button -->
+  <widget class="QPushButton" name="clearAll">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+  </widget>
+
+  <!-- Load data button -->
+  <widget class="QPushButton" name="loadDataButton">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>230</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load data</string>
+   </property>
+  </widget>
+
+  <!-- Standard buttons Cancel and OK -->
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
     <rect>
@@ -29,140 +238,8 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="lableAreaType">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>90</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select area type:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="areaType_2">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>90</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="editable">
-    <bool>false</bool>
-   </property>
-   <property name="currentIndex">
-    <number>-1</number>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="loadDataButton">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>230</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Load data</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="name">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>130</y>
-     <width>101</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>name</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="featureId">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>130</y>
-     <width>101</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>featureId</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Select">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>130</y>
-     <width>130</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select attribute to show: </string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="clearAll">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>180</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Clear All</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="selectAll">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>180</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select all</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Select_2">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>150</y>
-     <width>171</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="areaTypes">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>130</y>
-     <width>71</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>areaType</string>
-   </property>
-  </widget>
  </widget>
+
  <resources/>
  <connections>
   <connection>

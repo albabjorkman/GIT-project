@@ -30,9 +30,7 @@ def from_wfs(self):
             filters = " OR ".join([f"scientificName='{name}'" for name in names])
             endpoint = f"{base_url}{filters}"
         else:
-            endpoint = base_url  #  name is provided
-
-
+            endpoint = base_url  # name is provided
 
         # Send a GET request to fetch the data
         response = requests.get(endpoint)
@@ -194,7 +192,6 @@ def to_map_art(self):
         provider.addAttributes(fields)
         layer.updateFields()
 
-
         for record in data:
             print(f"Processing record: {record}")  # Log to inspect the data
 
@@ -230,7 +227,6 @@ def to_map_art(self):
         layer.updateExtents()
         QgsProject.instance().addMapLayer(layer)
 
-
         # Notify the user of success
         self.iface.messageBar().pushMessage(
             "Success", "Data loaded successfully as points.", level=1
@@ -254,16 +250,63 @@ def to_map_area(self):
         ]
         print(f"Selected attributes: {selected_attributes}")
 
+        # Limit for areaTypes (Max data points)
+        area_type_point_limits = {
+            "": (0, float('inf')),  # No limit for an empty area type
+            "Municipality": (1, 290),
+            "Community": (1, 1888),
+            "Sea": (1, 8),
+            "CountryRegion": (1, 4),
+            "NatureType": (1, 6),
+            "Province": (1, 34),
+            "Ramsar": (1, 67),
+            "BirdValidationArea": (1, 31),
+            "Parish": (1, 2433),
+            "Spa": (1, 550),
+            "County": (1, 21),
+            "ProtectedNature": (1, 6691),
+            "SwedishForestAgencyDistricts": (1, 22),
+            "Sci": (1, 3989),
+            "WaterArea": (1, 925),
+            "Atlas5x5": (1, 21921),
+            "Atlas10x10": (1, 5636),
+            "SfvDistricts": (1, 4),
+            "Campus": (1, 5)
+        }
+
+        selected_nbrPoints = self.dlg.maxNbr_area.text()
+
+        if selected_nbrPoints.isnumeric == False or int(selected_nbrPoints) <= 0:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please input a positive numerical value.", level=3
+            )
+            return
+
+        # Convert selected number of points to int
+        nbr_points = int(selected_nbrPoints)
+
+        # Limit check
+        if selected_area_type != "":
+            min_points, max_points = area_type_point_limits.get(selected_area_type, (1, 100))
+            if nbr_points > max_points:
+                self.dlg.maxLimitReachedLabel.setText(
+                    f"Limit exceeded! \n{selected_area_type}:{max_points}points"
+                )
+                self.dlg.maxLimitReachedLabel.setVisible(True)
+
+            else:
+                self.dlg.maxLimitReachedLabel.setVisible(False)
+
         # Define query parameters
         params_area = {
             "searchString": "",
             "skip": 0,
-            "take": 10,
+            "take": selected_nbrPoints,
         }
 
         # Add areaTypes only if it's not empty
         if selected_area_type:
-            params_area["areaType_2"] = selected_area_type
+            params_area["areaTypes"] = selected_area_type
 
         print(f"Sending API Request with parameters: {params_area}")
 
@@ -271,7 +314,6 @@ def to_map_area(self):
         endpoint = ""
 
         data = self.api_client_area.fetch_data(endpoint=endpoint, params=params_area)
-
 
         if not data or "records" not in data:
             self.iface.messageBar().pushMessage(
@@ -281,7 +323,6 @@ def to_map_area(self):
 
         records = data["records"]
         print(f"Fetched {len(records)} records from the API.")
-
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "Area Data Points", "memory")
@@ -318,4 +359,3 @@ def to_map_area(self):
             "Error", f"Failed to load data: {str(e)}", level=3
         )
         print("Error:", str(e))
-
