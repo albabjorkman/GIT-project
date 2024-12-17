@@ -83,6 +83,7 @@ class Artdatabanken:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
+
         # Initialize the APIClient with your API key and the base URL of the API
         self.api_key = "5044b6436a6b4814b9689cd6fac542f0"  # Replace with your actual API key
         self.base_url_area = "https://api.artdatabanken.se/species-observation-system/v1/Areas"  # Base URL of the API, area
@@ -265,6 +266,7 @@ class Artdatabanken:
 
         self.dlg.areaType_2.clear()  # Clear any existing items
         self.dlg.areaType_2.addItems(area_types_data)  # Add area types to the dropdown
+        self.dlg.areaType_2.setSelectionMode(QListWidget.MultiSelection)
 
     def art_type(self):
         art_type_data = ["","Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",

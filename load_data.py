@@ -262,12 +262,25 @@ def to_map_art(self):
 def to_map_area(self):
     try:
         # Select area type from the drop-down menu
-        selected_area_type = self.dlg.areaType_2.currentText().strip()
+        selected_area_types = [
+            item.text() for item in self.dlg.areaType_2.selectedItems()
+        ]
+
+        # Start building the base URL
+        base_url = "https://api.artdatabanken.se/species-observation-system/v1/Areas?"
+
+        # Add the areaTypes parameters, one for each selected item
+        area_type_str = ",".join(selected_area_types)  # Join areaTypes into a single comma-separated string
+        if area_type_str:
+            base_url += f"areaTypes={area_type_str}&"
+
+        # Remove the trailing '&' if there are any
+        base_url = base_url.rstrip("&")
+
+        print(f"Base URL with area types: {base_url}")  # For debugging
 
         selected_attributes = [
-            checkbox.text()
-            for checkbox in self.dlg.checkboxes
-            if checkbox.isChecked()
+            checkbox.text() for checkbox in self.dlg.checkboxes if checkbox.isChecked()
         ]
         print(f"Selected attributes: {selected_attributes}")
 
@@ -297,26 +310,15 @@ def to_map_area(self):
 
         selected_nbrPoints = self.dlg.maxNbr_area.text()
 
-        if selected_nbrPoints.isnumeric == False or int(selected_nbrPoints) <= 0:
+        # Check if the number of points is valid
+        if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
                 "Error", "Please input a positive numerical value.", level=3
             )
             return
 
-        # Convert selected number of points to int
+        # Convert the selected number of points to int
         nbr_points = int(selected_nbrPoints)
-
-        # Limit check
-        if selected_area_type != "":
-            min_points, max_points = area_type_point_limits.get(selected_area_type, (1, 100))
-            if nbr_points > max_points:
-                self.dlg.maxLimitReachedLabel.setText(
-                    f"Limit exceeded! \n{selected_area_type}:{max_points}points"
-                )
-                self.dlg.maxLimitReachedLabel.setVisible(True)
-
-            else:
-                self.dlg.maxLimitReachedLabel.setVisible(False)
 
         # Define query parameters
         params_area = {
@@ -325,14 +327,14 @@ def to_map_area(self):
             "take": selected_nbrPoints,
         }
 
-        # Add areaTypes only if it's not empty
-        if selected_area_type:
-            params_area["areaTypes"] = selected_area_type
+        # Add areaTypes as a comma-separated string to params_area
+        if area_type_str:
+            params_area["areaTypes"] = area_type_str
 
         print(f"Sending API Request with parameters: {params_area}")
 
         # Fetch data from the API
-        endpoint = ""
+        endpoint = ""  # Add the actual endpoint URL
 
         data = self.api_client_area.fetch_data(endpoint=endpoint, params=params_area)
 
