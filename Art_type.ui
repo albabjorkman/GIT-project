@@ -13,6 +13,8 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+
+  <!-- Label: Select scientificName -->
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
     <rect>
@@ -26,6 +28,8 @@
     <string>Select scientificName</string>
    </property>
   </widget>
+
+  <!-- QLineEdit: Input for scientificName -->
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
@@ -36,6 +40,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Label: Select kingdom -->
   <widget class="QLabel" name="lableAreaType">
    <property name="geometry">
     <rect>
@@ -49,6 +55,8 @@
     <string>Select kingdom</string>
    </property>
   </widget>
+
+  <!-- Label: Max number of points -->
   <widget class="QLabel" name="maxNbr_artLabel">
    <property name="geometry">
     <rect>
@@ -62,6 +70,8 @@
     <string>Max number points:</string>
    </property>
   </widget>
+
+  <!-- QLineEdit: Input for max number of points -->
   <widget class="QLineEdit" name="maxNbr_art">
    <property name="geometry">
     <rect>
@@ -72,6 +82,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Button: Load data / Next -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -85,6 +97,8 @@
     <string>Next</string>
    </property>
   </widget>
+
+  <!-- Dropdown: Select artType -->
   <widget class="QListWidget" name="artType">
    <property name="geometry">
     <rect>
@@ -95,6 +109,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Label: Select class -->
   <widget class="QLabel" name="lableAreaType_3">
    <property name="geometry">
     <rect>
@@ -108,6 +124,8 @@
     <string>Select class</string>
    </property>
   </widget>
+
+  <!-- Dropdown: Select artClass -->
   <widget class="QListWidget" name="artClass">
    <property name="geometry">
     <rect>
@@ -118,6 +136,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Sub-label: Instructions for artType dropdown -->
   <widget class="QLabel" name="lableAreaType_4">
    <property name="geometry">
     <rect>
@@ -131,6 +151,8 @@
     <string>(Choose empty for all)</string>
    </property>
   </widget>
+
+  <!-- Sub-label: Instructions for artClass dropdown -->
   <widget class="QLabel" name="lableAreaType_5">
    <property name="geometry">
     <rect>
@@ -144,6 +166,8 @@
     <string>(Choose empty for all)</string>
    </property>
   </widget>
+
+  <!-- Label: Select vernacularName -->
   <widget class="QLabel" name="lableAreaType_6">
    <property name="geometry">
     <rect>
@@ -157,6 +181,8 @@
     <string>Select vernacularName</string>
    </property>
   </widget>
+
+  <!-- QLineEdit: Input for vernacularName -->
   <widget class="QLineEdit" name="vernacularName">
    <property name="geometry">
     <rect>
