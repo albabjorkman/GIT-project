@@ -6,15 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>524</width>
+    <width>591</width>
     <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Artdatabanken</string>
   </property>
-
-  <!-- areaType Label -->
   <widget class="QLabel" name="labelAreaType">
    <property name="geometry">
     <rect>
@@ -28,8 +26,6 @@
     <string>Select area type:</string>
    </property>
   </widget>
-
-  <!-- Max number label -->
   <widget class="QLabel" name="maxNbr_areaLabel">
    <property name="geometry">
     <rect>
@@ -43,8 +39,6 @@
     <string>Max number points:</string>
    </property>
   </widget>
-
-  <!-- Max number QLineEdit -->
   <widget class="QLineEdit" name="maxNbr_area">
    <property name="geometry">
     <rect>
@@ -55,14 +49,12 @@
     </rect>
    </property>
   </widget>
-
-  <!-- Warning text: Limit reached for max number points -->
   <widget class="QLabel" name="maxLimitReachedLabel">
    <property name="geometry">
     <rect>
      <x>380</x>
      <y>80</y>
-     <width>300</width>
+     <width>250</width>
      <height>30</height>
     </rect>
    </property>
@@ -70,7 +62,7 @@
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string>color: red;</string> <!-- Red is more suitable for warnings -->
+    <string>color: red;</string>
    </property>
    <property name="text">
     <string/>
@@ -79,8 +71,6 @@
     <set>Qt::AlignLeading</set>
    </property>
   </widget>
-
-  <!-- Attribute selection label -->
   <widget class="QLabel" name="Select">
    <property name="geometry">
     <rect>
@@ -94,8 +84,6 @@
     <string>Select attribute to show: </string>
    </property>
   </widget>
-
-  <!-- Checkbox areaTypes -->
   <widget class="QCheckBox" name="areaTypes">
    <property name="geometry">
     <rect>
@@ -109,8 +97,6 @@
     <string>areaType</string>
    </property>
   </widget>
-
-  <!-- Checkbox name -->
   <widget class="QCheckBox" name="name">
    <property name="geometry">
     <rect>
@@ -124,8 +110,6 @@
     <string>name</string>
    </property>
   </widget>
-
-  <!-- Checkbox featureId-->
   <widget class="QCheckBox" name="featureId">
    <property name="geometry">
     <rect>
@@ -139,8 +123,6 @@
     <string>featureId</string>
    </property>
   </widget>
-
-  <!-- ? -->
   <widget class="QLabel" name="Select_2">
    <property name="geometry">
     <rect>
@@ -154,8 +136,6 @@
     <string/>
    </property>
   </widget>
-
-  <!-- selectAll button -->
   <widget class="QPushButton" name="selectAll">
    <property name="geometry">
     <rect>
@@ -169,8 +149,6 @@
     <string>Select all</string>
    </property>
   </widget>
-
-  <!-- ClearAll button -->
   <widget class="QPushButton" name="clearAll">
    <property name="geometry">
     <rect>
@@ -184,8 +162,6 @@
     <string>Clear All</string>
    </property>
   </widget>
-
-  <!-- Load data button -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -199,8 +175,6 @@
     <string>Load data</string>
    </property>
   </widget>
-
-  <!-- Dropdown menu areaType -->
   <widget class="QListWidget" name="areaType_2">
    <property name="geometry">
     <rect>

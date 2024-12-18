@@ -270,10 +270,7 @@ class Artdatabanken:
 
     def art_type(self):
         art_type_data = ["","Plantae", "Animalia", "Fungi"]
-        art_class_data =["","Actinopterygii","Arachnida", "Mollusca", "Insecta","Amphibia","Aves","Mammalia"]
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
-        self.art.artClass.addItems(art_class_data)
-        self.art.artClass.setSelectionMode(QListWidget.MultiSelection)
         self.art.artType.setSelectionMode(QListWidget.MultiSelection)
 

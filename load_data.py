@@ -130,14 +130,10 @@ def to_map_art(self):
         selected_scientific_names = self.art.scientificName.text()
         print(f"Selected scientific names: {selected_scientific_names}")
 
-        selected_vernacular_names = self.art.vernacularName.text()
-        print(f"Selected vernacular names: {selected_vernacular_names}")
 
-        selected_art_class= [item.text() for item in self.art.artClass.selectedItems()]
-        print(f"Selected scientific names: {selected_art_class}")
 
         scientific_names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
-        vernacular_names = [name.strip() for name in selected_vernacular_names.split(",") if name.strip()]
+
 
 
         selected_nbrPoints = self.art.maxNbr_art.text()
@@ -164,8 +160,6 @@ def to_map_art(self):
             params_art = {
                 "kingdom": ",".join(selected_art_types),
                 "scientificName": ",".join(scientific_names),
-                "class": ",".join(selected_art_class),
-                "vernacularName": ",".join(vernacular_names),
                 "skip": skips,
                 "take": min(1000, nbr_points_left),  # Take up to 1000 records
             }
