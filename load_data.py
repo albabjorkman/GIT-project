@@ -297,15 +297,62 @@ def to_map_area(self):
         ]
         print(f"Selected attributes: {selected_attributes}")
 
-        # Validate and get the number of points
+
+        # Limit for areaTypes (Max data points)
+        area_type_point_limits = {
+            "": (0, float('inf')),  # No limit for an empty area type
+            "Municipality": (1, 290),
+            "Community": (1, 1888),
+            "Sea": (1, 8),
+            "CountryRegion": (1, 4),
+            "NatureType": (1, 6),
+            "Province": (1, 34),
+            "Ramsar": (1, 67),
+            "BirdValidationArea": (1, 31),
+            "Parish": (1, 2433),
+            "Spa": (1, 550),
+            "County": (1, 21),
+            "ProtectedNature": (1, 6691),
+            "SwedishForestAgencyDistricts": (1, 22),
+            "Sci": (1, 3989),
+            "WaterArea": (1, 925),
+            "Atlas5x5": (1, 21921),
+            "Atlas10x10": (1, 5636),
+            "SfvDistricts": (1, 4),
+            "Campus": (1, 5)
+        }
+
+        # Selected number of takes (points)
         selected_nbrPoints = self.dlg.maxNbr_area.text()
+
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
                 "Error", "Please input a positive numerical value.", level=3
             )
             return
-
         nbr_points = int(selected_nbrPoints)
+
+        # Check limits for each selected area type
+        # Calculate the total maximum points across selected area types
+        total_min_points = 0
+        total_max_points = 0
+
+        for area_type in selected_area_types:
+            min_points, max_points = area_type_point_limits.get(area_type, (1, 100))
+            total_min_points += min_points
+            total_max_points += max_points
+
+        # Check if the user's input exceeds the combined limit
+        if  nbr_points > total_max_points:
+            self.dlg.maxLimitReachedLabel.setText(
+                f"Limit exceeded! Total allowed points: {total_max_points}."
+                f" "
+                f"You requested: {nbr_points}."
+            )
+            self.dlg.maxLimitReachedLabel.setVisible(True)
+            return  # Stop further execution
+        else:
+            self.dlg.maxLimitReachedLabel.setVisible(False)
 
         # Define query parameters
         params_area = {
