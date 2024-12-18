@@ -130,9 +130,18 @@ def to_map_art(self):
         selected_scientific_names = self.art.scientificName.text()
         print(f"Selected scientific names: {selected_scientific_names}")
 
-        names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
+        selected_vernacular_names = self.art.vernacularName.text()
+        print(f"Selected vernacular names: {selected_vernacular_names}")
+
+        selected_art_class= [item.text() for item in self.art.artClass.selectedItems()]
+        print(f"Selected scientific names: {selected_art_class}")
+
+        scientific_names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
+        vernacular_names = [name.strip() for name in selected_vernacular_names.split(",") if name.strip()]
+
 
         selected_nbrPoints = self.art.maxNbr_art.text()
+
 
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
@@ -154,7 +163,9 @@ def to_map_art(self):
         while nbr_points_left > 0:
             params_art = {
                 "kingdom": ",".join(selected_art_types),
-                "scientificName": ",".join(names),
+                "scientificName": ",".join(scientific_names),
+                "class": ",".join(selected_art_class),
+                "vernacularName": ",".join(vernacular_names),
                 "skip": skips,
                 "take": min(1000, nbr_points_left),  # Take up to 1000 records
             }
@@ -259,6 +270,8 @@ def to_map_art(self):
         print(f"Error: {str(e)}")
 
 
+import urllib.parse
+
 def to_map_area(self):
     try:
         # Select area type from the drop-down menu
@@ -266,85 +279,64 @@ def to_map_area(self):
             item.text() for item in self.dlg.areaType_2.selectedItems()
         ]
 
-        # Start building the base URL
-        base_url = "https://api.artdatabanken.se/species-observation-system/v1/Areas?"
+        # Ensure selected_area_types is not empty
+        if not selected_area_types:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please select at least one area type.", level=3
+            )
+            return
 
-        # Add the areaTypes parameters, one for each selected item
-        area_type_str = ",".join(selected_area_types)  # Join areaTypes into a single comma-separated string
-        if area_type_str:
-            base_url += f"areaTypes={area_type_str}&"
+        # Construct the areaTypes parameter with multiple keys (URL-encoded)
+        area_type_params = "&".join(
+            [f"areaTypes={urllib.parse.quote(area)}" for area in selected_area_types]
+        )
 
-        # Remove the trailing '&' if there are any
-        base_url = base_url.rstrip("&")
-
-        print(f"Base URL with area types: {base_url}")  # For debugging
-
+        # Get selected attributes (if applicable)
         selected_attributes = [
             checkbox.text() for checkbox in self.dlg.checkboxes if checkbox.isChecked()
         ]
         print(f"Selected attributes: {selected_attributes}")
 
-        # Limit for areaTypes (Max data points)
-        area_type_point_limits = {
-            "": (0, float('inf')),  # No limit for an empty area type
-            "Municipality": (1, 290),
-            "Community": (1, 1888),
-            "Sea": (1, 8),
-            "CountryRegion": (1, 4),
-            "NatureType": (1, 6),
-            "Province": (1, 34),
-            "Ramsar": (1, 67),
-            "BirdValidationArea": (1, 31),
-            "Parish": (1, 2433),
-            "Spa": (1, 550),
-            "County": (1, 21),
-            "ProtectedNature": (1, 6691),
-            "SwedishForestAgencyDistricts": (1, 22),
-            "Sci": (1, 3989),
-            "WaterArea": (1, 925),
-            "Atlas5x5": (1, 21921),
-            "Atlas10x10": (1, 5636),
-            "SfvDistricts": (1, 4),
-            "Campus": (1, 5)
-        }
-
+        # Validate and get the number of points
         selected_nbrPoints = self.dlg.maxNbr_area.text()
-
-        # Check if the number of points is valid
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
                 "Error", "Please input a positive numerical value.", level=3
             )
             return
 
-        # Convert the selected number of points to int
         nbr_points = int(selected_nbrPoints)
 
         # Define query parameters
         params_area = {
             "searchString": "",
             "skip": 0,
-            "take": selected_nbrPoints,
+            "take": nbr_points,
         }
 
-        # Add areaTypes as a comma-separated string to params_area
-        if area_type_str:
-            params_area["areaTypes"] = area_type_str
+        # Construct the full endpoint URL with the areaTypes parameter
+        endpoint = "Areas"
+        query_string = f"{urllib.parse.urlencode(params_area)}&{area_type_params}"
+        full_url = f"{endpoint}?{query_string}"
 
-        print(f"Sending API Request with parameters: {params_area}")
+        print(f"Sending API Request to: {full_url}")
 
         # Fetch data from the API
-        endpoint = ""  # Add the actual endpoint URL
+        data = self.api_client_area.fetch_data(endpoint=full_url)
 
-        data = self.api_client_area.fetch_data(endpoint=endpoint, params=params_area)
+        # Process the data (implement according to your application logic)
+        print(f"Received data: {data}")
 
+
+        # Validate the response
         if not data or "records" not in data:
+            print(f"API Response Error: {data}")
             self.iface.messageBar().pushMessage(
                 "Error", "Invalid or empty response from the API.", level=3
             )
             return
 
-        records = data["records"]
+        records = data.get("records", [])
         print(f"Fetched {len(records)} records from the API.")
 
         # Create a new vector layer for points
@@ -382,3 +374,4 @@ def to_map_area(self):
             "Error", f"Failed to load data: {str(e)}", level=3
         )
         print("Error:", str(e))
+

@@ -86,7 +86,7 @@ class Artdatabanken:
 
         # Initialize the APIClient with your API key and the base URL of the API
         self.api_key = "5044b6436a6b4814b9689cd6fac542f0"  # Replace with your actual API key
-        self.base_url_area = "https://api.artdatabanken.se/species-observation-system/v1/Areas"  # Base URL of the API, area
+        self.base_url_area = "https://api.artdatabanken.se/species-observation-system/v1/"  # Base URL of the API, area
         self.base_url_art = "https://api.artdatabanken.se/species-observation-system/v1/Observations/Search/DwC"  # Base URL of the API, art
 
         # Create an instance of APIClient
@@ -269,9 +269,11 @@ class Artdatabanken:
         self.dlg.areaType_2.setSelectionMode(QListWidget.MultiSelection)
 
     def art_type(self):
-        art_type_data = ["","Plantae", "Arachnida", "Mollusca", "Insecta", "Amphibia", "Aves",
-                         "Mammalia", "Reptilia", "Actinopterygii", "Animalia", "Fungi"]
+        art_type_data = ["","Plantae", "Animalia", "Fungi"]
+        art_class_data =["","Actinopterygii","Arachnida", "Mollusca", "Insecta","Amphibia","Aves","Mammalia"]
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
+        self.art.artClass.addItems(art_class_data)
+        self.art.artClass.setSelectionMode(QListWidget.MultiSelection)
         self.art.artType.setSelectionMode(QListWidget.MultiSelection)
 
