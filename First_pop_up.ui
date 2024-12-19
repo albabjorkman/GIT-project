@@ -11,8 +11,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Artdatabanken</string>
   </property>
+
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
@@ -29,6 +30,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
+
   <widget class="QCheckBox" name="form_class">
    <property name="geometry">
     <rect>
@@ -42,6 +44,7 @@
     <string>Area information</string>
    </property>
   </widget>
+
   <widget class="QCheckBox" name="art_info">
    <property name="geometry">
     <rect>
@@ -55,6 +58,7 @@
     <string>Art information</string>
    </property>
   </widget>
+
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -68,6 +72,7 @@
     <string>Load data</string>
    </property>
   </widget>
+
   <widget class="QCheckBox" name="WFS_info">
    <property name="geometry">
     <rect>
@@ -82,7 +87,9 @@
    </property>
   </widget>
  </widget>
+
  <resources/>
+ 
  <connections>
   <connection>
    <sender>buttonBox</sender>

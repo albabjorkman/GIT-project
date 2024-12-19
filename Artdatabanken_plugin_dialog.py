@@ -77,8 +77,6 @@ class FirstPopupDialog(QtWidgets.QDialog, FIRST_POP):
         super().__init__(parent)
         self.setupUi(self)
 
-
-
 class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
     def __init__(self, parent=None):
         super(ArtTypeDialog, self).__init__(parent)
@@ -106,6 +104,11 @@ class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
     def __init__(self, parent=None):
         super(WFSSearchDialog, self).__init__(parent)
         self.setupUi(self)
+
+        # Add start- and end-date as variables
+        self.startDate = self.findChild(QtWidgets.QDateEdit, 'startDate')
+        self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
+        
 
 class WFSInfoDialog(QtWidgets.QDialog, WFS_INFO):
     def __init__(self, parent=None):

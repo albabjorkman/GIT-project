@@ -11,13 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>WFS Service</string>
   </property>
+  
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>160</y>
+     <y>240</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -26,7 +27,8 @@
     <string>Next</string>
    </property>
   </widget>
-  <widget class="QLabel" name="lableAreaType_2">
+
+  <widget class="QLabel" name="labelAreaType_2">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -36,9 +38,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>Select scientificName</string>
+    <string>Select scientific name</string>
    </property>
   </widget>
+
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
@@ -49,19 +52,93 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="lableAreaType_3">
+
+  <widget class="QLabel" name="labelReminder">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>50</y>
+     <x>170</x>
+     <y>40</y>
      <width>151</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Be careful with the spelling</string>
+    <string>Correct spelling is important!</string>
    </property>
   </widget>
+
+  <widget class="QGroupBox" name="dateAndTimeBox">
+    <property name="geometry">
+        <rect>
+            <x>30</x>
+            <y>80</y>
+            <width>330</width>
+            <height>120</height>
+        </rect>
+    </property>
+    <property name="title">
+        <string>Date Range</string>
+    </property>
+    <widget class="QLabel" name="labelStartDate">
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>30</y>
+                <width>130</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Start Date</string>
+        </property>
+    </widget>
+    <widget class="QDateEdit" name="startDate">
+        <property name="geometry">
+            <rect>
+                <x>170</x>
+                <y>30</y>
+                <width>130</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="calendarPopup">
+            <bool>true</bool>
+        </property>
+        <property name="displayFormat">
+            <string>yyyy-MM-dd</string>
+        </property>
+    </widget>
+    <widget class="QLabel" name="labelEndDate">
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>70</y>
+                <width>130</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>End Date</string>
+        </property>
+   </widget>
+   <widget class="QDateEdit" name="endDate">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>70</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy-MM-dd</string>
+    </property>
+   </widget>
+  </widget>
+
  </widget>
  <resources/>
  <connections/>

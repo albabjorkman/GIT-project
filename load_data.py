@@ -6,7 +6,7 @@ from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
 from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
 import requests
-
+from datetime import datetime
 
 def from_wfs(self):
     """Fetch data from the WFS service and load it as points on the map with selectable attributes."""
@@ -15,7 +15,23 @@ def from_wfs(self):
         base_url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=5&CQL_Filter="
 
         selected_scientific_names = self.wfsS.scientificName.text()
+        start_date = self.wfsS.startDate.date().toString("yyyy-MM-dd")
+        end_date = self.wfsS.endDate.date().toString("yyyy-MM-dd")
         print(f"Selected scientific name: {selected_scientific_names}")
+        print(f"Start date: {start_date}, End date: {end_date}")
+
+        # Validate input dates (shouldn't be an issue due to calendar input but still)
+        if start_date and end_date:
+            try:
+                datetime.strptime(start_date, "%Y-%m-%d")
+                datetime.strptime(end_date, "%Y-%m-%d")
+            except ValueError:
+                self.iface.messageBar().pushMessage(    
+                    "Error", "Invalid date format."
+                )
+
+        # List that holds different filters used to construct endpoint call
+        filters = []
 
         # Construct the endpoint dynamically based on scientific name input
         if selected_scientific_names:
@@ -27,10 +43,21 @@ def from_wfs(self):
                 return
 
             # Create CQL filter for multiple names
-            filters = " OR ".join([f"scientificName='{name}'" for name in names])
-            endpoint = f"{base_url}{filters}"
-        else:
-            endpoint = base_url  # name is provided
+            name_filter = " OR ".join([f"scientificName='{name}'" for name in names])
+            filters.append(f"({name_filter})")
+        
+        # Add start- and end-date to filters
+        if start_date and end_date:
+            start_date_filter = f"startDate='{start_date}T00:00:00:000'"
+            end_date_filter = f"endDate='{end_date}T00:00:00:000'"
+            filters.append(start_date_filter)
+            filters.append(end_date_filter)
+
+        # Join all filters together
+        cql_filter = "&" .join(filters) if filters else ""
+
+        endpoint = f"{base_url}{cql_filter}"
+        self.iface.messageBar().pushMessage(f"Constructed endpoint: {endpoint}", level=3)
 
         # Send a GET request to fetch the data
         response = requests.get(endpoint)
