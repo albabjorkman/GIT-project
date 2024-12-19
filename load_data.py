@@ -44,19 +44,18 @@ def from_wfs(self):
 
             # Create CQL filter for multiple names
             name_filter = " OR ".join([f"scientificName='{name}'" for name in names])
-            filters.append(f"({name_filter})")
+            filters.append(f"{name_filter}")
         
         # Add start- and end-date to filters
         if start_date and end_date:
-            start_date_filter = f"startDate='{start_date}T00:00:00:000'"
-            end_date_filter = f"endDate='{end_date}T00:00:00:000'"
-            filters.append(start_date_filter)
-            filters.append(end_date_filter)
+            start_date_filter = f"endDate>='{start_date}'"
+            end_date_filter = f"endDate<='{end_date}'"
+            filters.append(f"{start_date_filter} AND {end_date_filter}")
 
         # Join all filters together
-        cql_filter = "&" .join(filters) if filters else ""
+        cql_filter = " AND " .join(filters) if filters else ""
 
-        endpoint = f"{base_url}{cql_filter}"
+        endpoint = f"{base_url}({cql_filter})"
         self.iface.messageBar().pushMessage(f"Constructed endpoint: {endpoint}", level=3)
 
         # Send a GET request to fetch the data
