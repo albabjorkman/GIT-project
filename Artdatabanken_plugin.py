@@ -22,19 +22,29 @@
  ***************************************************************************/
 """
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
-from qgis.core import QgsPoint, QgsFeature, QgsGeometry, QgsVectorLayer, QgsField,QgsRectangle
+from qgis.core import QgsPoint, QgsFeature, QgsGeometry, QgsVectorLayer, QgsField, QgsRectangle
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
-from qgis.core import QgsProject, QgsVectorLayer
+from qgis.PyQt.QtWidgets import QAction, QMessageBox
+from qgis.PyQt.QtWidgets import QListWidget
+
+
+
+from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
 from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
+
+
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .Artdatabanken_plugin_dialog import ArtdatabankenDialog
+from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
+    ArtAttDialog, WFSSearchDialog
+from .load_data import from_wfs, to_map_art, to_map_area
 import os.path
 from .api_handler import APIClient
+
+
 
 
 
@@ -72,14 +82,16 @@ class Artdatabanken:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
+
+
         # Initialize the APIClient with your API key and the base URL of the API
         self.api_key = "5044b6436a6b4814b9689cd6fac542f0"  # Replace with your actual API key
-        self.base_url = "https://api.artdatabanken.se/species-observation-system/v1/"  # Base URL of the API
+        self.base_url_area = "https://api.artdatabanken.se/species-observation-system/v1/"  # Base URL of the API, area
+        self.base_url_art = "https://api.artdatabanken.se/species-observation-system/v1/Observations/Search/DwC"  # Base URL of the API, art
 
         # Create an instance of APIClient
-        self.api_client = APIClient(self.api_key, self.base_url)
-
-
+        self.api_client_area = APIClient(self.api_key, self.base_url_area)
+        self.api_client_art = APIClient(self.api_key, self.base_url_art)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -96,18 +108,17 @@ class Artdatabanken:
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('Artdatabanken', message)
 
-
     def add_action(
-        self,
-        icon_path,
-        text,
-        callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+            self,
+            icon_path,
+            text,
+            callback,
+            enabled_flag=True,
+            add_to_menu=True,
+            add_to_toolbar=True,
+            status_tip=None,
+            whats_this=None,
+            parent=None):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -184,7 +195,6 @@ class Artdatabanken:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -193,7 +203,6 @@ class Artdatabanken:
                 action)
             self.iface.removeToolBarIcon(action)
 
-
     def run(self):
         """Run method that performs all the real work"""
 
@@ -201,93 +210,67 @@ class Artdatabanken:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.dlg = ArtdatabankenDialog()
-            self.dlg.loadDataButton.clicked.connect(self.load_data_to_map)
-        # show the dialog
-        self.dlg.show()
+            self.Fpop = FirstPopupDialog()
+
+        self.Fpop.show()
         # Run the dialog event loop
-        result = self.dlg.exec_()
+
+        self.Fpop.loadDataButton.clicked.connect(self.show_second_dialog)
         # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
 
-    def load_data_to_map(self):
-        """Fetch all data from the API and add it to the QGIS map."""
-        try:
-            # Fetch the data from the API
-            endpoint = "Areas/Municipality/1465"  # Modify this as needed
-            data = self.api_client.fetch_data(endpoint)  # Use the instance variable here
+    def show_second_dialog(self):
+        """Show the second dialog after the first one."""
+        area_info_checked = self.Fpop.form_class.isChecked()
+        art_info_checked = self.Fpop.art_info.isChecked()
+        wfs_info_checked = self.Fpop.WFS_info.isChecked()
 
-            # Check if data is returned as expected
-            if not data:
-                self.iface.messageBar().pushMessage(
-                    "Error", "No data returned from the API.", level=3
-                )
-                return
+        if area_info_checked:
+            self.dlg = ArtdatabankenDialog()
+            self.populate_area_types()
+            self.dlg.loadDataButton.clicked.connect(lambda: to_map_area(self))
+            self.dlg.show()
 
-            # If response contains valid data, process it
-            if isinstance(data, dict) and "name" in data:
-                # For example, you could use bounding box to visualize the area
-                bounding_box = data.get("boundingBox")
-                point = data.get("featureId")
-                if bounding_box:
-                    # You can use the bounding box to create a rectangular layer or display
-                    min_lon = bounding_box["bottomRight"]["longitude"]
-                    min_lat = bounding_box["bottomRight"]["latitude"]
-                    max_lon = bounding_box["topLeft"]["longitude"]
-                    max_lat = bounding_box["topLeft"]["latitude"]
+        if art_info_checked:
+            self.art = ArtTypeDialog()
+            self.art_type()
+            self.art.loadDataButton.clicked.connect(lambda: self.on_art_load())
+            self.art.show()
 
-                    center_lon = (min_lon + max_lon) / 2
-                    center_lat = (min_lat + max_lat) / 2
+        if wfs_info_checked:
+            self.wfsS = WFSSearchDialog()
+            self.wfsS.loadDataButton.clicked.connect(lambda: self.on_WFS_search())
+            self.wfsS.show()
 
-                    point = QgsPoint(center_lon, center_lat)
-
-                    # Example: create a rectangle (bounding box) layer in QGIS
-                    # Note: You will need to adapt this to the actual spatial data format you need
-
-
-                    # Create a new vector layer for the bounding box (just an example)
-                    # Create a new vector layer for the bounding box
-                    layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "BoundingBox Layer", "memory")
-                    provider = layer.dataProvider()
-
-                    # Define the fields (attributes) for the layer
-                    provider.addAttributes([
-                        QgsField("Name", QVariant.String),
-                        QgsField("FeatureID", QVariant.String)
-                    ])
-                    layer.updateFields()
-
-                    # Create a feature for the bounding box
-                    feature = QgsFeature()
-                    feature.setGeometry(QgsGeometry.fromRect(QgsRectangle(min_lon, min_lat, max_lon, max_lat)))
-
-                    # Set attributes matching the fields
-                    feature.setAttributes([data.get("name", "Unknown"), data.get("featureId", "Unknown")])
-
-                    # Add feature to the layer
-                    provider.addFeature(feature)
-                    layer.updateExtents()
-
-                    # Add the layer to the QGIS project
-                    QgsProject.instance().addMapLayer(layer)
-
-                   
-                    self.iface.messageBar().pushMessage("Success", "Data loaded successfully.", level=1)
-                else:
-                    self.iface.messageBar().pushMessage(
-                        "Error", "Bounding box data missing in the API response.", level=3
-                    )
-            else:
-                self.iface.messageBar().pushMessage(
-                    "Error", "Unexpected response format from the API.", level=3
-                )
-
-        except Exception as e:
+        if not (area_info_checked or art_info_checked or wfs_info_checked):
             self.iface.messageBar().pushMessage(
-                "Error", f"Failed to load data: {str(e)}", level=3
-            )
+                "Select a type of data", level=3)
 
-        print(data)  #see if data is loaded in python-console
+        self.Fpop.close()
+
+    def on_art_load(self):
+        self.attA = ArtAttDialog()
+        self.attA.loadDataButton.clicked.connect(lambda: to_map_art(self))
+        self.attA.show()
+
+    def on_WFS_search(self):
+        self.wfs = WFSInfoDialog()
+        self.wfs.loadDataButton.clicked.connect(lambda: from_wfs(self))
+        self.wfs.show()
+
+    def populate_area_types(self):
+        area_types_data = ["","Municipality", "Community", "Sea", "CountryRegion", "NatureType",
+            "Province", "Ramsar", "BirdValidationArea", "Parish", "Spa",
+            "County", "ProtectedNature", "SwedishForestAgencyDistricts",
+            "Sci", "WaterArea", "Atlas5x5", "Atlas10x10", "SfvDistricts", "Campus"
+        ]
+
+        self.dlg.areaType_2.clear()  # Clear any existing items
+        self.dlg.areaType_2.addItems(area_types_data)  # Add area types to the dropdown
+        self.dlg.areaType_2.setSelectionMode(QListWidget.MultiSelection)
+
+    def art_type(self):
+        art_type_data = ["","Plantae", "Animalia", "Fungi"]
+        self.art.artType.clear()
+        self.art.artType.addItems(art_type_data)
+        self.art.artType.setSelectionMode(QListWidget.MultiSelection)
+
