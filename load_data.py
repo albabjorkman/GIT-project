@@ -6,17 +6,31 @@ from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
 from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
 import requests
-
+from datetime import datetime
 
 def from_wfs(self):
     """Fetch data from the WFS service and load it as points on the map with selectable attributes."""
     try:
         # Define the WFS URL
-        base_url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&count=5&CQL_Filter="
+        base_url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&CQL_Filter="
 
         selected_scientific_names = self.wfsS.scientificName.text()
-        print(f"Selected scientific name: {selected_scientific_names}")
+        start_date = self.wfsS.startDate.date().toString("yyyy-MM-dd")
+        end_date = self.wfsS.endDate.date().toString("yyyy-MM-dd")
 
+        # Validate input dates (shouldn't be an issue due to calendar input but still)
+        if start_date and end_date:
+            try:
+                datetime.strptime(start_date, "%Y-%m-%d")
+                datetime.strptime(end_date, "%Y-%m-%d")
+            except ValueError:
+                self.iface.messageBar().pushMessage(    
+                    "Error", "Invalid date format."
+                )
+
+        # List that holds different filters used to construct endpoint call
+        filters = []
+        
         # Construct the endpoint dynamically based on scientific name input
         if selected_scientific_names:
             names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
@@ -25,145 +39,171 @@ def from_wfs(self):
                     "Error", "Please provide valid scientific names.", level=3
                 )
                 return
+            
+            name_filter = " OR ".join([f"scientificName='{name}'" for name in names])
+            filters.append(name_filter)
 
-            # Create CQL filter for multiple names
-            filters = " OR ".join([f"scientificName='{name}'" for name in names])
-            endpoint = f"{base_url}{filters}"
-        else:
-            endpoint = base_url  #  name is provided
+         # Add start- and end-date to filters
+        if start_date and end_date:
+            start_date_filter = f"endDate>='{start_date}'"
+            end_date_filter = f"endDate<='{end_date}'"
+            filters.append(f"{start_date_filter} AND {end_date_filter}")
 
+        # Join all filters together
+        cql_filter = " AND " .join(filters) if filters else ""
+        
+        # Create a new vector layer for points
+        layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
+        provider = layer.dataProvider()
 
+        # Get selected attributes from checkboxes (the text of each checkbox)
+        selected_attributes = [
+            checkbox.text()  # This will fetch the name set in the <string> property of QCheckBox
+            for checkbox in self.wfs.checkboxes
+            if checkbox.isChecked()
+        ]
+        print(f"Selected attributes: {selected_attributes}")
 
-        # Send a GET request to fetch the data
-        response = requests.get(endpoint)
-
-        if response.status_code == 200:
-            data = response.json()  # Parse the JSON response
-
-            # Log the full response to inspect the data
-            print("Response data:", data)
-
-            # Create a new vector layer for points
-            layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
-            provider = layer.dataProvider()
-
-            # Get selected attributes from checkboxes (the text of each checkbox)
-            selected_attributes = [
-                checkbox.text()  # This will fetch the name set in the <string> property of QCheckBox
-                for checkbox in self.wfs.checkboxes
-                if checkbox.isChecked()
-            ]
-            print(f"Selected attributes: {selected_attributes}")
-
-            if not selected_attributes:
-                self.iface.messageBar().pushMessage(
-                    "Error", "Please select at least one attribute.", level=3
-                )
-                return
-
-            # Dynamically create the fields based on selected attributes
-            fields = [QgsField(attr, QVariant.String) for attr in selected_attributes]
-            provider.addAttributes(fields)
-            layer.updateFields()
-
-            # Set to track unique points with some precision tolerance
-            processed_points = set()
-
-            # Function to round coordinates for comparison
-            def round_coordinates(lon, lat, precision=5):
-                return (round(lon, precision), round(lat, precision))
-
-            # Process each record and add a point feature
-            for feature in data.get("features", []):
-                geometry = feature.get("geometry")
-                if geometry:
-                    coords = geometry.get("coordinates", [])
-                    if len(coords) >= 2:  # Assuming coordinates are [longitude, latitude]
-                        lon, lat = coords[0], coords[1]
-
-                        # Round the coordinates for comparison
-                        point_key = round_coordinates(lon, lat)
-
-                        # Skip if the point has already been processed
-                        if point_key in processed_points:
-                            continue
-
-                        # Mark this point as processed
-                        processed_points.add(point_key)
-
-                        # Create feature geometry (point)
-                        point = QgsPointXY(lon, lat)
-                        qgis_feature = QgsFeature()
-                        qgis_feature.setGeometry(QgsGeometry.fromPointXY(point))
-
-                        # Collect attributes based on selected fields
-                        attributes = [
-                            feature.get("properties", {}).get(attr, "Unknown") for attr in selected_attributes
-                        ]
-                        qgis_feature.setAttributes(attributes)
-
-                        # Add feature to the provider
-                        provider.addFeature(qgis_feature)
-
-            # Finalize the layer and add it to the QGIS project
-            layer.updateExtents()
-            QgsProject.instance().addMapLayer(layer)
-
-            # Notify the user of success
+        if not selected_attributes:
             self.iface.messageBar().pushMessage(
-                "Success", "WFS data loaded successfully as points.", level=1
-            )
-        else:
-            self.iface.messageBar().pushMessage("Error", "Failed to retrieve data from WFS.", level=3)
-            print(f"Failed to retrieve data. Status code: {response.status_code}")
-    except Exception as e:
-        self.iface.messageBar().pushMessage(
-            "Error", f"Failed to load data: {str(e)}", level=3
-        )
-        print(f"Error: {str(e)}")
-
-
-def to_map_art(self):
-
-    try:
-        # Select art type from the drop-down menu
-        selected_art_type = self.art.artType.currentText()
-        print(f"Selected art type: {selected_art_type}")
-
-        selected_scientific_names = self.art.scientificName.text()
-        print(f"Selected scientific names: {selected_scientific_names}")
-
-        names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
-        if not names:
-            self.iface.messageBar().pushMessage(
-                "Error", "Please provide at least one valid scientific name.", level=3
+                "Error", "Please select at least one attribute.", level=3
             )
             return
 
-        #Selected number of takes (points) and checked if correctly written before converting to int
-        selected_nbrPoints = self.art.maxNbr_art.text()
+        # Dynamically create the fields based on selected attributes
+        fields = [QgsField(attr, QVariant.String) for attr in selected_attributes]
+        provider.addAttributes(fields)
+        layer.updateFields()
         
+        # Input and check max points
+        selected_nbrPoints = self.wfsS.maxNbr_WFS.text()
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
                 "Error", "Please input a positive numerical value.", level=3
             )
             return
         
+        # Convert to int and define max features per request and max start index
+        max_points = int(selected_nbrPoints)
+        max_features_per_request = 5000
+        max_start_index = 100000
+
+        # Fetch data in batches
+        start_index = 0
+        total_features = []
+
+        while start_index < max_start_index and len(total_features) < max_points:
+            remaining_points = max_points - len(total_features)
+            request_count = min(remaining_points, max_features_per_request)
+            endpoint = f"{base_url}{cql_filter}&startIndex={start_index}&count={request_count}"
+
+            response = requests.get(endpoint)
+            if response.status_code != 200:
+                self.iface.messageBar().pushMessage(
+                    "Error", f"Failed to retrieve data: HTTP {response.status_code}", level=3
+                )
+                return
+
+            data = response.json()
+            features = data.get("features", [])
+            if not features:
+                return
+
+            total_features.extend(features)
+            start_index += request_count
+
+        # Set to track unique points with some precision tolerance
+        processed_points = set()
+        
+        # Function to round coordinates for comparison
+        def round_coordinates(lon, lat, precision=5):
+            return (round(lon, precision), round(lat, precision))
+        
+        for feature in total_features:
+            geometry = feature.get("geometry")
+            if geometry:
+                coords = geometry.get("coordinates", [])
+                if len(coords) >= 2:  # Assuming coordinates are [longitude, latitude]
+                    lon, lat = coords[0], coords[1]
+
+                    # Round the coordinates for comparison
+                    point_key = round_coordinates(lon, lat)
+
+                    # Skip if the point has already been processed
+                    if point_key in processed_points:
+                        continue
+
+                    # Mark this point as processed
+                    processed_points.add(point_key)
+
+                    # Create feature geometry (point)
+                    point = QgsPointXY(lon, lat)
+                    qgis_feature = QgsFeature()
+                    qgis_feature.setGeometry(QgsGeometry.fromPointXY(point))
+
+                    # Collect attributes based on selected fields
+                    attributes = [
+                        feature.get("properties", {}).get(attr, "Unknown") for attr in selected_attributes
+                    ]
+                    qgis_feature.setAttributes(attributes)
+
+                    # Add feature to the provider
+                    provider.addFeature(qgis_feature)
+
+        # Finalize the layer and add it to the QGIS project
+        layer.updateExtents()
+        QgsProject.instance().addMapLayer(layer)
+
+        # Notify the user of success
+        self.iface.messageBar().pushMessage(
+            "Success", "WFS data loaded successfully as points.", level=1
+        )
+
+    # Exception block
+    except Exception as e:
+        self.iface.messageBar().pushMessage(
+            "Error", f"Failed to load data: {str(e)}", level=3
+        )
+
+def to_map_art(self):
+    try:
+        # Select art type from the drop-down menu
+        selected_art_types = [item.text() for item in self.art.artType.selectedItems()]
+        print("Selected Art Types:", selected_art_types)
+
+        selected_scientific_names = self.art.scientificName.text()
+        print(f"Selected scientific names: {selected_scientific_names}")
+
+
+
+        scientific_names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
+
+
+
+        selected_nbrPoints = self.art.maxNbr_art.text()
+
+
+        if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please input a positive numerical value.", level=3
+            )
+            return
+
         nbr_points = int(selected_nbrPoints)
 
         # Fetch data from the API
-        endpoint = "" 
-        
-        #To handle requests with more than 1000 takes
+        endpoint = ""
+
+        # To handle requests with more than 1000 takes
         skips = 0
         nbr_points_left = nbr_points
-        all_data=[]
-        
-        # Construct the query parameters and run API depending on the number of takes 
+        all_data = []
+
+        # Construct the query parameters and run API depending on the number of takes
         while nbr_points_left > 0:
             params_art = {
-                "kingdom": selected_art_type,
-                "scientificName": ",".join(names),
+                "kingdom": ",".join(selected_art_types),
+                "scientificName": ",".join(scientific_names),
                 "skip": skips,
                 "take": min(1000, nbr_points_left),  # Take up to 1000 records
             }
@@ -182,13 +222,12 @@ def to_map_art(self):
                     "Error", "Invalid or empty response from the API.", level=3
                 )
                 return
-        
+
             all_data.extend(data)  # Add the new data to the existing data list
 
             # Update remaining points and skip for the next API call
             nbr_points_left -= len(data)  # Adjust remaining points
             skips += len(data)  # Increase skip based on the amount of data received
-
 
         # Now we have all data in `all_data`, proceed to create the QGIS layer
         if not all_data:
@@ -196,7 +235,6 @@ def to_map_art(self):
                 "Error", "No data returned from the API.", level=3
             )
             return
-                        
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "Species Observations", "memory")
@@ -223,7 +261,6 @@ def to_map_art(self):
         fields = [QgsField(attr, QVariant.String) for attr in selected_attributes]
         provider.addAttributes(fields)
         layer.updateFields()
-
 
         for record in all_data:
             print(f"Processing record: {record}")  # Log to inspect the data
@@ -260,7 +297,6 @@ def to_map_art(self):
         layer.updateExtents()
         QgsProject.instance().addMapLayer(layer)
 
-
         # Notify the user of success
         self.iface.messageBar().pushMessage(
             "Success", "Data loaded successfully as points.", level=1
@@ -272,96 +308,121 @@ def to_map_art(self):
         print(f"Error: {str(e)}")
 
 
+import urllib.parse
+
 def to_map_area(self):
     try:
         # Select area type from the drop-down menu
-        selected_area_type = self.dlg.areaType_2.currentText().strip()
+        selected_area_types = [
+            item.text() for item in self.dlg.areaType_2.selectedItems()
+        ]
 
+        # Ensure selected_area_types is not empty
+        if not selected_area_types:
+            self.iface.messageBar().pushMessage(
+                "Error", "Please select at least one area type.", level=3
+            )
+            return
+
+        # Construct the areaTypes parameter with multiple keys (URL-encoded)
+        area_type_params = "&".join(
+            [f"areaTypes={urllib.parse.quote(area)}" for area in selected_area_types]
+        )
+
+        # Get selected attributes (if applicable)
         selected_attributes = [
-            checkbox.text()
-            for checkbox in self.dlg.checkboxes
-            if checkbox.isChecked()
+            checkbox.text() for checkbox in self.dlg.checkboxes if checkbox.isChecked()
         ]
         print(f"Selected attributes: {selected_attributes}")
-        
-        #Limit for areaTypes (Max data points)
+
+
+        # Limit for areaTypes (Max data points)
         area_type_point_limits = {
             "": (0, float('inf')),  # No limit for an empty area type
             "Municipality": (1, 290),
             "Community": (1, 1888),
             "Sea": (1, 8),
-            "CountryRegion": (1,4),
-            "NatureType": (1,6),
-            "Province": (1,34), 
-            "Ramsar": (1,67),
-            "BirdValidationArea": (1,31), 
-            "Parish": (1,2433), 
-            "Spa": (1,550), 
-            "County": (1,21),
-            "ProtectedNature": (1,6691),
-            "SwedishForestAgencyDistricts": (1,22),
-            "Sci": (1,3989),
-            "WaterArea": (1,925),
-            "Atlas5x5": (1,21921),
-            "Atlas10x10": (1,5636),
-            "SfvDistricts": (1,4),
-            "Campus": (1,5)
-            }
-        
-        #Selected number of takes (points)
+            "CountryRegion": (1, 4),
+            "NatureType": (1, 6),
+            "Province": (1, 34),
+            "Ramsar": (1, 67),
+            "BirdValidationArea": (1, 31),
+            "Parish": (1, 2433),
+            "Spa": (1, 550),
+            "County": (1, 21),
+            "ProtectedNature": (1, 6691),
+            "SwedishForestAgencyDistricts": (1, 22),
+            "Sci": (1, 3989),
+            "WaterArea": (1, 925),
+            "Atlas5x5": (1, 21921),
+            "Atlas10x10": (1, 5636),
+            "SfvDistricts": (1, 4),
+            "Campus": (1, 5)
+        }
+
+        # Selected number of takes (points)
         selected_nbrPoints = self.dlg.maxNbr_area.text()
-        
+
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
                 "Error", "Please input a positive numerical value.", level=3
             )
             return
-        
-        #Convert selected number of points to int
         nbr_points = int(selected_nbrPoints)
-        
-        #Limit check 
-        if selected_area_type != "":
-            min_points, max_points = area_type_point_limits.get(selected_area_type, (1, 100))
-            if  nbr_points > max_points:
-                self.dlg.maxLimitReachedLabel.setText(
-                    f"Limit exceeded! \n{selected_area_type}:{max_points}points"
-                )
-                self.dlg.maxLimitReachedLabel.setVisible(True)
 
-            else:
-                self.dlg.maxLimitReachedLabel.setVisible(False)
-                
+        # Check limits for each selected area type
+        # Calculate the total maximum points across selected area types
+        total_min_points = 0
+        total_max_points = 0
+
+        for area_type in selected_area_types:
+            min_points, max_points = area_type_point_limits.get(area_type, (1, 100))
+            total_min_points += min_points
+            total_max_points += max_points
+
+        # Check if the user's input exceeds the combined limit
+        if  nbr_points > total_max_points:
+            self.dlg.maxLimitReachedLabel.setText(
+                f"Limit exceeded! Total allowed points: {total_max_points}."
+                f" "
+                f"You requested: {nbr_points}."
+            )
+            self.dlg.maxLimitReachedLabel.setVisible(True)
+            return  # Stop further execution
+        else:
+            self.dlg.maxLimitReachedLabel.setVisible(False)
+
         # Define query parameters
         params_area = {
             "searchString": "",
             "skip": 0,
-            "take": selected_nbrPoints,
-            }
-            
-        # Add areaTypes only if it's not empty
-        if selected_area_type:
-            params_area["areaTypes"] = selected_area_type
-            
-    
-        print(f"Sending API Request with parameters: {params_area}")
-        
-    
+            "take": nbr_points,
+        }
+
+        # Construct the full endpoint URL with the areaTypes parameter
+        endpoint = "Areas"
+        query_string = f"{urllib.parse.urlencode(params_area)}&{area_type_params}"
+        full_url = f"{endpoint}?{query_string}"
+
+        print(f"Sending API Request to: {full_url}")
+
         # Fetch data from the API
-        endpoint = ""
+        data = self.api_client_area.fetch_data(endpoint=full_url)
 
-        data = self.api_client_area.fetch_data(endpoint=endpoint, params=params_area)
+        # Process the data (implement according to your application logic)
+        print(f"Received data: {data}")
 
 
+        # Validate the response
         if not data or "records" not in data:
+            print(f"API Response Error: {data}")
             self.iface.messageBar().pushMessage(
                 "Error", "Invalid or empty response from the API.", level=3
             )
             return
 
-        records = data["records"]
+        records = data.get("records", [])
         print(f"Fetched {len(records)} records from the API.")
-
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "Area Data Points", "memory")
