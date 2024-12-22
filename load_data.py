@@ -383,12 +383,11 @@ def to_map_area(self):
         # Check if the user's input exceeds the combined limit
         if  nbr_points > total_max_points:
             self.dlg.maxLimitReachedLabel.setText(
-                f"Limit exceeded! Total allowed points: {total_max_points}."
+                f"Warning! Limit exceeded! Total allowed points: {total_max_points}."
                 f" "
                 f"You requested: {nbr_points}."
             )
             self.dlg.maxLimitReachedLabel.setVisible(True)
-            return  # Stop further execution
         else:
             self.dlg.maxLimitReachedLabel.setVisible(False)
 
