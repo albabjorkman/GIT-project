@@ -6,19 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>522</width>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>WFS Service</string>
+   <string>Dialog</string>
   </property>
-
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>240</y>
+     <x>210</x>
+     <y>290</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -27,8 +26,7 @@
     <string>Next</string>
    </property>
   </widget>
-
-  <widget class="QLabel" name="labelAreaType_2">
+  <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -38,10 +36,9 @@
     </rect>
    </property>
    <property name="text">
-    <string>Select scientific name</string>
+    <string>Select scientificName</string>
    </property>
   </widget>
-
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
@@ -52,74 +49,95 @@
     </rect>
    </property>
   </widget>
-
-  <widget class="QLabel" name="labelReminder">
+  <widget class="QLabel" name="lableAreaType_3">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>40</y>
+     <x>30</x>
+     <y>50</y>
      <width>151</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Correct spelling is important!</string>
+    <string>Be careful with the spelling</string>
    </property>
   </widget>
-
+  <widget class="QLabel" name="lableAreaType_4">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>79</y>
+     <width>130</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select vernacularName</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="vernacularName">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>90</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QGroupBox" name="dateAndTimeBox">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>140</y>
+     <width>330</width>
+     <height>120</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Date Range</string>
+   </property>
+   <widget class="QLabel" name="labelStartDate">
     <property name="geometry">
-        <rect>
-            <x>30</x>
-            <y>80</y>
-            <width>330</width>
-            <height>120</height>
-        </rect>
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
     </property>
-    <property name="title">
-        <string>Date Range</string>
+    <property name="text">
+     <string>Start Date</string>
     </property>
-    <widget class="QLabel" name="labelStartDate">
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>30</y>
-                <width>130</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Start Date</string>
-        </property>
-    </widget>
-    <widget class="QDateEdit" name="startDate">
-        <property name="geometry">
-            <rect>
-                <x>170</x>
-                <y>30</y>
-                <width>130</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="calendarPopup">
-            <bool>true</bool>
-        </property>
-        <property name="displayFormat">
-            <string>yyyy-MM-dd</string>
-        </property>
-    </widget>
-    <widget class="QLabel" name="labelEndDate">
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>70</y>
-                <width>130</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>End Date</string>
-        </property>
+   </widget>
+   <widget class="QDateEdit" name="startDate">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>30</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy-MM-dd</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelEndDate">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>End Date</string>
+    </property>
    </widget>
    <widget class="QDateEdit" name="endDate">
     <property name="geometry">
@@ -130,43 +148,37 @@
       <height>20</height>
      </rect>
     </property>
-    <property name="calendarPopup">
-     <bool>true</bool>
-    </property>
     <property name="displayFormat">
      <string>yyyy-MM-dd</string>
     </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
    </widget>
-
-   <!-- Label max number WFS points -->
-   <widget class="QLabel" name="maxNbr_WFSLabel">
+  </widget>
+  <widget class="QLineEdit" name="maxNbr_WFS">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>121</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lableAreaType_6">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>90</y>
+     <y>110</y>
      <width>130</width>
-     <height>30</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Max number points:</string>
    </property>
   </widget>
-
-   <!-- QLineEdit max number WFS points -->
-   <widget class="QLineEdit" name="maxNbr_WFS">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>90</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-  </widget>
-
-  </widget>
-
  </widget>
  <resources/>
  <connections/>

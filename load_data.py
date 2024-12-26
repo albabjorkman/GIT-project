@@ -16,6 +16,7 @@ def from_wfs(self):
         base_url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&CQL_Filter="
 
         selected_scientific_names = self.wfsS.scientificName.text()
+        selected_vernacular_names = self.wfsS.vernacularName.text()
         start_date = self.wfsS.startDate.date().toString("yyyy-MM-dd")
         end_date = self.wfsS.endDate.date().toString("yyyy-MM-dd")
 
@@ -42,6 +43,18 @@ def from_wfs(self):
                 return
 
             name_filter = " OR ".join([f"scientificName='{name}'" for name in names])
+            filters.append(name_filter)
+
+
+        if selected_vernacular_names:
+            names = [name.strip() for name in selected_vernacular_names.split(",") if name.strip()]
+            if not names:
+                self.iface.messageBar().pushMessage(
+                    "Error", "Please provide valid vernacular names.", level=3
+                )
+                return
+
+            name_filter = " OR ".join([f"vernacularName='{name}'" for name in names])
             filters.append(name_filter)
 
         # Add start- and end-date to filters
