@@ -25,13 +25,11 @@ from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.core import QgsPoint, QgsFeature, QgsGeometry, QgsVectorLayer, QgsField, QgsRectangle
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMessageBox
-from qgis.PyQt.QtWidgets import QListWidget
-
-
-
 from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
 from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
+from qgis.PyQt.QtWidgets import QListWidget
+
 
 
 
@@ -43,9 +41,6 @@ from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, 
 from .load_data import from_wfs, to_map_art, to_map_area
 import os.path
 from .api_handler import APIClient
-
-
-
 
 
 class Artdatabanken:
@@ -82,7 +77,6 @@ class Artdatabanken:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
-
 
         # Initialize the APIClient with your API key and the base URL of the API
         self.api_key = "5044b6436a6b4814b9689cd6fac542f0"  # Replace with your actual API key
@@ -269,8 +263,7 @@ class Artdatabanken:
         self.dlg.areaType_2.setSelectionMode(QListWidget.MultiSelection)
 
     def art_type(self):
-        art_type_data = ["","Plantae", "Animalia", "Fungi"]
+        art_type_data = ["", "Plantae", "Animalia", "Fungi"]
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
         self.art.artType.setSelectionMode(QListWidget.MultiSelection)
-

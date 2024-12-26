@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Species Loader</string>
   </property>
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Select scientificName</string>
+    <string>Input scientific name</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="scientificName">
