@@ -149,8 +149,6 @@ def from_wfs(self):
         # Set to track unique points with some precision tolerance
         processed_points = set()
 
-        # Function to round coordinates for comparison
-
         for feature in total_features:
             geometry = feature.get("geometry")
             if geometry:
@@ -158,7 +156,6 @@ def from_wfs(self):
                 if len(coords) >= 2:  # Assuming coordinates are [longitude, latitude]
                     lon, lat = coords[0], coords[1]
 
-                    # Round the coordinates for comparison
                     point_key = lon, lat
 
                     # Skip if the point has already been processed
@@ -291,6 +288,9 @@ def to_map_art(self):
         provider.addAttributes(fields)
         layer.updateFields()
 
+        # Define `processed_points` outside the loop
+        processed_points = set()
+
         for record in all_data:
             print(f"Processing record: {record}")  # Log to inspect the data
 
@@ -299,16 +299,25 @@ def to_map_art(self):
                 lat = record.get("decimalLatitude")
                 lon = record.get("decimalLongitude")
 
-                # Check if lat and lon are valid
+                # Skip processing if coordinates are missing
                 if lat is None or lon is None:
                     print(f"Skipping record due to missing coordinates: {record}")
-                    continue  # Skip this record if coordinates are missing
+                    continue  # Skip this record
+
+                # Check for duplicates
+                point_key = (lat, lon)  # Create a tuple to represent the point uniquely
+                if not self.art.double.isChecked():  # If "no duplicates" is selected
+                    if point_key in processed_points:
+                        print(f"Skipping duplicate point: {point_key}")
+                        continue  # Skip this duplicate point
+                    processed_points.add(point_key)  # Mark this point as processed
 
                 print(f"Adding feature with coordinates: {lon}, {lat}")  # Debugging print statement
 
                 # Create feature geometry (point)
+                point = QgsPointXY(lon, lat)
                 feature = QgsFeature()
-                feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
+                feature.setGeometry(QgsGeometry.fromPointXY(point))
 
                 # Collect attributes based on selected fields
                 attributes = [

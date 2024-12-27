@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>454</width>
+    <width>523</width>
     <height>302</height>
    </rect>
   </property>
@@ -40,7 +40,7 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>99</y>
+     <y>59</y>
      <width>91</width>
      <height>30</height>
     </rect>
@@ -52,8 +52,8 @@
   <widget class="QLabel" name="maxNbr_artLabel">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>190</y>
+     <x>70</x>
+     <y>130</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -65,8 +65,8 @@
   <widget class="QLineEdit" name="maxNbr_art">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>190</y>
+     <x>210</x>
+     <y>130</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -89,7 +89,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>100</y>
+     <y>60</y>
      <width>231</width>
      <height>61</height>
     </rect>
@@ -99,13 +99,26 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>120</y>
+     <y>80</y>
      <width>111</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
     <string>(Choose empty for all)</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="double">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>190</y>
+     <width>231</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show features on same coordinates</string>
    </property>
   </widget>
  </widget>
