@@ -2,6 +2,7 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
+  <!-- Main dialog window for WFS-->
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,6 +14,8 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+
+  <!-- Button to proceed to the next step -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -26,6 +29,8 @@
     <string>Next</string>
    </property>
   </widget>
+
+  <!-- Input for scientific name and guidance -->
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
     <rect>
@@ -62,6 +67,8 @@
     <string>Be careful with the spelling</string>
    </property>
   </widget>
+
+  <!-- Input for vernacular name -->
   <widget class="QLabel" name="lableAreaType_4">
    <property name="geometry">
     <rect>
@@ -85,6 +92,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Group box for specifying a date range -->
   <widget class="QGroupBox" name="dateAndTimeBox">
    <property name="geometry">
     <rect>
@@ -156,6 +165,8 @@
     </property>
    </widget>
   </widget>
+
+  <!-- Options for maximum number of points -->
   <widget class="QLineEdit" name="maxNbr_WFS">
    <property name="geometry">
     <rect>
@@ -179,6 +190,8 @@
     <string>Max number points:</string>
    </property>
   </widget>
+
+  <!-- Radio buttons for specifying logical operations -->
   <widget class="QRadioButton" name="AND">
    <property name="geometry">
     <rect>
@@ -218,6 +231,8 @@
     <string>Combine with</string>
    </property>
   </widget>
+
+  <!-- Checkbox for showing duplicate features -->
   <widget class="QCheckBox" name="checkBox">
    <property name="geometry">
     <rect>

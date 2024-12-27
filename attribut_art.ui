@@ -2,6 +2,7 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
+   <!-- Main dialog window for attribute Species-->
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,6 +14,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+   <!-- Checkboxes to choose attributes-->
   <widget class="QCheckBox" name="taxonRank">
    <property name="geometry">
     <rect>
@@ -221,6 +223,7 @@
     <string>kingdom</string>
    </property>
   </widget>
+    <!-- Button to go load data-->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -299,6 +302,7 @@
     <string>vernacularName</string>
    </property>
   </widget>
+    <!-- Button to clear all-->
   <widget class="QPushButton" name="clearAll">
    <property name="geometry">
     <rect>
@@ -377,6 +381,7 @@
     <string>occurrenceRemarks</string>
    </property>
   </widget>
+    <!-- Button to select all-->
   <widget class="QPushButton" name="selectAll">
    <property name="geometry">
     <rect>

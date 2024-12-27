@@ -2,7 +2,9 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
+  <!-- Main dialog window -->
   <property name="geometry">
+   <!-- Set the size and position of the dialog -->
    <rect>
     <x>0</x>
     <y>0</y>
@@ -13,6 +15,8 @@
   <property name="windowTitle">
    <string>Species Loader</string>
   </property>
+
+  <!-- Label for inputting the scientific name -->
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
     <rect>
@@ -26,6 +30,8 @@
     <string>Input scientific name</string>
    </property>
   </widget>
+
+  <!-- Text input field for the scientific name -->
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
@@ -36,6 +42,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Label for selecting the kingdom -->
   <widget class="QLabel" name="lableAreaType">
    <property name="geometry">
     <rect>
@@ -49,6 +57,8 @@
     <string>Select kingdom</string>
    </property>
   </widget>
+
+  <!-- Label for the max number of points -->
   <widget class="QLabel" name="maxNbr_artLabel">
    <property name="geometry">
     <rect>
@@ -62,6 +72,8 @@
     <string>Max number points:</string>
    </property>
   </widget>
+
+  <!-- Text input field for the max number of points -->
   <widget class="QLineEdit" name="maxNbr_art">
    <property name="geometry">
     <rect>
@@ -72,6 +84,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Button to proceed to the next step -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -85,6 +99,8 @@
     <string>Next</string>
    </property>
   </widget>
+
+  <!-- List widget to select the kingdom (artType) -->
   <widget class="QListWidget" name="artType">
    <property name="geometry">
     <rect>
@@ -95,6 +111,8 @@
     </rect>
    </property>
   </widget>
+
+  <!-- Additional label providing clarification for the kingdom selection -->
   <widget class="QLabel" name="lableAreaType_4">
    <property name="geometry">
     <rect>
@@ -108,6 +126,8 @@
     <string>(Choose empty for all)</string>
    </property>
   </widget>
+
+  <!-- Checkbox for controlling duplicate features -->
   <widget class="QCheckBox" name="double">
    <property name="geometry">
     <rect>
