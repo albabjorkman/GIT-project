@@ -115,7 +115,7 @@ class Artdatabanken:
             parent=None):
         """Add a toolbar icon to the toolbar.
 
-        :param icon_path: Path to the icon for this action. Can be a resource
+        icon_path: Path to the icon for this action. Can be a resource
             path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
         :type icon_path: str
 
@@ -151,6 +151,12 @@ class Artdatabanken:
             added to self.actions list.
         :rtype: QAction
         """
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the icon file relative to the script directory
+        icon_path = os.path.join(script_dir, 'icon.png')
+        text="Artdatabanken plugin"
 
         icon = QIcon(icon_path)
         action = QAction(icon, text, parent)
