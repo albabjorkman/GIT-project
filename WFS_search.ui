@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>522</width>
-    <height>370</height>
+    <width>595</width>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>310</y>
+     <x>260</x>
+     <y>340</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -216,6 +216,19 @@
    </property>
    <property name="text">
     <string>Combine with</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>310</y>
+     <width>231</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Show features on same coordinates</string>
    </property>
   </widget>
  </widget>

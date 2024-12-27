@@ -30,10 +30,6 @@ from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
 from qgis.PyQt.QtWidgets import QListWidget
 
-
-
-
-
 # Import the code for the dialog
 from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
     ArtAttDialog, WFSSearchDialog

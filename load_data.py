@@ -150,8 +150,6 @@ def from_wfs(self):
         processed_points = set()
 
         # Function to round coordinates for comparison
-        def round_coordinates(lon, lat, precision=10):
-            return (round(lon, precision), round(lat, precision))
 
         for feature in total_features:
             geometry = feature.get("geometry")
@@ -161,11 +159,12 @@ def from_wfs(self):
                     lon, lat = coords[0], coords[1]
 
                     # Round the coordinates for comparison
-                    point_key = round_coordinates(lon, lat)
+                    point_key = lon, lat
 
                     # Skip if the point has already been processed
-                    if point_key in processed_points:
-                        continue
+                    if not self.wfsS.duble.isChecked():
+                        if point_key in processed_points:
+                            continue
 
                     # Mark this point as processed
                     processed_points.add(point_key)
