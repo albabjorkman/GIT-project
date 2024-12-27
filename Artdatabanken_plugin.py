@@ -33,8 +33,7 @@ from qgis.PyQt.QtWidgets import QListWidget
 
 
 
-# Initialize Qt resources from file resources.py
-from .resources import *
+
 # Import the code for the dialog
 from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
     ArtAttDialog, WFSSearchDialog

@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/plugins/Artdatabanken_plugin" >
-        <file>icon.png</file>
-    </qresource>
-</RCC>
