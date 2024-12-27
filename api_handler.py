@@ -5,6 +5,7 @@ import urllib.parse
 import urllib.request
 import json
 
+#To be able to use API from artdatabanken
 class APIClient:
     def __init__(self, api_key, base_url):
         self.api_key = api_key
@@ -12,7 +13,7 @@ class APIClient:
 
     def fetch_data(self, endpoint="", params=None):
         try:
-            # Construct the full URL
+            # Construct the full URL to be able different types of options
             if params:
                 query_string = f"?{urllib.parse.urlencode(params, doseq=True)}"
             else:

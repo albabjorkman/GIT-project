@@ -48,6 +48,8 @@ WFS_SEARCH, _ = uic.loadUiType(os.path.join(
 
 ATT_ART, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'attribut_art.ui'))
+
+# class for Area, adding the UI and working checkboxes, and options to select/clear all
 class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
@@ -72,18 +74,20 @@ class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):
         for checkbox in self.checkboxes:
             checkbox.setChecked(False)
 
+# class for first pop-up to load in the UI
 class FirstPopupDialog(QtWidgets.QDialog, FIRST_POP):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
 
 
-
+# class for Species first page for options
 class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
     def __init__(self, parent=None):
         super(ArtTypeDialog, self).__init__(parent)
         self.setupUi(self)
 
+# class for Species attribute, adding the UI and working checkboxes, and options to select/clear all
 class ArtAttDialog(QtWidgets.QDialog, ATT_ART):
     def __init__(self, parent=None):
         super(ArtAttDialog, self).__init__(parent)
@@ -102,11 +106,13 @@ class ArtAttDialog(QtWidgets.QDialog, ATT_ART):
         for checkbox in self.checkboxes:
             checkbox.setChecked(False)
 
+# class for WFS first pop-up for overall options
 class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
     def __init__(self, parent=None):
         super(WFSSearchDialog, self).__init__(parent)
         self.setupUi(self)
 
+# class for WFS, adding the UI and working checkboxes, and options to select/clear all
 class WFSInfoDialog(QtWidgets.QDialog, WFS_INFO):
     def __init__(self, parent=None):
         super(WFSInfoDialog, self).__init__(parent)

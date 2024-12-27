@@ -7,14 +7,17 @@ from PyQt5.QtCore import QVariant
 from qgis.core import QgsProject
 import requests
 from datetime import datetime
+import urllib.parse
+
 
 
 def from_wfs(self):
-    """Fetch data from the WFS service and load it as points on the map with selectable attributes."""
+    # fetch data from the WFS service and load it as points on the map with selectable attributes
     try:
-        # Define the WFS URL
+        # Define the WFS URL with added CQL filter
         base_url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&CQL_Filter="
 
+        #load in the added option from first pop-up window from WFS
         selected_scientific_names = self.wfsS.scientificName.text()
         selected_vernacular_names = self.wfsS.vernacularName.text()
         start_date = self.wfsS.startDate.date().toString("yyyy-MM-dd")
@@ -29,6 +32,8 @@ def from_wfs(self):
                 self.iface.messageBar().pushMessage(
                     "Error", "Invalid date format."
                 )
+
+        # Loading in the radiobuttom if want OR or AND in between scientific name and vernacular name
         combine_with = "AND"  # Default logical operator
         if self.wfsS.AND.isChecked():
             combine_with = "AND"
@@ -39,7 +44,7 @@ def from_wfs(self):
         filters_name = []
         filter_date=[]
 
-        # Construct the endpoint dynamically based on scientific name input
+        # Construct the endpoint based on scientific name input
         if selected_scientific_names:
             names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
             if not names:
@@ -51,7 +56,7 @@ def from_wfs(self):
             name_filter = "(" + " OR ".join([f"scientificName='{name}'" for name in names]) + ")"
             filters_name.append(name_filter)
 
-
+        # Construct the endpoint based on vernacular name input
         if selected_vernacular_names:
             names = [name.strip() for name in selected_vernacular_names.split(",") if name.strip()]
             if not names:
@@ -63,6 +68,7 @@ def from_wfs(self):
             name_filter = "(" + " OR ".join([f"vernacularName='{name}'" for name in names]) + ")"
             filters_name.append(name_filter)
 
+        # Construct the endpoint based on logical operation, vernacular, scientific name
         cql_name_filter = f"({combine_with .join(filters_name)})" if filters_name else ""
 
         # Add start- and end-date to filters
@@ -71,15 +77,16 @@ def from_wfs(self):
             end_date_filter = f"endDate<='{end_date}'"
             filter_date.append(f"{start_date_filter} AND {end_date_filter}")
 
-        # Join all filters together
+        # Join all filters together to contruct final endpoint
         all_filters = []
         if cql_name_filter:
             all_filters.append(cql_name_filter)
         if filter_date:
             all_filters.append(" AND ".join(filter_date)) if filter_date else ""
 
-        cql_filter = " AND ".join(all_filters) if all_filters else ""
 
+        # final endpoint and print control to see it correct
+        cql_filter = " AND ".join(all_filters) if all_filters else ""
         print(cql_filter)
 
         # Create a new vector layer for points
@@ -88,19 +95,20 @@ def from_wfs(self):
 
         # Get selected attributes from checkboxes (the text of each checkbox)
         selected_attributes = [
-            checkbox.text()  # This will fetch the name set in the <string> property of QCheckBox
+            checkbox.text()  # This will fetch the name set in QCheckBox
             for checkbox in self.wfs.checkboxes
             if checkbox.isChecked()
         ]
         print(f"Selected attributes: {selected_attributes}")
 
+        # error if not show anything in attribute table
         if not selected_attributes:
             self.iface.messageBar().pushMessage(
                 "Error", "Please select at least one attribute.", level=3
             )
             return
 
-        # Dynamically create the fields based on selected attributes
+        # Create the fields based on selected attributes
         fields = [QgsField(attr, QVariant.String) for attr in selected_attributes]
         provider.addAttributes(fields)
         layer.updateFields()
@@ -122,6 +130,7 @@ def from_wfs(self):
         start_index = 0
         total_features = []
 
+        # to do until selected nbr of points, WFS have maximum of point, to go over this max. Max number to stuck in loop
         while start_index < max_start_index and len(total_features) < max_points:
             remaining_points = max_points - len(total_features)
             request_count = min(remaining_points, max_features_per_request)
@@ -129,6 +138,8 @@ def from_wfs(self):
             print(endpoint)
 
             response = requests.get(endpoint)
+
+            # if not can fetch data
             if response.status_code != 200:
                 self.iface.messageBar().pushMessage(
                     "Error", f"Failed to retrieve data: HTTP {response.status_code}", level=3
@@ -137,6 +148,7 @@ def from_wfs(self):
 
             data = response.json()
             features = data.get("features", [])
+
             if not features:
                 return
 
@@ -149,6 +161,7 @@ def from_wfs(self):
         # Set to track unique points with some precision tolerance
         processed_points = set()
 
+        # adding the features as points on map
         for feature in total_features:
             geometry = feature.get("geometry")
             if geometry:
@@ -158,7 +171,7 @@ def from_wfs(self):
 
                     point_key = lon, lat
 
-                    # Skip if the point has already been processed
+                    # Skip if doublets points (if that option is checked)
                     if not self.wfsS.duble.isChecked():
                         if point_key in processed_points:
                             continue
@@ -195,18 +208,21 @@ def from_wfs(self):
             "Error", f"Failed to load data: {str(e)}", level=3
         )
 
-
+# loading data for species API
 def to_map_art(self):
     try:
-        # Select art type from the drop-down menu
+        # Select species type (kingdom) from the drop-down menu + control of valid
         selected_art_types = [item.text() for item in self.art.artType.selectedItems()]
         print("Selected Art Types:", selected_art_types)
 
+        # Select scientific name written + control of valid
         selected_scientific_names = self.art.scientificName.text()
         print(f"Selected scientific names: {selected_scientific_names}")
 
+        # if several added these are change for the API to work correctly
         scientific_names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
 
+        # read nbr of point wanting + error if this is not working as INT
         selected_nbrPoints = self.art.maxNbr_art.text()
 
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
@@ -215,9 +231,10 @@ def to_map_art(self):
             )
             return
 
+        #change string to INT
         nbr_points = int(selected_nbrPoints)
 
-        # Fetch data from the API
+        # basic endpoint if nothing more added
         endpoint = ""
 
         # To handle requests with more than 1000 takes
@@ -234,13 +251,13 @@ def to_map_art(self):
                 "take": min(1000, nbr_points_left),  # Take up to 1000 records
             }
 
+            # fetching data  with params and endpoint in API handler
             try:
                 data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
             except Exception as fetch_error:
                 self.iface.messageBar().pushMessage(
                     "Error", f"Failed to fetch data: {str(fetch_error)}", level=3
                 )
-                print(f"Error: Failed to fetch data: {str(fetch_error)}")
                 return
 
             if not data or not isinstance(data, list):
@@ -252,10 +269,10 @@ def to_map_art(self):
             all_data.extend(data)  # Add the new data to the existing data list
 
             # Update remaining points and skip for the next API call
-            nbr_points_left -= len(data)  # Adjust remaining points
+            nbr_points_left -= len(data)
             skips += len(data)  # Increase skip based on the amount of data received
 
-        # Now we have all data in `all_data`, proceed to create the QGIS layer
+        # Check All data in `all_data`
         if not all_data:
             self.iface.messageBar().pushMessage(
                 "Error", "No data returned from the API.", level=3
@@ -273,8 +290,8 @@ def to_map_art(self):
             for checkbox in self.attA.checkboxes
             if checkbox.isChecked()
         ]
-        print(selected_attributes)
 
+        #error so no empty attribute table
         if not selected_attributes:
             self.iface.messageBar().pushMessage(
                 "Error", "Please select at least one attribute.", level=3
@@ -306,13 +323,13 @@ def to_map_art(self):
 
                 # Check for duplicates
                 point_key = (lat, lon)  # Create a tuple to represent the point uniquely
-                if not self.art.double.isChecked():  # If "no duplicates" is selected
+                if not self.art.double.isChecked():  # If "no duplicates" is selected to not get duplicates
                     if point_key in processed_points:
                         print(f"Skipping duplicate point: {point_key}")
-                        continue  # Skip this duplicate point
-                    processed_points.add(point_key)  # Mark this point as processed
+                        continue  # Skip point
+                    processed_points.add(point_key)  # Mark point as processed
 
-                print(f"Adding feature with coordinates: {lon}, {lat}")  # Debugging print statement
+                print(f"Adding feature with coordinates: {lon}, {lat}")  # Debugging
 
                 # Create feature geometry (point)
                 point = QgsPointXY(lon, lat)
@@ -346,9 +363,7 @@ def to_map_art(self):
         print(f"Error: {str(e)}")
 
 
-import urllib.parse
-
-
+#function to load data from Area API
 def to_map_area(self):
     try:
         # Select area type from the drop-down menu
