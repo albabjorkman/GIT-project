@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>290</y>
+     <x>240</x>
+     <y>310</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -89,7 +89,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>140</y>
+     <y>180</y>
      <width>330</width>
      <height>120</height>
     </rect>
@@ -160,7 +160,7 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>121</y>
+     <y>161</y>
      <width>113</width>
      <height>20</height>
     </rect>
@@ -170,13 +170,52 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>110</y>
+     <y>150</y>
      <width>130</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Max number points:</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="AND">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>130</y>
+     <width>80</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>AND</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="OR">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>130</y>
+     <width>80</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OR</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lableAreaType_5">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>120</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Combine with</string>
    </property>
   </widget>
  </widget>

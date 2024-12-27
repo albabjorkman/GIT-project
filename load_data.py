@@ -29,9 +29,15 @@ def from_wfs(self):
                 self.iface.messageBar().pushMessage(
                     "Error", "Invalid date format."
                 )
+        combine_with = "AND"  # Default logical operator
+        if self.wfsS.AND.isChecked():
+            combine_with = "AND"
+        elif self.wfsS.OR.isChecked():
+            combine_with = "OR"
 
         # List that holds different filters used to construct endpoint call
-        filters = []
+        filters_name = []
+        filter_date=[]
 
         # Construct the endpoint dynamically based on scientific name input
         if selected_scientific_names:
@@ -42,8 +48,8 @@ def from_wfs(self):
                 )
                 return
 
-            name_filter = " OR ".join([f"scientificName='{name}'" for name in names])
-            filters.append(name_filter)
+            name_filter = "(" + " OR ".join([f"scientificName='{name}'" for name in names]) + ")"
+            filters_name.append(name_filter)
 
 
         if selected_vernacular_names:
@@ -54,17 +60,27 @@ def from_wfs(self):
                 )
                 return
 
-            name_filter = " OR ".join([f"vernacularName='{name}'" for name in names])
-            filters.append(name_filter)
+            name_filter = "(" + " OR ".join([f"vernacularName='{name}'" for name in names]) + ")"
+            filters_name.append(name_filter)
+
+        cql_name_filter = f"({combine_with .join(filters_name)})" if filters_name else ""
 
         # Add start- and end-date to filters
         if start_date and end_date:
-            start_date_filter = f"endDate>='{start_date}'"
+            start_date_filter = f"startDate>='{start_date}'"
             end_date_filter = f"endDate<='{end_date}'"
-            filters.append(f"{start_date_filter} AND {end_date_filter}")
+            filter_date.append(f"{start_date_filter} AND {end_date_filter}")
 
         # Join all filters together
-        cql_filter = " AND ".join(filters) if filters else ""
+        all_filters = []
+        if cql_name_filter:
+            all_filters.append(cql_name_filter)
+        if filter_date:
+            all_filters.append(" AND ".join(filter_date)) if filter_date else ""
+
+        cql_filter = " AND ".join(all_filters) if all_filters else ""
+
+        print(cql_filter)
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
@@ -110,6 +126,7 @@ def from_wfs(self):
             remaining_points = max_points - len(total_features)
             request_count = min(remaining_points, max_features_per_request)
             endpoint = f"{base_url}{cql_filter}&startIndex={start_index}&count={request_count}"
+            print(endpoint)
 
             response = requests.get(endpoint)
             if response.status_code != 200:
@@ -126,11 +143,14 @@ def from_wfs(self):
             total_features.extend(features)
             start_index += request_count
 
+            if len(features) < request_count:
+                break
+
         # Set to track unique points with some precision tolerance
         processed_points = set()
 
         # Function to round coordinates for comparison
-        def round_coordinates(lon, lat, precision=5):
+        def round_coordinates(lon, lat, precision=10):
             return (round(lon, precision), round(lat, precision))
 
         for feature in total_features:
