@@ -1,8 +1,5 @@
 import urllib.request
-import json
-
 import urllib.parse
-import urllib.request
 import json
 
 #To be able to use API from artdatabanken

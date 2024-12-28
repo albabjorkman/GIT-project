@@ -23,7 +23,6 @@
 """
 
 import os
-
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 from PyQt5.QtWidgets import QDialog, QCheckBox

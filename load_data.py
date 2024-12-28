@@ -1,15 +1,9 @@
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.core import QgsPoint, QgsFeature, QgsGeometry, QgsVectorLayer, QgsField, QgsRectangle
-from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QMessageBox
 from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
 from PyQt5.QtCore import QVariant
-from qgis.core import QgsProject
 import requests
 from datetime import datetime
 import urllib.parse
-
-
 
 def from_wfs(self):
     # fetch data from the WFS service and load it as points on the map with selectable attributes

@@ -22,14 +22,8 @@
  ***************************************************************************/
 """
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
-from qgis.core import QgsPoint, QgsFeature, QgsGeometry, QgsVectorLayer, QgsField, QgsRectangle
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QMessageBox
-from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
-from PyQt5.QtCore import QVariant
-from qgis.core import QgsProject
-from qgis.PyQt.QtWidgets import QListWidget
-
+from qgis.PyQt.QtWidgets import QAction, QMessageBox, QListWidget
 # Import the code for the dialog
 from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
     ArtAttDialog, WFSSearchDialog
