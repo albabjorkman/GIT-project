@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Dialog</class>
+ <!-- Main dialog window -->
  <widget class="QDialog" name="Dialog">
   <property name="geometry">
    <rect>
@@ -11,24 +12,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Artdatabanken plugin</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>220</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
+
+   <!-- checkbox for area -->
   <widget class="QCheckBox" name="form_class">
    <property name="geometry">
     <rect>
@@ -39,22 +26,41 @@
     </rect>
    </property>
    <property name="text">
-    <string>Area information</string>
+    <string>GetAreas() API</string>
    </property>
   </widget>
+
+  <!-- checkbox for art -->
   <widget class="QCheckBox" name="art_info">
    <property name="geometry">
     <rect>
      <x>210</x>
      <y>80</y>
-     <width>131</width>
+     <width>171</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Art information</string>
+    <string>Species Observation System API</string>
    </property>
   </widget>
+
+  <!-- checkbox for WFS -->
+  <widget class="QCheckBox" name="WFS_info">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>40</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OGC Web Feature Service (WFS)</string>
+   </property>
+  </widget>
+
+  <!-- Load buttom -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -68,53 +74,7 @@
     <string>Load data</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="WFS_info">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>40</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>WFS information</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
