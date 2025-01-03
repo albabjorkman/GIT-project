@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Dialog</class>
+ 
+ <!-- Main dialog window for attribute Species-->
  <widget class="QDialog" name="Dialog">
   <property name="geometry">
    <rect>
@@ -11,24 +13,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Attributes</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>240</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
+
+   <!-- Checkboxes to choose attributes-->
   <widget class="QCheckBox" name="taxonRank">
    <property name="geometry">
     <rect>
@@ -237,6 +225,7 @@
     <string>kingdom</string>
    </property>
   </widget>
+    <!-- Button to go load data-->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -315,6 +304,7 @@
     <string>vernacularName</string>
    </property>
   </widget>
+    <!-- Button to clear all-->
   <widget class="QPushButton" name="clearAll">
    <property name="geometry">
     <rect>
@@ -393,6 +383,7 @@
     <string>occurrenceRemarks</string>
    </property>
   </widget>
+    <!-- Button to select all-->
   <widget class="QPushButton" name="selectAll">
    <property name="geometry">
     <rect>
@@ -473,38 +464,5 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
