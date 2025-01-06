@@ -2,21 +2,17 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
-  <!-- Main dialog window -->
   <property name="geometry">
-   <!-- Set the size and position of the dialog -->
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>523</width>
-    <height>302</height>
+    <width>526</width>
+    <height>394</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Species Loader</string>
   </property>
-
-  <!-- Label for inputting the scientific name -->
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
     <rect>
@@ -30,8 +26,6 @@
     <string>Input scientific name</string>
    </property>
   </widget>
-
-  <!-- Text input field for the scientific name -->
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
@@ -42,8 +36,6 @@
     </rect>
    </property>
   </widget>
-
-  <!-- Label for selecting the kingdom -->
   <widget class="QLabel" name="lableAreaType">
    <property name="geometry">
     <rect>
@@ -57,8 +49,77 @@
     <string>Select kingdom</string>
    </property>
   </widget>
-
-  <!-- Label for the max number of points -->
+  <widget class="QGroupBox" name="dateAndTimeBox">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>170</y>
+     <width>330</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Date Range</string>
+   </property>
+   <widget class="QLabel" name="labelStartDate">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start Date</string>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="startDate">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>30</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy-MM-dd</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelEndDate">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>End Date</string>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="endDate">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>70</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy-MM-dd</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
   <widget class="QLabel" name="maxNbr_artLabel">
    <property name="geometry">
     <rect>
@@ -69,11 +130,9 @@
     </rect>
    </property>
    <property name="text">
-    <string>Max number points:</string>
+    <string>Nbr of observations:</string>
    </property>
   </widget>
-
-  <!-- Text input field for the max number of points -->
   <widget class="QLineEdit" name="maxNbr_art">
    <property name="geometry">
     <rect>
@@ -84,13 +143,11 @@
     </rect>
    </property>
   </widget>
-
-  <!-- Button to proceed to the next step -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>230</y>
+     <x>220</x>
+     <y>340</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -99,8 +156,6 @@
     <string>Next</string>
    </property>
   </widget>
-
-  <!-- List widget to select the kingdom (artType) -->
   <widget class="QListWidget" name="artType">
    <property name="geometry">
     <rect>
@@ -111,8 +166,6 @@
     </rect>
    </property>
   </widget>
-
-  <!-- Additional label providing clarification for the kingdom selection -->
   <widget class="QLabel" name="lableAreaType_4">
    <property name="geometry">
     <rect>
@@ -123,16 +176,14 @@
     </rect>
    </property>
    <property name="text">
-    <string>(Choose empty for all)</string>
+    <string>(No input for all)</string>
    </property>
   </widget>
-
-  <!-- Checkbox for controlling duplicate features -->
   <widget class="QCheckBox" name="double">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>190</y>
+     <x>80</x>
+     <y>280</y>
      <width>231</width>
      <height>18</height>
     </rect>

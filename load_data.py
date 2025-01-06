@@ -1,9 +1,11 @@
 from qgis.core import QgsPoint, QgsFeature, QgsGeometry, QgsVectorLayer, QgsField, QgsRectangle
-from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY
+from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY, QgsWkbTypes, QgsCoordinateReferenceSystem, \
+    QgsCoordinateTransform
 from PyQt5.QtCore import QVariant
 import requests
 from datetime import datetime
 import urllib.parse
+
 
 def from_wfs(self):
     # fetch data from the WFS service and load it as points on the map with selectable attributes
@@ -11,8 +13,9 @@ def from_wfs(self):
         # Define the WFS URL with added CQL filter
         base_url = "https://sosgeo.artdata.slu.se/geoserver/SOS/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=SOS:SpeciesObservations&outputFormat=application/json&CQL_Filter="
 
-        #load in the added option from first pop-up window from WFS
+        # load in the added option from first pop-up window from WFS
         selected_scientific_names = self.wfsS.scientificName.text()
+        selected_area_names = self.wfsS.writeAreaType.text()
         selected_vernacular_names = self.wfsS.vernacularName.text()
         start_date = self.wfsS.startDate.date().toString("yyyy-MM-dd")
         end_date = self.wfsS.endDate.date().toString("yyyy-MM-dd")
@@ -34,9 +37,11 @@ def from_wfs(self):
         elif self.wfsS.OR.isChecked():
             combine_with = "OR"
 
-        # List that holds different filters used to construct endpoint call
+        # Lists that hold different filters used to construct endpoint call
         filters_name = []
-        filter_date=[]
+        filter_date = []
+        filter_geom = []
+        filter_area =[]
 
         # Construct the endpoint based on scientific name input
         if selected_scientific_names:
@@ -63,7 +68,25 @@ def from_wfs(self):
             filters_name.append(name_filter)
 
         # Construct the endpoint based on logical operation, vernacular, scientific name
-        cql_name_filter = f"({combine_with .join(filters_name)})" if filters_name else ""
+        cql_name_filter = f"({combine_with.join(filters_name)})" if filters_name else ""
+
+        if selected_area_names:
+
+            area= self.wfsS.AreaType.currentText()
+            if not area or area == "":  # Check if no area is selected
+                self.iface.messageBar().pushMessage(
+                    "Error", "Please select an Area Type before providing area names.", level=3
+                )
+                return
+            names = [name.strip() for name in selected_area_names.split(",") if name.strip()]
+            if not names:
+                self.iface.messageBar().pushMessage(
+                    "Error", "Please provide valid scientific names.", level=3
+                )
+                return
+
+            name_filter = "(" + " OR ".join([f"{area}='{name}'" for name in names]) + ")"
+            filter_area.append(name_filter)
 
         # Add start- and end-date to filters
         if start_date and end_date:
@@ -71,17 +94,93 @@ def from_wfs(self):
             end_date_filter = f"endDate<='{end_date}'"
             filter_date.append(f"{start_date_filter} AND {end_date_filter}")
 
+        # Define geographical reference systems for potential input of polygons
+        crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
+        crs_project = QgsProject.instance().crs()
+        crs_transform = QgsCoordinateTransform(crs_project, crs_wgs84, QgsProject.instance())
+
+        # Get polygon(s) that limit shown points from selection list
+        selected_layer = self.wfsS.polygonLayerComboBox.currentText()
+        # Check if user has chosen to use a polygon as a border
+        use_polygon = selected_layer != "No polygon"
+
+        # If user has chosen to use a polygon, load geometry here
+        if use_polygon:
+            polygon_layer = QgsProject.instance().mapLayersByName(selected_layer)[0] if selected_layer else None
+
+            if polygon_layer:
+                polygon_filters = []
+
+                for feature in polygon_layer.getFeatures():
+                    geometry = feature.geometry()
+                    if geometry and geometry.type() == QgsWkbTypes.PolygonGeometry:
+                        if geometry.isGeosValid():
+                            # Check original WKT
+                            orig_wkt = geometry.asWkt()
+                            self.iface.messageBar().pushMessage(
+                                "Original WKT", f"{orig_wkt}", level=3
+                            )
+                            # Check whether the input polygon layer is in WGS84 or WGS84/Pseudo Mercator and transform to WGS84 if not
+                            if polygon_layer.crs().authid() == "EPSG:4326":
+                                polygon_wkt = geometry.asWkt()
+                            else:
+                                # Convert polygon coordinates to WGS84 for correct(?) input to SOS-server
+                                transformed_geom = QgsGeometry(geometry)
+                                transform_result = transformed_geom.transform(crs_transform)
+                                # If transform was succesful, translate polygon corner coordinates to WKT format
+                                if transform_result == 0:
+                                    polygon_wkt = transformed_geom.asWkt()
+                                    self.iface.messageBar().pushMessage(
+                                        "Polygon WKT", f"{polygon_wkt}", level=3
+                                    )
+                                else:
+                                    self.iface.messageBar().pushMessage(
+                                        "Error", f"CRS transformation failed with result code: {transform_result}",
+                                        level=3
+                                    )
+                                continue
+                            # Make sure that URL-encoding is correctly done by replacing any encoded values with the correct symbol
+                            polygon_wkt = (
+                                polygon_wkt.replace(" ", "%20")
+                                .replace("(", "%28")
+                                .replace(")", "%29")
+                                .replace(",", "%2C")
+                            )
+                            polygon_filters.append(f"Intersects(geom,%20{polygon_wkt})")
+                        else:
+                            print("Invalid geometry detected, skipping.")
+                    else:
+                        print("Feature has no valid polygon geometry.")
+
+                # Get geom of every polygon included in layer and join them to later add to cql_filter
+                if polygon_filters:
+                    filter_geom = "(" + " OR ".join(polygon_filters) + ")"
+                    self.iface.messageBar().pushMessage(
+                        "filter_geom", f"{filter_geom}", level=3
+                    )
+                else:
+                    self.iface.messageBar().pushMessage(
+                        "Error", "No valid polygons found in the selected layer.", level=3
+                    )
+                    filter_geom = None
+
         # Join all filters together to contruct final endpoint
         all_filters = []
         if cql_name_filter:
             all_filters.append(cql_name_filter)
         if filter_date:
-            all_filters.append(" AND ".join(filter_date)) if filter_date else ""
-
+            all_filters.append(" AND ".join(filter_date))
+        if filter_geom:
+            all_filters.append(filter_geom)
+        if filter_area:
+            all_filters.append(" OR ".join(filter_area))
 
         # final endpoint and print control to see it correct
-        cql_filter = " AND ".join(all_filters) if all_filters else ""
+        cql_filter = urllib.parse.quote(" AND ".join(all_filters)) if all_filters else ""
         print(cql_filter)
+        #self.iface.messageBar().pushMessage(
+        #    "CQL-filter", f"{cql_filter}", level=3
+        #)
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
@@ -166,7 +265,7 @@ def from_wfs(self):
                     point_key = lon, lat
 
                     # Skip if doublets points (if that option is checked)
-                    if not self.wfsS.duble.isChecked():
+                    if not self.wfsS.doubleCheckBox.isChecked():
                         if point_key in processed_points:
                             continue
 
@@ -202,6 +301,7 @@ def from_wfs(self):
             "Error", f"Failed to load data: {str(e)}", level=3
         )
 
+
 # loading data for species API
 def to_map_art(self):
     try:
@@ -225,8 +325,22 @@ def to_map_art(self):
             )
             return
 
-        #change string to INT
+        # change string to INT
         nbr_points = int(selected_nbrPoints)
+
+        # Date interval for events, chosen by input
+        startEventDate = self.art.startDate.date().toString("yyyy-MM-dd")
+        endEventDate = self.art.endDate.date().toString("yyyy-MM-dd")
+
+        # Validate input dates (shouldn't be an issue due to calendar input but still)
+        if startEventDate and endEventDate:
+            try:
+                datetime.strptime(startEventDate, "%Y-%m-%d")
+                datetime.strptime(endEventDate, "%Y-%m-%d")
+            except ValueError:
+                self.iface.messageBar().pushMessage(
+                    "Error", "Invalid date format."
+                )
 
         # basic endpoint if nothing more added
         endpoint = ""
@@ -241,6 +355,8 @@ def to_map_art(self):
             params_art = {
                 "kingdom": ",".join(selected_art_types),
                 "scientificName": ",".join(scientific_names),
+                "minEventDate": startEventDate,
+                "maxEventDate": endEventDate,
                 "skip": skips,
                 "take": min(1000, nbr_points_left),  # Take up to 1000 records
             }
@@ -285,7 +401,7 @@ def to_map_art(self):
             if checkbox.isChecked()
         ]
 
-        #error so no empty attribute table
+        # error so no empty attribute table
         if not selected_attributes:
             self.iface.messageBar().pushMessage(
                 "Error", "Please select at least one attribute.", level=3
@@ -357,7 +473,7 @@ def to_map_art(self):
         print(f"Error: {str(e)}")
 
 
-#function to load data from Area API
+# function to load data from Area API
 def to_map_area(self):
     try:
         # Select area type from the drop-down menu
@@ -382,7 +498,6 @@ def to_map_area(self):
             checkbox.text() for checkbox in self.dlg.checkboxes if checkbox.isChecked()
         ]
         print(f"Selected attributes: {selected_attributes}")
-
 
         # Limit for areaTypes (Max data points)
         area_type_point_limits = {
@@ -429,7 +544,7 @@ def to_map_area(self):
             total_max_points += max_points
 
         # Check if the user's input exceeds the combined limit
-        if  nbr_points > total_max_points:
+        if nbr_points > total_max_points:
             self.dlg.maxLimitReachedLabel.setText(
                 f"Limit exceeded! Total allowed points: {total_max_points}."
                 f" "
@@ -459,7 +574,6 @@ def to_map_area(self):
 
         # Process the data (implement according to your application logic)
         print(f"Received data: {data}")
-
 
         # Validate the response
         if not data or "records" not in data:

@@ -26,6 +26,7 @@ import os
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 from PyQt5.QtWidgets import QDialog, QCheckBox
+from qgis.core import QgsProject, QgsWkbTypes, QgsVectorLayer
 
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
@@ -86,6 +87,9 @@ class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
         super(ArtTypeDialog, self).__init__(parent)
         self.setupUi(self)
 
+        self.startDate = self.findChild(QtWidgets.QDateEdit, 'startDate')
+        self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
+
 # class for Species attribute, adding the UI and working checkboxes, and options to select/clear all
 class ArtAttDialog(QtWidgets.QDialog, ATT_ART):
     def __init__(self, parent=None):
@@ -111,7 +115,19 @@ class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
         super(WFSSearchDialog, self).__init__(parent)
         self.setupUi(self)
 
-# class for WFS, adding the UI and working checkboxes, and options to select/clear all
+        # Add start- and end-date as variables
+        self.startDate = self.findChild(QtWidgets.QDateEdit, 'startDate')
+        self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
+
+        # Populate polygon layer combo box
+        self.polygonLayerComboBox.addItem("No polygon")
+        polygon_layers = [
+            layer.name()
+            for layer in QgsProject.instance().mapLayers().values()
+            if isinstance(layer, QgsVectorLayer) and layer.geometryType() == QgsWkbTypes.PolygonGeometry
+        ]
+        self.polygonLayerComboBox.addItems(polygon_layers)
+
 class WFSInfoDialog(QtWidgets.QDialog, WFS_INFO):
     def __init__(self, parent=None):
         super(WFSInfoDialog, self).__init__(parent)

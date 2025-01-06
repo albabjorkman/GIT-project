@@ -2,7 +2,6 @@
 <ui version="4.0">
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
-  <!-- Main dialog window for WFS-->
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,10 +11,8 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>WFS Service</string>
   </property>
-
-  <!-- Button to proceed to the next step -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
@@ -29,78 +26,95 @@
     <string>Next</string>
    </property>
   </widget>
-
-  <!-- Input for scientific name and guidance -->
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>60</x>
      <y>19</y>
      <width>130</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select scientificName</string>
+    <string>Select scientific name:</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>200</x>
      <y>30</y>
      <width>113</width>
      <height>20</height>
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="lableAreaType_3">
+  <widget class="QLabel" name="labelReminder">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>50</y>
+     <x>200</x>
+     <y>0</y>
      <width>151</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Be careful with the spelling</string>
+    <string>Correct spelling is important!</string>
    </property>
   </widget>
-
-  <!-- Input for vernacular name -->
   <widget class="QLabel" name="lableAreaType_4">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>79</y>
+     <x>60</x>
+     <y>49</y>
      <width>130</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select vernacularName</string>
+    <string>Select vernacular name:</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="vernacularName">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>90</y>
+     <x>200</x>
+     <y>60</y>
      <width>113</width>
      <height>20</height>
     </rect>
    </property>
   </widget>
-
-  <!-- Group box for specifying a date range -->
+  <widget class="QLabel" name="labelPolygonLayer">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>90</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Polygon Layer:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="polygonLayerComboBox">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>90</y>
+     <width>200</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QGroupBox" name="dateAndTimeBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>180</y>
+     <x>40</x>
+     <y>200</y>
      <width>330</width>
-     <height>120</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="title">
@@ -165,13 +179,11 @@
     </property>
    </widget>
   </widget>
-
-  <!-- Options for maximum number of points -->
   <widget class="QLineEdit" name="maxNbr_WFS">
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>161</y>
+     <y>170</y>
      <width>113</width>
      <height>20</height>
     </rect>
@@ -181,24 +193,22 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>150</y>
-     <width>130</width>
+     <y>160</y>
+     <width>141</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>Max number points:</string>
+    <string>Nbr of output observations:</string>
    </property>
   </widget>
-
-  <!-- Radio buttons for specifying logical operations -->
   <widget class="QRadioButton" name="AND">
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>130</y>
+     <y>150</y>
      <width>80</width>
-     <height>18</height>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -209,7 +219,7 @@
    <property name="geometry">
     <rect>
      <x>220</x>
-     <y>130</y>
+     <y>150</y>
      <width>80</width>
      <height>18</height>
     </rect>
@@ -221,19 +231,17 @@
   <widget class="QLabel" name="lableAreaType_5">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>120</y>
+     <x>60</x>
+     <y>150</y>
      <width>111</width>
-     <height>41</height>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Combine with</string>
+    <string>Combine input with:</string>
    </property>
   </widget>
-
-  <!-- Checkbox for showing duplicate features -->
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="doubleCheckBox">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -244,6 +252,26 @@
    </property>
    <property name="text">
     <string>Show features on same coordinates</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="writeAreaType">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>120</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="AreaType">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>120</y>
+     <width>121</width>
+     <height>20</height>
+    </rect>
    </property>
   </widget>
  </widget>

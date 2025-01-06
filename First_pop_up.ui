@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Dialog</class>
+ <!-- Main dialog window -->
  <widget class="QDialog" name="Dialog">
-  <!-- Main dialog window -->
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,8 +12,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Artdatabanken plugin</string>
   </property>
+
    <!-- checkbox for area -->
   <widget class="QCheckBox" name="form_class">
    <property name="geometry">
@@ -25,9 +26,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>Area API</string>
+    <string>GetAreas() API</string>
    </property>
   </widget>
+
   <!-- checkbox for art -->
   <widget class="QCheckBox" name="art_info">
    <property name="geometry">
@@ -42,20 +44,7 @@
     <string>Species Observation System API</string>
    </property>
   </widget>
-  <!-- Load buttom -->
-  <widget class="QPushButton" name="loadDataButton">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>130</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Load data</string>
-   </property>
-  </widget>
+
   <!-- checkbox for WFS -->
   <widget class="QCheckBox" name="WFS_info">
    <property name="geometry">
@@ -68,6 +57,21 @@
    </property>
    <property name="text">
     <string>OGC Web Feature Service (WFS)</string>
+   </property>
+  </widget>
+
+  <!-- Load buttom -->
+  <widget class="QPushButton" name="loadDataButton">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>130</y>
+     <width>130</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load data</string>
    </property>
   </widget>
  </widget>

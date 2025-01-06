@@ -227,6 +227,7 @@ class Artdatabanken:
         # pop-up for WFS
         if wfs_info_checked:
             self.wfsS = WFSSearchDialog() #get UI
+            self.wfs_area_type() #load option for area types
             self.wfsS.loadDataButton.clicked.connect(lambda: self.on_WFS_search()) # get attribute for WFS
             self.wfsS.show()
 
@@ -268,3 +269,8 @@ class Artdatabanken:
         self.art.artType.clear()
         self.art.artType.addItems(art_type_data)
         self.art.artType.setSelectionMode(QListWidget.MultiSelection)
+
+    def wfs_area_type(self):
+        area_type_data = ["", "locality", "municipality", "county", "province"]
+        self.wfsS.AreaType.clear()
+        self.wfsS.AreaType.addItems(area_type_data)

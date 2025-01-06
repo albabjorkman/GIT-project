@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Dialog</class>
+
+ <!-- Main dialog window for attribute Species-->
  <widget class="QDialog" name="Dialog">
-   <!-- Main dialog window for attribute Species-->
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,8 +13,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Attributes</string>
   </property>
+
    <!-- Checkboxes to choose attributes-->
   <widget class="QCheckBox" name="taxonRank">
    <property name="geometry">
