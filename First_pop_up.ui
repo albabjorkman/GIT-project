@@ -7,26 +7,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>500</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Artdatabanken plugin</string>
+   <string>GIT-Project's Artdatabanken plugin</string>
   </property>
 
  <!-- Welcome label -->
  <widget class="QLabel" name="welcome_text">
   <property name="geometry">
    <rect>
-    <x>40</x>
+    <x>30</x>
     <y>30</y>
-    <width>400</width>
+    <width>420</width>
     <height>40</height>
    </rect>
   </property>
   <property name="text">
-   <string>Welcome to the Artdatabanken's plugin! </string>
+   <string>Welcome to the GIT-Project's Artdatabanken plugin! </string>
   </property>
      <property name="styleSheet">
    <string>
@@ -37,18 +37,192 @@
   </property>
  </widget>
  
- <!-- Copyright label -->
+  <!-- Description label -->
+ <widget class="QLabel" name="desc_text">
+  <property name="geometry">
+   <rect>
+    <x>25</x>
+    <y>60</y>
+    <width>460</width>
+    <height>150</height>
+   </rect>
+  </property>
+  <property name="text">
+   <string>
+	&lt;html&gt;&lt;body style="line-height: 1.2;"&gt;
+    Constructed by three LTH students at GIS-Centrum in Lund, here you&lt;br/&gt;
+	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt; 
+	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt; 
+	For more information, please visit the following links: &lt;br/&gt; 
+	https://api-portal.artdatabanken.se/api-details#api=sos-api-v1 &amp;&lt;br/&gt; 
+	 https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md
+    &lt;/body&gt;&lt;/html&gt;
+	</string>
+  </property>
+     <property name="styleSheet">
+   <string>
+     font-size: 13px; 
+     font-family: "Arial"; 
+   </string>
+  </property>
+ </widget>
+ 
+  <!-- Checkbox for area -->
+  <widget class="QCheckBox" name="form_class">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>220</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Areas_GetAreas</string>
+   </property>
+   <property name="styleSheet">
+    <string>
+      font-weight: bold;
+      font-size: 10px;
+      font-family: "Arial";
+    </string>
+  </property>
+  </widget>
+  
+  <!-- Description for area -->
+  <widget class="QLabel" name="desc_area">
+    <property name="geometry">
+     <rect>
+      <x>260</x>´
+      <y>220</y>
+      <width>300</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(API GET request, regions)</string>
+    </property>
+	<property name="styleSheet">
+    <string>
+      font-size: 10px;
+      font-family: "Arial";
+    </string>
+  </property>
+   </widget>
+
+  <!-- checkbox for species -->
+  <widget class="QCheckBox" name="art_info">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>240</y>
+     <width>220</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Observations_ObservationsBySearchDwc</string>
+   </property>
+   <property name="styleSheet">
+    <string>
+      font-weight: bold;
+      font-size: 10px;
+      font-family: "Arial";
+    </string>
+  </property>
+  </widget>
+  
+  <!-- Description for species -->
+  <widget class="QLabel" name="desc_art">
+    <property name="geometry">
+     <rect>
+      <x>260</x>´
+      <y>240</y>
+      <width>300</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(API GET request, species observations)</string>
+    </property>
+	<property name="styleSheet">
+    <string>
+      font-size: 10px;
+      font-family: "Arial";
+    </string>
+  </property>
+   </widget>
+
+  <!-- checkbox for WFS -->
+  <widget class="QCheckBox" name="WFS_info">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>260</y>
+     <width>200</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OGC WFS</string>
+   </property>
+   <property name="styleSheet">
+    <string>
+      font-weight: bold;
+      font-size: 10px;
+      font-family: "Arial";
+    </string>
+  </property>
+  </widget>
+  
+  <!-- Description for WFS-->
+  <widget class="QLabel" name="desc_WFS">
+    <property name="geometry">
+     <rect>
+      <x>260</x>´
+      <y>260</y>
+      <width>300</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(WFS using geoserver, species observations)</string>
+    </property>
+	<property name="styleSheet">
+    <string>
+      font-size: 10px;
+      font-family: "Arial";
+    </string>
+  </property>
+   </widget>
+
+  <!-- Load buttom -->
+  <widget class="QPushButton" name="loadDataButton">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>300</y>
+     <width>120</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load data</string>
+   </property>
+  </widget> 
+  
+  <!-- Copyright label -->
  <widget class="QLabel" name="copyright_text">
   <property name="geometry">
    <rect>
-    <x>35</x>
-    <y>55</y>
+    <x>70</x>
+    <y>350</y>
     <width>400</width>
     <height>40</height>
    </rect>
   </property>
   <property name="text">
-   <string>Please note that this is a private project and not an official plugin from SLU</string>
+   <string>Please note that this is a student project &amp; not an official plugin from SLU!</string>
   </property>
      <property name="styleSheet">
    <string>
@@ -58,87 +232,6 @@
    </string>
   </property>
  </widget>
- 
- <!--Instruction label-->
- <widget class="QLabel" name="ins_text">
-  <property name="geometry">
-   <rect>
-    <x>40</x>
-    <y>100</y>
-    <width>400</width>
-    <height>40</height>
-   </rect>
-  </property>
-  <property name="text">
-   <string>Please select from below and press the button: </string>
-  </property>
-    <property name="styleSheet">
-   <string>
-     font-size: 16px; 
-     font-family: "Arial";  
-   </string>
-  </property>
- </widget>
-   
-  <!-- Checkbox for area -->
-  <widget class="QCheckBox" name="form_class">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>150</y>
-     <width>120</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>GetAreas() API</string>
-   </property>
-  </widget>
-
-  <!-- checkbox for art -->
-  <widget class="QCheckBox" name="art_info">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>180</y>
-     <width>200</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Species Observation System API</string>
-   </property>
-  </widget>
-
-  <!-- checkbox for WFS -->
-  <widget class="QCheckBox" name="WFS_info">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>210</y>
-     <width>200</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>OGC Web Feature Service (WFS)</string>
-   </property>
-  </widget>
-
-  <!-- Load buttom -->
-  <widget class="QPushButton" name="loadDataButton">
-   <property name="geometry">
-    <rect>
-     <x>135</x>
-     <y>250</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Load data</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections/>
