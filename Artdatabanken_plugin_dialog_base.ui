@@ -70,6 +70,7 @@
    </property>
   </widget> 
   
+  <!-- Label, max number points -->
   <widget class="QLabel" name="maxNbr_areaLabel">
    <property name="geometry">
     <rect>
@@ -90,6 +91,7 @@
   </property>
   </widget>
   
+  <!-- line, max number points -->
   <widget class="QLineEdit" name="maxNbr_area">
    <property name="geometry">
     <rect>
@@ -104,10 +106,10 @@
   <widget class="QLabel" name="maxLimitReachedLabel">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>165</y>
+     <x>340</x>
+     <y>160</y>
      <width>250</width>
-     <height>30</height>
+     <height>40</height>
     </rect>
    </property>
    <property name="visible">
@@ -238,9 +240,7 @@
     <string>Load data</string>
    </property>
   </widget> 
-  
 
-  
  </widget>
  <resources/>
  <connections/>
