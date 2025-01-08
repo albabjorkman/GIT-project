@@ -1,92 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Dialog</class>
+ <!-- Main dialog window for attribute WFS-->
  <widget class="QDialog" name="Dialog">
-  <!-- Main dialog window for attribute WFS-->
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>505</width>
-    <height>301</height>
+    <width>500</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>OGC WFS</string>
   </property>
-  <!-- Button to proceed to the next step -->
-  <widget class="QPushButton" name="loadDataButton">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>240</y>
-     <width>130</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Load data</string>
-   </property>
-  </widget>
-  <!-- Checkboxes to choose attributes-->
-  <widget class="QCheckBox" name="isRedlisted">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>140</y>
-     <width>91</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>isRedlisted</string>
+  
+   <!-- Title label -->
+  <widget class="QLabel" name="Title_art">
+    <property name="geometry">
+     <rect>
+      <x>30</x>´
+      <y>30</y>
+      <width>400</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Attributes for OGC WFS </string>
+    </property>
+	<property name="styleSheet">
+    <string>
+	  font-weight: bold;
+      font-size: 14px;
+      font-family: "Arial";
+    </string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="startDate">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>180</y>
-     <width>111</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>startDate</string>
-   </property>
-  </widget>
+  
+    <!-- Description label -->
+ <widget class="QLabel" name="desc_art">
+  <property name="geometry">
+   <rect>
+    <x>50</x>
+    <y>50</y>
+    <width>350</width>
+    <height>40</height>
+   </rect>
+  </property>
+  <property name="text">
+   <string>
+   For additional info about the different attributes, please visit:&lt;br/&gt;  
+   https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md
+   </string>
+  </property>
+     <property name="styleSheet">
+   <string>
+     font-size: 11px; 
+     font-family: "Arial"; 
+   </string>
+  </property>
+ </widget>
+ 
+  <!-- Label, select attributes-->
   <widget class="QLabel" name="Select">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>130</width>
-     <height>30</height>
+     <x>40</x>
+     <y>90</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select attribute to show</string>
+    <string>Select attributes:</string>
    </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 12px;
+      font-family: "Arial";
+    </string>
+  </property>
   </widget>
-  <widget class="QCheckBox" name="isInvasiveInSweden">
+  
+  <!-- Checkboxes to choose attributes-->   
+  
+  <!-- Checkbox, vernacularName-->
+  <widget class="QCheckBox" name="vernacularName_2">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>140</y>
-     <width>91</width>
-     <height>18</height>
+     <x>20</x>
+     <y>120</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>isInvasiveInSweden</string>
+    <string>vernacularName</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, scientificName-->
   <widget class="QCheckBox" name="scientificName">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>140</y>
-     <width>101</width>
+     <x>130</x>
+     <y>120</y>
+     <width>100</width>
      <height>20</height>
     </rect>
    </property>
@@ -94,103 +113,164 @@
     <string>scientificName</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="institutionCode">
+  
+  <!-- Checkbox, organismGroup-->
+  <widget class="QCheckBox" name="organismGroup">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>100</y>
-     <width>91</width>
-     <height>18</height>
+     <x>240</x>
+     <y>120</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>institutionCode</string>
+    <string>organismGroup</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="scientificNameAuthorship">
+  
+  <!-- Checkbox, isRedlisted-->
+  <widget class="QCheckBox" name="isRedlisted">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>180</y>
-     <width>141</width>
-     <height>18</height>
+     <x>350</x>
+     <y>120</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>endDate</string>
+    <string>isRedlisted</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="decimalLongitude">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>200</y>
-     <width>111</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>decimalLongitude</string>
-   </property>
-  </widget>
+  
+  <!-- Checkbox, province-->
   <widget class="QCheckBox" name="province">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>100</y>
-     <width>91</width>
-     <height>18</height>
+     <x>20</x>
+     <y>140</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>province</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, municipality-->
   <widget class="QCheckBox" name="municipality">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>100</y>
-     <width>91</width>
-     <height>18</height>
+     <x>130</x>
+     <y>140</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>municipality</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, county-->
+  <widget class="QCheckBox" name="county">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>140</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>county</string>
+   </property>
+  </widget>
+  
+  <!-- Checkbox, locality-->
   <widget class="QCheckBox" name="locality">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>80</y>
-     <width>111</width>
-     <height>18</height>
+     <x>350</x>
+     <y>140</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>locality</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="decimalLatitude">
+  
+  <!-- Checkbox, startDate-->
+  <widget class="QCheckBox" name="startDate">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>200</y>
-     <width>91</width>
-     <height>18</height>
+     <x>20</x>
+     <y>160</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>decimalLatitude</string>
+    <string>startDate</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, modified-->
+  <widget class="QCheckBox" name="modified">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>160</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>modified</string>
+   </property>
+  </widget>
+  
+  <!-- Checkbox, institutionCode-->
+  <widget class="QCheckBox" name="institutionCode">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>160</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>institutionCode</string>
+   </property>
+  </widget>
+  
+    <!-- Checkbox, recordedBy-->
+  <widget class="QCheckBox" name="recordedBy">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>160</y>
+     <width>100</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>recordedBy</string>
+   </property>
+  </widget>
+  
+  <!-- Checkbox, dataProviderId-->
   <widget class="QCheckBox" name="dataProviderId">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>80</y>
-     <width>101</width>
+     <x>20</x>
+     <y>180</y>
+     <width>100</width>
      <height>20</height>
     </rect>
    </property>
@@ -198,12 +278,14 @@
     <string>dataProviderId</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, datasetName-->
   <widget class="QCheckBox" name="datasetName_2">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>80</y>
-     <width>101</width>
+     <x>130</x>
+     <y>180</y>
+     <width>100</width>
      <height>20</height>
     </rect>
    </property>
@@ -211,90 +293,91 @@
     <string>datasetName</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="county">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>100</y>
-     <width>91</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>county</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="organismGroup">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>120</y>
-     <width>131</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>organismGroup</string>
-   </property>
-  </widget>
+  
+  <!-- Checkbox, occurrenceID-->
   <widget class="QCheckBox" name="occurrenceID">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>60</y>
-     <width>91</width>
-     <height>18</height>
+     <x>240</x>
+     <y>180</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>occurrenceID</string>
    </property>
   </widget>
+  
+
+  
+  <!-- Checkbox, isVerified-->
   <widget class="QCheckBox" name="isVerified">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>160</y>
-     <width>91</width>
-     <height>18</height>
+     <x>350</x>
+     <y>180</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>isVerified</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, isInvasiveEu-->
   <widget class="QCheckBox" name="isInvasiveEu">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>160</y>
-     <width>91</width>
-     <height>18</height>
+     <x>20</x>
+     <y>200</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>isInvasiveEu</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="isNeverFoundObservation">
+  
+  <!-- Checkbox, decimalLatitude-->
+  <widget class="QCheckBox" name="decimalLatitude">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>180</y>
-     <width>151</width>
+     <x>130</x>
+     <y>200</y>
+     <width>100</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>isNeverFoundObservation</string>
+    <string>decimalLatitude</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, decimalLongitude-->
+  <widget class="QCheckBox" name="decimalLongitude">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>200</y>
+     <width>120</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>decimalLongitude</string>
+   </property>
+  </widget>
+  
+   <!-- Checkbox, isPresentObservation-->
   <widget class="QCheckBox" name="isPresentObservation">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>60</y>
-     <width>121</width>
+     <x>350</x>
+     <y>200</y>
+     <width>140</width>
      <height>20</height>
     </rect>
    </property>
@@ -302,38 +385,29 @@
     <string>isPresentObservation</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="modified">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>80</y>
-     <width>91</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>modified</string>
-   </property>
-  </widget>
+  
+  <!-- Checkbox, isProtectedByLaw-->
   <widget class="QCheckBox" name="isProtectedByLaw">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>140</y>
-     <width>111</width>
-     <height>18</height>
+     <x>20</x>
+     <y>220</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>isProtectedByLaw</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, dyntaxaTaxonId-->
   <widget class="QCheckBox" name="dyntaxaTaxonId">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>120</y>
-     <width>101</width>
+     <x>130</x>
+     <y>220</y>
+     <width>100</width>
      <height>20</height>
     </rect>
    </property>
@@ -341,25 +415,89 @@
     <string>dyntaxaTaxonId</string>
    </property>
   </widget>
+  
+  <!-- Checkbox, taxonCategory-->
   <widget class="QCheckBox" name="taxonCategory">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>120</y>
-     <width>91</width>
-     <height>18</height>
+     <x>240</x>
+     <y>220</y>
+     <width>100</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>taxonCategory</string>
    </property>
+  </widget> 
+  
+  <!-- Checkbox, isNaturalOccurrence-->
+  <widget class="QCheckBox" name="isNaturalOccurrence">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>220</y>
+     <width>120</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>isNaturalOccurrence</string>
+   </property>
   </widget>
+  
+  <!-- Checkbox, isInvasiveInSweden-->
+  <widget class="QCheckBox" name="isInvasiveInSweden">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>240</y>
+     <width>120</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>isInvasiveInSweden</string>
+   </property>
+  </widget>
+
+  <!-- Checkbox, scientificNameAuthorship-->
+  <widget class="QCheckBox" name="scientificNameAuthorship">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>240</y>
+     <width>150</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>scientificNameAuthorship</string>
+   </property>
+  </widget>
+ 
+  <!-- Checkbox, isNeverFoundObservation-->
+  <widget class="QCheckBox" name="isNeverFoundObservation">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>240</y>
+     <width>150</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>isNeverFoundObservation</string>
+   </property>
+  </widget>
+  
+  <!-- Checkbox, coordinateUncertaintyInMeters-->
   <widget class="QCheckBox" name="coordinateUncertaintyInMeters">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>200</y>
-     <width>191</width>
+     <x>20</x>
+     <y>260</y>
+     <width>190</width>
      <height>20</height>
     </rect>
    </property>
@@ -367,51 +505,14 @@
     <string>coordinateUncertaintyInMeters</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="isNaturalOccurrence">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>160</y>
-     <width>91</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>isNaturalOccurrence</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="recordedBy">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>60</y>
-     <width>91</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>recordedBy</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="vernacularName_2">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>120</y>
-     <width>91</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>vernacularName</string>
-   </property>
-  </widget>
+  
+  <!-- Checkbox, isUncertainIdentification-->
   <widget class="QCheckBox" name="isUncertainIdentification">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>160</y>
-     <width>151</width>
+     <x>200</x>
+     <y>260</y>
+     <width>150</width>
      <height>20</height>
     </rect>
    </property>
@@ -419,34 +520,51 @@
     <string>isUncertainIdentification</string>
    </property>
   </widget>
-  <!-- Button to clear all-->
-  <widget class="QPushButton" name="clearAll">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>240</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Clear All</string>
-   </property>
-  </widget>
+  
   <!-- Button to select all-->
   <widget class="QPushButton" name="selectAll">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>240</y>
-     <width>75</width>
-     <height>23</height>
+     <x>160</x>
+     <y>300</y>
+     <width>80</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>Select all</string>
    </property>
   </widget>
+  <!-- Button to clear all-->
+  <widget class="QPushButton" name="clearAll">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>300</y>
+     <width>80</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+  </widget>  
+ 
+  <!-- Button, load data -->
+  <widget class="QPushButton" name="loadDataButton">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>330</y>
+     <width>120</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load data</string>
+   </property>
+  </widget>
+ 
  </widget>
  <resources/>
  <connections/>
