@@ -102,67 +102,45 @@ def from_wfs(self):
         # Get polygon(s) that limit shown points from selection list
         selected_layer = self.wfsS.polygonLayerComboBox.currentText()
         # Check if user has chosen to use a polygon as a border
-        use_polygon = selected_layer != "No polygon"
 
         # If user has chosen to use a polygon, load geometry here
-        if use_polygon:
-            polygon_layer = QgsProject.instance().mapLayersByName(selected_layer)[0] if selected_layer else None
+        # Polygon filter
+        filter_geom = None
+        # Modify the 'filter_geom' creation section to generate CQL filters like the one in your provided URL
+        selected_layer = self.wfsS.polygonLayerComboBox.currentText()
 
-            if polygon_layer:
-                polygon_filters = []
-
-                for feature in polygon_layer.getFeatures():
-                    geometry = feature.geometry()
-                    if geometry and geometry.type() == QgsWkbTypes.PolygonGeometry:
-                        if geometry.isGeosValid():
-                            # Check original WKT
-                            orig_wkt = geometry.asWkt()
-                            self.iface.messageBar().pushMessage(
-                                "Original WKT", f"{orig_wkt}", level=3
+        if selected_layer != "No polygon":
+            try:
+                polygon_layer = QgsProject.instance().mapLayersByName(selected_layer)[0]
+                if polygon_layer:
+                    polygon_filters = []
+                    for feature in polygon_layer.getFeatures():
+                        geometry = feature.geometry()
+                        if geometry:
+                            # Transform geometry to WGS 84 (EPSG:4326)
+                            crs_transform = QgsCoordinateTransform(
+                                polygon_layer.crs(),
+                                QgsCoordinateReferenceSystem("EPSG:4326"),
+                                QgsProject.instance()
                             )
-                            # Check whether the input polygon layer is in WGS84 or WGS84/Pseudo Mercator and transform to WGS84 if not
-                            if polygon_layer.crs().authid() == "EPSG:4326":
-                                polygon_wkt = geometry.asWkt()
-                            else:
-                                # Convert polygon coordinates to WGS84 for correct(?) input to SOS-server
-                                transformed_geom = QgsGeometry(geometry)
-                                transform_result = transformed_geom.transform(crs_transform)
-                                # If transform was succesful, translate polygon corner coordinates to WKT format
-                                if transform_result == 0:
-                                    polygon_wkt = transformed_geom.asWkt()
-                                    self.iface.messageBar().pushMessage(
-                                        "Polygon WKT", f"{polygon_wkt}", level=3
-                                    )
-                                else:
-                                    self.iface.messageBar().pushMessage(
-                                        "Error", f"CRS transformation failed with result code: {transform_result}",
-                                        level=3
-                                    )
-                                continue
-                            # Make sure that URL-encoding is correctly done by replacing any encoded values with the correct symbol
-                            polygon_wkt = (
-                                polygon_wkt.replace(" ", "%20")
-                                .replace("(", "%28")
-                                .replace(")", "%29")
-                                .replace(",", "%2C")
-                            )
-                            polygon_filters.append(f"Intersects(geom,%20{polygon_wkt})")
-                        else:
-                            print("Invalid geometry detected, skipping.")
-                    else:
-                        print("Feature has no valid polygon geometry.")
+                            geometry.transform(crs_transform)
 
-                # Get geom of every polygon included in layer and join them to later add to cql_filter
-                if polygon_filters:
-                    filter_geom = "(" + " OR ".join(polygon_filters) + ")"
-                    self.iface.messageBar().pushMessage(
-                        "filter_geom", f"{filter_geom}", level=3
-                    )
-                else:
-                    self.iface.messageBar().pushMessage(
-                        "Error", "No valid polygons found in the selected layer.", level=3
-                    )
-                    filter_geom = None
+                            # Convert geometry to WKT and URL-encode it
+                            polygon_wkt = geometry.asWkt()
+                            encoded_wkt = urllib.parse.quote(polygon_wkt)
+                            polygon_filters.append(f"Within(pointLocation,{polygon_wkt})")
+
+                    if polygon_filters:
+                        # This generates the CQL filter that can be appended to the URL
+                        filter_geom = f"({' OR '.join(polygon_filters)})"
+                        print(f"Polygon Filter: {filter_geom}")
+
+            except IndexError:
+                self.iface.messageBar().pushMessage("Error", "Selected polygon layer not found.", level=3)
+            except Exception as e:
+                self.iface.messageBar().pushMessage("Error", f"Error processing polygon layer: {str(e)}", level=3)
+
+
 
         # Join all filters together to contruct final endpoint
         all_filters = []
@@ -546,9 +524,7 @@ def to_map_area(self):
         # Check if the user's input exceeds the combined limit
         if nbr_points > total_max_points:
             self.dlg.maxLimitReachedLabel.setText(
-                f"Limit exceeded! Total allowed points: {total_max_points}."
-                f" "
-                f"You requested: {nbr_points}."
+                f"Limit exceeded!\nTotal allowed points: {total_max_points}"
             )
             self.dlg.maxLimitReachedLabel.setVisible(True)
 
