@@ -123,6 +123,9 @@ class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
         self.startDate = self.findChild(QtWidgets.QDateEdit, 'startDate')
         self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
 
+        self.startDate.setDate(QDate(1900, 1, 1))
+        self.endDate.setDate(QDate(2025, 1, 1))
+
         # Populate polygon layer combo box
         self.polygonLayerComboBox.addItem("No polygon")
         polygon_layers = [
