@@ -41,8 +41,8 @@
  <widget class="QLabel" name="desc_text">
   <property name="geometry">
    <rect>
-    <x>25</x>
-    <y>60</y>
+    <x>50</x>
+    <y>40</y>
     <width>460</width>
     <height>150</height>
    </rect>
@@ -61,7 +61,7 @@
   </property>
      <property name="styleSheet">
    <string>
-     font-size: 13px; 
+     font-size: 11px; 
      font-family: "Arial"; 
    </string>
   </property>
@@ -72,8 +72,8 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>220</y>
-     <width>100</width>
+     <y>180</y>
+     <width>120</width>
      <height>20</height>
     </rect>
    </property>
@@ -83,7 +83,7 @@
    <property name="styleSheet">
     <string>
       font-weight: bold;
-      font-size: 10px;
+      font-size: 13px;
       font-family: "Arial";
     </string>
   </property>
@@ -94,7 +94,7 @@
     <property name="geometry">
      <rect>
       <x>260</x>´
-      <y>220</y>
+      <y>180</y>
       <width>300</width>
       <height>20</height>
      </rect>
@@ -104,7 +104,7 @@
     </property>
 	<property name="styleSheet">
     <string>
-      font-size: 10px;
+      font-size: 12px;
       font-family: "Arial";
     </string>
   </property>
@@ -115,18 +115,18 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>240</y>
-     <width>220</width>
+     <y>220</y>
+     <width>230</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Observations_ObservationsBySearchDwc</string>
+    <string>Obs_ObservationsBySearchDwc</string>
    </property>
    <property name="styleSheet">
     <string>
       font-weight: bold;
-      font-size: 10px;
+      font-size: 13px;
       font-family: "Arial";
     </string>
   </property>
@@ -137,7 +137,7 @@
     <property name="geometry">
      <rect>
       <x>260</x>´
-      <y>240</y>
+      <y>220</y>
       <width>300</width>
       <height>20</height>
      </rect>
@@ -147,7 +147,7 @@
     </property>
 	<property name="styleSheet">
     <string>
-      font-size: 10px;
+      font-size: 12px;
       font-family: "Arial";
     </string>
   </property>
@@ -169,7 +169,7 @@
    <property name="styleSheet">
     <string>
       font-weight: bold;
-      font-size: 10px;
+      font-size: 13px;
       font-family: "Arial";
     </string>
   </property>
@@ -186,11 +186,11 @@
      </rect>
     </property>
     <property name="text">
-     <string>(WFS using geoserver, species observations)</string>
+     <string>(Using geoserver, species observations)</string>
     </property>
 	<property name="styleSheet">
     <string>
-      font-size: 10px;
+      font-size: 12px;
       font-family: "Arial";
     </string>
   </property>
@@ -207,7 +207,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Load data</string>
+    <string>Next</string>
    </property>
   </widget> 
   
