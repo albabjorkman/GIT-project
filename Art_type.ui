@@ -47,7 +47,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Select kingdom &lt;br/&gt;(No input for all)</string>
+    <string>Select kingdom &lt;br/&gt;(Choose none for all)</string>
    </property>
    <property name="styleSheet">
     <string>
