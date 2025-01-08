@@ -5,6 +5,8 @@ from PyQt5.QtCore import QVariant
 import requests
 from datetime import datetime
 import urllib.parse
+from shapely.wkt import loads, dumps
+from shapely.geometry import MultiPolygon, Polygon
 
 
 def from_wfs(self):
@@ -41,7 +43,7 @@ def from_wfs(self):
         filters_name = []
         filter_date = []
         filter_geom = []
-        filter_area =[]
+        filter_area = []
 
         # Construct the endpoint based on scientific name input
         if selected_scientific_names:
@@ -72,7 +74,7 @@ def from_wfs(self):
 
         if selected_area_names:
 
-            area= self.wfsS.AreaType.currentText()
+            area = self.wfsS.AreaType.currentText()
             if not area or area == "":  # Check if no area is selected
                 self.iface.messageBar().pushMessage(
                     "Error", "Please select an Area Type before providing area names.", level=3
@@ -94,22 +96,11 @@ def from_wfs(self):
             end_date_filter = f"endDate<='{end_date}'"
             filter_date.append(f"{start_date_filter} AND {end_date_filter}")
 
-        # Define geographical reference systems for potential input of polygons
-        crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
-        crs_project = QgsProject.instance().crs()
-        crs_transform = QgsCoordinateTransform(crs_project, crs_wgs84, QgsProject.instance())
-
-        # Get polygon(s) that limit shown points from selection list
-        selected_layer = self.wfsS.polygonLayerComboBox.currentText()
-        # Check if user has chosen to use a polygon as a border
-
-        # If user has chosen to use a polygon, load geometry here
-        # Polygon filter
+        # Polygon filter to add to URL in correct way
         filter_geom = None
-        # Modify the 'filter_geom' creation section to generate CQL filters like the one in your provided URL
         selected_layer = self.wfsS.polygonLayerComboBox.currentText()
 
-        if selected_layer != "No polygon":
+        if selected_layer != "No polygon": #skip step if no added polygon
             try:
                 polygon_layer = QgsProject.instance().mapLayersByName(selected_layer)[0]
                 if polygon_layer:
@@ -117,7 +108,7 @@ def from_wfs(self):
                     for feature in polygon_layer.getFeatures():
                         geometry = feature.geometry()
                         if geometry:
-                            # Transform geometry to WGS 84 (EPSG:4326)
+                            # Transform geometry to WGS84
                             crs_transform = QgsCoordinateTransform(
                                 polygon_layer.crs(),
                                 QgsCoordinateReferenceSystem("EPSG:4326"),
@@ -127,8 +118,12 @@ def from_wfs(self):
 
                             # Convert geometry to WKT and URL-encode it
                             polygon_wkt = geometry.asWkt()
-                            encoded_wkt = urllib.parse.quote(polygon_wkt)
-                            polygon_filters.append(f"Within(pointLocation,{polygon_wkt})")
+
+                            # Use swap_coordinates function to change order of long and lat
+                            poly_geom = loads(polygon_wkt)
+                            swapped_geom = swap_coordinates(poly_geom) #using functions own written below
+                            swapped_wkt = dumps(swapped_geom)
+                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_wkt})")
 
                     if polygon_filters:
                         # This generates the CQL filter that can be appended to the URL
@@ -139,8 +134,6 @@ def from_wfs(self):
                 self.iface.messageBar().pushMessage("Error", "Selected polygon layer not found.", level=3)
             except Exception as e:
                 self.iface.messageBar().pushMessage("Error", f"Error processing polygon layer: {str(e)}", level=3)
-
-
 
         # Join all filters together to contruct final endpoint
         all_filters = []
@@ -156,9 +149,6 @@ def from_wfs(self):
         # final endpoint and print control to see it correct
         cql_filter = urllib.parse.quote(" AND ".join(all_filters)) if all_filters else ""
         print(cql_filter)
-        #self.iface.messageBar().pushMessage(
-        #    "CQL-filter", f"{cql_filter}", level=3
-        #)
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
@@ -278,6 +268,31 @@ def from_wfs(self):
         self.iface.messageBar().pushMessage(
             "Error", f"Failed to load data: {str(e)}", level=3
         )
+
+# function to convert WKT coordinates from long/lat to lat/long
+def swap_coordinates(geometry):
+    if geometry.geom_type == 'Polygon':
+        # Handle Polygon object
+        new_shell = [(y, x) for x, y in geometry.exterior.coords]
+        new_holes = [
+            [(y, x) for x, y in ring.coords]
+            for ring in geometry.interiors
+        ]
+        return Polygon(new_shell, new_holes)
+
+    elif geometry.geom_type == 'MultiPolygon':
+        # Handle MultiPolygon object
+        new_polygons = []
+        for polygon in geometry.geoms:
+            new_shell = [(y, x) for x, y in polygon.exterior.coords]
+            new_holes = [
+                [(y, x) for x, y in ring.coords]
+                for ring in polygon.interiors
+            ]
+            new_polygons.append(Polygon(new_shell, new_holes))
+        return MultiPolygon(new_polygons)
+    else:
+        raise ValueError("Only polygons and Multipolygons supported")
 
 
 # loading data for species API
