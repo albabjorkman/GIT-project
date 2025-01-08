@@ -27,6 +27,7 @@ from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 from PyQt5.QtWidgets import QDialog, QCheckBox
 from qgis.core import QgsProject, QgsWkbTypes, QgsVectorLayer
+from PyQt5.QtCore import QDate
 
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
@@ -89,6 +90,9 @@ class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
 
         self.startDate = self.findChild(QtWidgets.QDateEdit, 'startDate')
         self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
+
+        self.startDate.setDate(QDate(1900, 1, 1))
+        self.endDate.setDate(QDate(2025, 1, 1))
 
 # class for Species attribute, adding the UI and working checkboxes, and options to select/clear all
 class ArtAttDialog(QtWidgets.QDialog, ATT_ART):

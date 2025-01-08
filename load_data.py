@@ -116,26 +116,22 @@ def from_wfs(self):
                             )
                             geometry.transform(crs_transform)
 
-                            # Convert geometry to WKT and URL-encode it
+                            # Convert geometry to WKT
                             polygon_wkt = geometry.asWkt()
-<<<<<<< HEAD
-
-                            # Use swap_coordinates function to change order of long and lat
-                            poly_geom = loads(polygon_wkt)
-                            swapped_geom = swap_coordinates(poly_geom) #using functions own written below
-=======
                             
                             # Use swap_coordinates function to change order of long and lat
+                            # loads() and dumps() are shapely function that in this case transform objects between geom and wkt objects
                             poly_geom = loads(polygon_wkt)
                             swapped_geom = swap_coordinates(poly_geom)
->>>>>>> origin/git
                             swapped_wkt = dumps(swapped_geom)
-                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_wkt})")
 
-                    if polygon_filters:
-                        # This generates the CQL filter that can be appended to the URL
-                        filter_geom = f"({' OR '.join(polygon_filters)})"
-                        print(f"Polygon Filter: {filter_geom}")
+                            # pointLocation geometry type required due to observations being output as points
+                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_wkt})")
+                            
+                        if polygon_filters:
+                            # This generates the CQL filter that can be appended to the URL
+                            filter_geom = f"({' OR '.join(polygon_filters)})"
+                            print(f"Polygon Filter: {filter_geom}")
 
             except IndexError:
                 self.iface.messageBar().pushMessage("Error", "Selected polygon layer not found.", level=3)
@@ -278,7 +274,6 @@ def from_wfs(self):
 
 # function to convert WKT coordinates from long/lat to lat/long
 def swap_coordinates(geometry):
-<<<<<<< HEAD
     if geometry.geom_type == 'Polygon':
         # Handle Polygon object
         new_shell = [(y, x) for x, y in geometry.exterior.coords]
@@ -290,9 +285,6 @@ def swap_coordinates(geometry):
 
     elif geometry.geom_type == 'MultiPolygon':
         # Handle MultiPolygon object
-=======
-    if geometry.geom_type == 'MultiPolygon':
->>>>>>> origin/git
         new_polygons = []
         for polygon in geometry.geoms:
             new_shell = [(y, x) for x, y in polygon.exterior.coords]
@@ -303,11 +295,7 @@ def swap_coordinates(geometry):
             new_polygons.append(Polygon(new_shell, new_holes))
         return MultiPolygon(new_polygons)
     else:
-<<<<<<< HEAD
         raise ValueError("Only polygons and Multipolygons supported")
-=======
-        raise ValueError("Endast MultiPolygon stöds i detta exempel")
->>>>>>> origin/git
 
 
 # loading data for species API
