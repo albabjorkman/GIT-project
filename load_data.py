@@ -5,6 +5,8 @@ from PyQt5.QtCore import QVariant
 import requests
 from datetime import datetime
 import urllib.parse
+from shapely.wkt import loads, dumps
+from shapely.geometry import MultiPolygon, Polygon
 
 
 def from_wfs(self):
@@ -127,8 +129,12 @@ def from_wfs(self):
 
                             # Convert geometry to WKT and URL-encode it
                             polygon_wkt = geometry.asWkt()
-                            encoded_wkt = urllib.parse.quote(polygon_wkt)
-                            polygon_filters.append(f"Within(pointLocation,{polygon_wkt})")
+                            
+                            # Use swap_coordinates function to change order of long and lat
+                            poly_geom = loads(polygon_wkt)
+                            swapped_geom = swap_coordinates(poly_geom)
+                            swapped_wkt = dumps(swapped_geom)
+                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_wkt})")
 
                     if polygon_filters:
                         # This generates the CQL filter that can be appended to the URL
@@ -278,6 +284,21 @@ def from_wfs(self):
         self.iface.messageBar().pushMessage(
             "Error", f"Failed to load data: {str(e)}", level=3
         )
+
+# function to convert WKT coordinates from long/lat to lat/long
+def swap_coordinates(geometry):
+    if geometry.geom_type == 'MultiPolygon':
+        new_polygons = []
+        for polygon in geometry.geoms:
+            new_shell = [(y, x) for x, y in polygon.exterior.coords]
+            new_holes = [
+                [(y, x) for x, y in ring.coords]
+                for ring in polygon.interiors
+            ]
+            new_polygons.append(Polygon(new_shell, new_holes))
+        return MultiPolygon(new_polygons)
+    else:
+        raise ValueError("Endast MultiPolygon stöds i detta exempel")
 
 
 # loading data for species API
