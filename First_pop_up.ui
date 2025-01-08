@@ -30,13 +30,13 @@
   </property>
      <property name="styleSheet">
    <string>
-     font-size: 18px;
-     font-family: "Arial";
-     color: #0000FF;
+     font-size: 18px; 
+     font-family: "Arial"; 
+     color: #0000FF; 
    </string>
   </property>
  </widget>
-
+ 
   <!-- Description label -->
  <widget class="QLabel" name="desc_text">
   <property name="geometry">
@@ -51,22 +51,22 @@
    <string>
 	&lt;html&gt;&lt;body style="line-height: 1.2;"&gt;
     Constructed by three LTH students at GIS-Centrum in Lund, here you&lt;br/&gt;
-	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt;
-	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt;
-	For more information, please visit the following links: &lt;br/&gt;
-	https://api-portal.artdatabanken.se/api-details#api=sos-api-v1 &amp;&lt;br/&gt;
+	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt; 
+	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt; 
+	For more information, please visit the following links: &lt;br/&gt; 
+	https://api-portal.artdatabanken.se/api-details#api=sos-api-v1 &amp;&lt;br/&gt; 
 	 https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md
     &lt;/body&gt;&lt;/html&gt;
 	</string>
   </property>
      <property name="styleSheet">
    <string>
-     font-size: 11px;
-     font-family: "Arial";
+     font-size: 11px; 
+     font-family: "Arial"; 
    </string>
   </property>
  </widget>
-
+ 
   <!-- Checkbox for area -->
   <widget class="QCheckBox" name="form_class">
    <property name="geometry">
@@ -88,7 +88,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Description for area -->
   <widget class="QLabel" name="desc_area">
     <property name="geometry">
@@ -131,7 +131,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Description for species -->
   <widget class="QLabel" name="desc_art">
     <property name="geometry">
@@ -174,7 +174,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Description for WFS-->
   <widget class="QLabel" name="desc_WFS">
     <property name="geometry">
@@ -209,8 +209,8 @@
    <property name="text">
     <string>Next</string>
    </property>
-  </widget>
-
+  </widget> 
+  
   <!-- Copyright label -->
  <widget class="QLabel" name="copyright_text">
   <property name="geometry">
@@ -226,9 +226,9 @@
   </property>
      <property name="styleSheet">
    <string>
-     font-size: 10px;
-     font-family: "Arial";
-     color: #FF0000;
+     font-size: 10px; 
+     font-family: "Arial"; 
+     color: #FF0000; 
    </string>
   </property>
  </widget>

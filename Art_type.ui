@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Observations_ObservationsBySearchDwc</string>
   </property>
-
+  
   <!-- Title label -->
   <widget class="QLabel" name="Title_art">
     <property name="geometry">
@@ -35,7 +35,7 @@
     </string>
    </property>
   </widget>
-
+  
    <!-- Label, select kingdom -->
   <widget class="QLabel" name="lableAreaType">
    <property name="geometry">
@@ -48,6 +48,7 @@
    </property>
    <property name="text">
     <string>Select kingdom &lt;br/&gt;(Choose none for all)</string>
+    <string>Select kingdom &lt;br/&gt;(Choose none for all)</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -56,7 +57,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Dropdown menu, select kingdom-->
   <widget class="QListWidget" name="artType">
    <property name="geometry">
@@ -68,7 +69,7 @@
     </rect>
    </property>
   </widget>
-
+  
   <!-- Label, scientific name -->
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
@@ -89,7 +90,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Line, scientific name -->
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
@@ -124,7 +125,7 @@
     </string>
   </property>
   </widget>
-
+  
  <!-- Label, select max number points -->
   <widget class="QLabel" name="maxNbr_artLabel">
    <property name="geometry">
@@ -157,8 +158,8 @@
     </rect>
    </property>
   </widget>
-
-  <!-- Data and time box -->
+   
+  <!-- Data and time box --> 
   <widget class="QGroupBox" name="dateAndTimeBox">
    <property name="geometry">
     <rect>
@@ -177,7 +178,7 @@
       font-family: "Arial";
     </string>
   </property>
-
+   
    <!-- Label, start date -->
    <widget class="QLabel" name="labelStartDate">
     <property name="geometry">
@@ -192,7 +193,7 @@
      <string>Start Date</string>
     </property>
    </widget>
-
+   
    <!-- Date, start date -->
    <widget class="QDateEdit" name="startDate">
     <property name="geometry">
@@ -209,8 +210,11 @@
     <property name="calendarPopup">
      <bool>true</bool>
     </property>
+    <property name="date">
+     <date>1900-01-01</date>
+    </property>
    </widget>
-
+   
    <!-- Label, end date -->
    <widget class="QLabel" name="labelEndDate">
     <property name="geometry">
@@ -225,7 +229,7 @@
      <string>End Date</string>
     </property>
    </widget>
-
+   
    <!-- Date, end date -->
    <widget class="QDateEdit" name="endDate">
     <property name="geometry">
@@ -242,9 +246,12 @@
     <property name="calendarPopup">
      <bool>true</bool>
     </property>
+    <property name="date">
+     <date>2025-01-01</date>
+    </property>
    </widget>
   </widget>
-
+  
   <!-- Checkbox, show multiple points with same coordinates -->
   <widget class="QCheckBox" name="double">
    <property name="geometry">
@@ -259,7 +266,7 @@
     <string>Show multiple points on same coordinates</string>
    </property>
   </widget>
-
+  
   <!-- Button, next page -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
@@ -274,7 +281,7 @@
     <string>Next</string>
    </property>
   </widget>
-
+  
  </widget>
  <resources/>
  <connections/>

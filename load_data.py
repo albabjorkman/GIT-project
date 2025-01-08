@@ -116,19 +116,22 @@ def from_wfs(self):
                             )
                             geometry.transform(crs_transform)
 
-                            # Convert geometry to WKT and URL-encode it
+                            # Convert geometry to WKT
                             polygon_wkt = geometry.asWkt()
-
+                            
                             # Use swap_coordinates function to change order of long and lat
+                            # loads() and dumps() are shapely function that in this case transform objects between geom and wkt objects
                             poly_geom = loads(polygon_wkt)
-                            swapped_geom = swap_coordinates(poly_geom) #using functions own written below
+                            swapped_geom = swap_coordinates(poly_geom)
                             swapped_wkt = dumps(swapped_geom)
-                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_wkt})")
 
-                    if polygon_filters:
-                        # This generates the CQL filter that can be appended to the URL
-                        filter_geom = f"({' OR '.join(polygon_filters)})"
-                        print(f"Polygon Filter: {filter_geom}")
+                            # pointLocation geometry type required due to observations being output as points
+                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_wkt})")
+                            
+                        if polygon_filters:
+                            # This generates the CQL filter that can be appended to the URL
+                            filter_geom = f"({' OR '.join(polygon_filters)})"
+                            print(f"Polygon Filter: {filter_geom}")
 
             except IndexError:
                 self.iface.messageBar().pushMessage("Error", "Selected polygon layer not found.", level=3)

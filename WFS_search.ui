@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>OGC WFS</string>
   </property>
-
+  
   <!-- Title label -->
   <widget class="QLabel" name="Title_art">
     <property name="geometry">
@@ -35,7 +35,7 @@
     </string>
    </property>
   </widget>
-
+  
   <!-- Label, scientific name-->
   <widget class="QLabel" name="lableAreaType_2">
    <property name="geometry">
@@ -56,7 +56,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Line, scientific name-->
   <widget class="QLineEdit" name="scientificName">
    <property name="geometry">
@@ -68,7 +68,7 @@
     </rect>
    </property>
   </widget>
-
+  
   <!-- Label, reminder spelling-->
   <widget class="QLabel" name="labelReminder">
    <property name="geometry">
@@ -90,7 +90,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Label, vernacular name-->
   <widget class="QLabel" name="lableAreaType_4">
    <property name="geometry">
@@ -111,7 +111,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Line, vernacular name-->
   <widget class="QLineEdit" name="vernacularName">
    <property name="geometry">
@@ -123,7 +123,7 @@
     </rect>
    </property>
   </widget>
-
+  
   <!-- Label, polygon-->
   <widget class="QLabel" name="labelPolygonLayer">
    <property name="geometry">
@@ -144,7 +144,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Combobox, polygon-->
   <widget class="QComboBox" name="polygonLayerComboBox">
    <property name="geometry">
@@ -156,7 +156,7 @@
     </rect>
    </property>
   </widget>
-
+  
   <!-- Label, locality-->
   <widget class="QLabel" name="labelLocality">
    <property name="geometry">
@@ -177,7 +177,7 @@
     </string>
   </property>
   </widget>
-
+   
    <!-- Combobox, locality-->
    <widget class="QComboBox" name="AreaType">
    <property name="geometry">
@@ -188,8 +188,8 @@
      <height>20</height>
     </rect>
    </property>
-  </widget>
-
+  </widget>  
+  
   <!-- Line, location-->
    <widget class="QLineEdit" name="writeAreaType">
    <property name="geometry">
@@ -201,7 +201,7 @@
     </rect>
    </property>
   </widget>
-
+  
   <!-- Label, combine input-->
   <widget class="QLabel" name="lableAreaType_5">
    <property name="geometry">
@@ -222,7 +222,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- RadioButton, AND-->
   <widget class="QRadioButton" name="AND">
    <property name="geometry">
@@ -243,7 +243,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Radiobutton, OR-->
   <widget class="QRadioButton" name="OR">
    <property name="geometry">
@@ -264,7 +264,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Label, nbr of data points-->
   <widget class="QLabel" name="lableAreaType_6">
    <property name="geometry">
@@ -285,7 +285,7 @@
     </string>
   </property>
   </widget>
-
+  
   <!-- Line, nbr of data points-->
   <widget class="QLineEdit" name="maxNbr_WFS">
    <property name="geometry">
@@ -297,8 +297,8 @@
     </rect>
    </property>
   </widget>
-
-   <!-- Data and time box -->
+  
+   <!-- Data and time box --> 
   <widget class="QGroupBox" name="dateAndTimeBox">
    <property name="geometry">
     <rect>
@@ -317,7 +317,7 @@
       font-family: "Arial";
     </string>
   </property>
-
+   
    <!-- Label, start date -->
    <widget class="QLabel" name="labelStartDate">
     <property name="geometry">
@@ -332,7 +332,7 @@
      <string>Start Date</string>
     </property>
    </widget>
-
+   
    <!-- Date, start date -->
    <widget class="QDateEdit" name="startDate">
     <property name="geometry">
@@ -349,8 +349,11 @@
     <property name="calendarPopup">
      <bool>true</bool>
     </property>
+    <property name="date">
+     <date>1900-01-01</date>
+    </property>
    </widget>
-
+   
    <!-- Label, end date -->
    <widget class="QLabel" name="labelEndDate">
     <property name="geometry">
@@ -365,7 +368,7 @@
      <string>End Date</string>
     </property>
    </widget>
-
+   
    <!-- Date, end date -->
    <widget class="QDateEdit" name="endDate">
     <property name="geometry">
@@ -382,9 +385,12 @@
     <property name="calendarPopup">
      <bool>true</bool>
     </property>
+    <property name="date">
+     <date>2025-01-01</date>
+    </property>
    </widget>
   </widget>
-
+ 
   <!-- Checkbox, show multiple points with same coordinates -->
   <widget class="QCheckBox" name="double">
    <property name="geometry">
@@ -399,7 +405,7 @@
     <string>Show multiple points on same coordinates</string>
    </property>
   </widget>
-
+  
   <!-- Button, next page-->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
@@ -414,7 +420,7 @@
     <string>Next</string>
    </property>
   </widget>
-
+  
  </widget>
  <resources/>
  <connections/>
