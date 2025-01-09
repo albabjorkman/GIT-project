@@ -68,28 +68,7 @@
     </rect>
    </property>
   </widget>
-  
-  <!-- Label, reminder spelling-->
-  <widget class="QLabel" name="labelReminder">
-   <property name="geometry">
-    <rect>
-     <x>350</x>
-     <y>65</y>
-     <width>150</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>(Mind the spelling!)</string>
-   </property>
-   <property name="styleSheet">
-    <string>
-      font-size: 11px;
-      font-family: "Arial";
-	  color: #FF0000;
-    </string>
-  </property>
-  </widget>
+
   
   <!-- Label, vernacular name-->
   <widget class="QLabel" name="lableAreaType_4">
@@ -123,13 +102,35 @@
     </rect>
    </property>
   </widget>
-  
+
+  <widget class="QLabel" name="labelReminder">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>60</y>
+     <width>150</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>(Mind the spelling! &lt;br/&gt; ÅÄÖ is acceptable. &lt;br/&gt;
+     To include several &lt;br/&gt; searches add &lt;br/&gt;  "," inbetween.)</string>
+   </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 12px;
+      font-family: "Arial";
+	  color: #FF0000;
+    </string>
+  </property>
+  </widget>
+
   <!-- Label, polygon-->
   <widget class="QLabel" name="labelPolygonLayer">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>185</y>
+     <y>180</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -150,7 +151,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>190</y>
+     <y>185</y>
      <width>130</width>
      <height>20</height>
     </rect>
@@ -374,7 +375,7 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>60</y>
+      <y>70</y>
       <width>130</width>
       <height>20</height>
      </rect>
@@ -405,13 +406,34 @@
     <string>Show multiple points on same coordinates</string>
    </property>
   </widget>
+
+    <widget class="QLabel" name="labelReminder">
+   <property name="geometry">
+    <rect>
+     <x>47</x>
+     <y>367</y>
+     <width>270</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>(If NOT checked LESS points than max can appear)</string>
+   </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 11px;
+      font-family: "Arial";
+	  color: #FF0000;
+    </string>
+  </property>
+  </widget>
   
   <!-- Button, next page-->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
      <x>320</x>
-     <y>350</y>
+     <y>355</y>
      <width>120</width>
      <height>30</height>
     </rect>

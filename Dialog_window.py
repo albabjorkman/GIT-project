@@ -31,13 +31,13 @@ from PyQt5.QtCore import QDate
 
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
+AREA_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'Area_Search.ui'))
 
 FIRST_POP, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'First_pop_up.ui'))
 
-ART_TYPE, _ = uic.loadUiType(os.path.join(
+SPECIES_TYPE, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'Species_search.ui'))
 
 
@@ -47,11 +47,11 @@ WFS_INFO, _ = uic.loadUiType(os.path.join(
 WFS_SEARCH, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'WFS_search.ui'))
 
-ATT_ART, _ = uic.loadUiType(os.path.join(
+SPECIES_ATT, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'Species_attributes.ui'))
 
 # class for Area, adding the UI and working checkboxes, and options to select/clear all
-class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):
+class ArtdatabankenDialog(QtWidgets.QDialog, AREA_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
         super(ArtdatabankenDialog, self).__init__(parent)
@@ -63,6 +63,7 @@ class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.selectAll.clicked.connect(self.select_all)
         self.clearAll.clicked.connect(self.clear_all)
+        self.maxNbr_area.setText("10")
 
         # Find all checkboxes (assuming they are within a specific container)
         self.checkboxes = self.findChildren(QCheckBox)
@@ -83,7 +84,7 @@ class FirstPopupDialog(QtWidgets.QDialog, FIRST_POP):
 
 
 # class for Species first page for options
-class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
+class ArtTypeDialog(QtWidgets.QDialog, SPECIES_TYPE):
     def __init__(self, parent=None):
         super(ArtTypeDialog, self).__init__(parent)
         self.setupUi(self)
@@ -93,9 +94,10 @@ class ArtTypeDialog(QtWidgets.QDialog, ART_TYPE):
 
         self.startDate.setDate(QDate(1900, 1, 1))
         self.endDate.setDate(QDate(2025, 1, 1))
+        self.maxNbr_art.setText("10")
 
 # class for Species attribute, adding the UI and working checkboxes, and options to select/clear all
-class ArtAttDialog(QtWidgets.QDialog, ATT_ART):
+class ArtAttDialog(QtWidgets.QDialog, SPECIES_ATT):
     def __init__(self, parent=None):
         super(ArtAttDialog, self).__init__(parent)
         self.setupUi(self)
@@ -125,6 +127,7 @@ class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
 
         self.startDate.setDate(QDate(1900, 1, 1))
         self.endDate.setDate(QDate(2025, 1, 1))
+        self.maxNbr_WFS.setText("10")
 
         # Populate polygon layer combo box
         self.polygonLayerComboBox.addItem("No polygon")

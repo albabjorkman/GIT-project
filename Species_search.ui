@@ -109,13 +109,13 @@
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>135</y>
+     <y>115</y>
      <width>150</width>
-     <height>20</height>
+     <height>60</height>
     </rect>
    </property>
    <property name="text">
-    <string>(Mind the spelling!)</string>
+    <string>(Mind the spelling! &lt;br/&gt; To include several  searches &lt;br/&gt; add "," inbetween.)</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -235,7 +235,7 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>60</y>
+      <y>70</y>
       <width>130</width>
       <height>20</height>
      </rect>
@@ -266,13 +266,34 @@
     <string>Show multiple points on same coordinates</string>
    </property>
   </widget>
+
+  <widget class="QLabel" name="labelReminder">
+   <property name="geometry">
+    <rect>
+     <x>45</x>
+     <y>346</y>
+     <width>270</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>(If NOT checked LESS points than max can appear)</string>
+   </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 11px;
+      font-family: "Arial";
+	  color: #FF0000;
+    </string>
+  </property>
+  </widget>
   
   <!-- Button, next page -->
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>340</y>
+     <x>320</x>
+     <y>333</y>
      <width>120</width>
      <height>30</height>
     </rect>

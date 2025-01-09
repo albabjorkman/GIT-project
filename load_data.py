@@ -151,7 +151,7 @@ def from_wfs(self):
 
         # final endpoint and print control to see it correct
         cql_filter = urllib.parse.quote(" AND ".join(all_filters)) if all_filters else ""
-        print(cql_filter)
+        print("CQL filter: ", cql_filter)
 
         # Create a new vector layer for points
         layer = QgsVectorLayer("Point?crs=EPSG:4326", "WFS Data Points", "memory")
@@ -430,11 +430,8 @@ def to_map_art(self):
                 point_key = (lat, lon)  # Create a tuple to represent the point uniquely
                 if not self.art.double.isChecked():  # If "no duplicates" is selected to not get duplicates
                     if point_key in processed_points:
-                        print(f"Skipping duplicate point: {point_key}")
                         continue  # Skip point
                     processed_points.add(point_key)  # Mark point as processed
-
-                print(f"Adding feature with coordinates: {lon}, {lat}")  # Debugging
 
                 # Create feature geometry (point)
                 point = QgsPointXY(lon, lat)
@@ -567,9 +564,6 @@ def to_map_area(self):
 
         # Fetch data from the API
         data = self.api_client_area.fetch_data(endpoint=full_url)
-
-        # Process the data (implement according to your application logic)
-        print(f"Received data: {data}")
 
         # Validate the response
         if not data or "records" not in data:
