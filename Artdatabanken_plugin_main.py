@@ -25,7 +25,7 @@ from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMessageBox, QListWidget
 # Import the code for the dialog
-from .Artdatabanken_plugin_dialog import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
+from .Dialog_window import ArtdatabankenDialog, FirstPopupDialog, ArtTypeDialog, WFSInfoDialog, \
     ArtAttDialog, WFSSearchDialog
 from .load_data import from_wfs, to_map_art, to_map_area
 import os.path
@@ -256,7 +256,7 @@ class Artdatabanken:
         area_types_data = ["","Municipality", "Community", "Sea", "CountryRegion", "NatureType",
             "Province", "Ramsar", "BirdValidationArea", "Parish", "Spa",
             "County", "ProtectedNature", "SwedishForestAgencyDistricts",
-            "Sci", "WaterArea", "Atlas5x5", "Atlas10x10", "SfvDistricts", "Campus"
+            "Sci", "WaterArea", "SfvDistricts", "Campus"
         ]
 
         self.dlg.areaType_2.clear()  # Clear any existing items

@@ -236,7 +236,7 @@ def from_wfs(self):
                     point_key = lon, lat
 
                     # Skip if doublets points (if that option is checked)
-                    if not self.wfsS.doubleCheckBox.isChecked():
+                    if not self.wfsS.double.isChecked():
                         if point_key in processed_points:
                             continue
 
@@ -527,7 +527,10 @@ def to_map_area(self):
                 "Error", "Please input a positive numerical value.", level=3
             )
             return
+
+
         nbr_points = int(selected_nbrPoints)
+
 
         # Check limits for each selected area type
         # Calculate the total maximum points across selected area types
@@ -591,6 +594,7 @@ def to_map_area(self):
 
         # Process records
         for record in records:
+            print("RECORD", record.keys())
             if "boundingBox" in record and "featureId" in record:
                 bbox = record["boundingBox"]
                 min_lon = bbox["bottomRight"]["longitude"]
@@ -603,8 +607,13 @@ def to_map_area(self):
 
                 feature = QgsFeature()
                 feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(center_lon, center_lat)))
-                feature.setAttributes([record.get(attr, "") for attr in selected_attributes])
+                attributes = [
+                    record.get(attr, "") for attr in selected_attributes
+                ]
+
+                feature.setAttributes(attributes)
                 provider.addFeature(feature)
+                layer.updateFields()
 
         layer.updateExtents()
         QgsProject.instance().addMapLayer(layer)

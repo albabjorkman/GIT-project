@@ -32,23 +32,23 @@ from PyQt5.QtCore import QDate
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'Area_type.ui'))
+    os.path.dirname(__file__), 'Area_Search.ui'))
 
 FIRST_POP, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'First_pop_up.ui'))
 
 ART_TYPE, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'Art_type.ui'))
+    os.path.dirname(__file__), 'Species_search.ui'))
 
 
 WFS_INFO, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'WFS.ui'))
+    os.path.dirname(__file__), 'WFS_attributes.ui'))
 
 WFS_SEARCH, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'WFS_search.ui'))
 
 ATT_ART, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'attribut_art.ui'))
+    os.path.dirname(__file__), 'Species_attributes.ui'))
 
 # class for Area, adding the UI and working checkboxes, and options to select/clear all
 class ArtdatabankenDialog(QtWidgets.QDialog, FORM_CLASS):

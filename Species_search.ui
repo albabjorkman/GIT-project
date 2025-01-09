@@ -43,13 +43,13 @@
      <x>60</x>
      <y>60</y>
      <width>130</width>
-     <height>30</height>
+     <height>50</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select kingdom &lt;br/&gt;(Choose none for all)</string>
-    <string>Select kingdom &lt;br/&gt;(Choose none for all)</string>
-   </property>
+    <string>Select kingdom &lt;br/&gt;(Choose empty for&lt;br/&gt;all kingdoms)&lt;br/&gt;</string>
+</property>
+
    <property name="styleSheet">
     <string>
       font-size: 12px;

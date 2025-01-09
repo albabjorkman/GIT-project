@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .Artdatabanken_plugin import Artdatabanken
+    from .Artdatabanken_plugin_main import Artdatabanken
     return Artdatabanken(iface)

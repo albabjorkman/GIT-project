@@ -16,7 +16,7 @@ import unittest
 
 from qgis.PyQt.QtGui import QDialogButtonBox, QDialog
 
-from Artdatabanken_plugin_dialog import ArtdatabankenDialog
+from Dialog_window import ArtdatabankenDialog
 
 from utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
