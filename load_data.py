@@ -415,7 +415,6 @@ def to_map_art(self):
         processed_points = set()
 
         for record in all_data:
-            print(f"Processing record: {record}")  # Log to inspect the data
 
             try:
                 # Extract latitude and longitude
@@ -594,7 +593,6 @@ def to_map_area(self):
 
         # Process records
         for record in records:
-            print("RECORD", record.keys())
             if "boundingBox" in record and "featureId" in record:
                 bbox = record["boundingBox"]
                 min_lon = bbox["bottomRight"]["longitude"]
