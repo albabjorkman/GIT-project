@@ -114,7 +114,7 @@
    </property>
    <property name="text">
     <string>(Mind the spelling! &lt;br/&gt; ÅÄÖ is acceptable. &lt;br/&gt;
-     To include several &lt;br/&gt; searches add &lt;br/&gt;  "," inbetween.)</string>
+     To include several &lt;br/&gt; searches add &lt;br/&gt;  (,) inbetween.)</string>
    </property>
    <property name="styleSheet">
     <string>

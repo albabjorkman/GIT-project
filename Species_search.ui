@@ -115,7 +115,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>(Mind the spelling! &lt;br/&gt; To include several  searches &lt;br/&gt; add "," inbetween.)</string>
+    <string>(Mind the spelling! &lt;br/&gt; To include several  searches &lt;br/&gt; add (,) inbetween.)</string>
    </property>
    <property name="styleSheet">
     <string>
