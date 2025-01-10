@@ -215,6 +215,8 @@ class Artdatabanken:
             self.populate_area_types() # getting the options of type of area
             self.dlg.loadDataButton.clicked.connect(lambda: to_map_area(self)) # get data that is asked for
             self.dlg.show()
+            # close first pop-up window
+            self.Fpop.close()
 
         # pop-up for species
         if art_info_checked:
@@ -222,6 +224,8 @@ class Artdatabanken:
             self.art_type()  # load the options for species
             self.art.loadDataButton.clicked.connect(lambda: self.on_art_load()) # get attribute pop-up
             self.art.show()
+            # close first pop-up window
+            self.Fpop.close()
 
 
         # pop-up for WFS
@@ -230,14 +234,15 @@ class Artdatabanken:
             self.wfs_area_type() #load option for area types
             self.wfsS.loadDataButton.clicked.connect(lambda: self.on_WFS_search()) # get attribute for WFS
             self.wfsS.show()
+            # close first pop-up window
+            self.Fpop.close()
 
         # if nothing selected get warning
         if not (area_info_checked or art_info_checked or wfs_info_checked):
             self.iface.messageBar().pushMessage(
                 "Select a type of data", level=3)
 
-        # close first pop-up window
-        self.Fpop.close()
+
 
     # get pop-up for attributes for species
     def on_art_load(self):
