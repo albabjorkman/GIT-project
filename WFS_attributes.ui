@@ -67,12 +67,12 @@
     <rect>
      <x>40</x>
      <y>90</y>
-     <width>100</width>
+     <width>200</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select attributes:</string>
+    <string>Select attributes (at least one):</string>
    </property>
    <property name="styleSheet">
     <string>

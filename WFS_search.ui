@@ -107,7 +107,7 @@
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>60</y>
+     <y>65</y>
      <width>150</width>
      <height>80</height>
     </rect>
@@ -118,7 +118,7 @@
    </property>
    <property name="styleSheet">
     <string>
-      font-size: 12px;
+      font-size: 11.5px;
       font-family: "Arial";
 	  color: #FF0000;
     </string>

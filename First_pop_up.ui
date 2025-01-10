@@ -52,7 +52,8 @@
 	&lt;html&gt;&lt;body style="line-height: 1.2;"&gt;
     Constructed by three LTH students at GIS-Centrum in Lund, here you&lt;br/&gt;
 	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt; 
-	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt; 
+	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt;
+      Points are loaded in the WGS84 coordinate system. &lt;br/&gt;
 	For more information, please visit the following links: &lt;br/&gt; 
 	https://api-portal.artdatabanken.se/api-details#api=sos-api-v1 &amp;&lt;br/&gt; 
 	 https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md
