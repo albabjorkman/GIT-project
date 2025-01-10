@@ -3,8 +3,9 @@ Unofficial plugin for extracting data from the Swedish Artdatabankens database.\
 Created by **Matilda Bengtsson, Alba Björkman and Albin Röcklinger**, in the course EXTP40 - GIT Project with Python Programming, at Lund University in 2024/2025.
 
 ## Introduction 
-Geospatial data analysis is essential for biodiversity and used for urban planning, and today this is not included in a good way to QGIS which is a way to visualize solutions and spatial information. The integration of the Swedish Artdatabankens, which provides species observations, datasets and a program like QGIS will make this process easiest for  municipalities or other institutions. The aim of this project was to integrate parts of SLU's Artdatabanken into the open source GIS tool QGIS. 
+Geospatial data analysis is essential for biodiversity and used for urban planning, and today this is not included in a good way to QGIS which is a way to visualize solutions and spatial information. The integration of the Swedish Artdatabankens, which provides species observations, datasets and a program like QGIS will make this process easiest for  municipalities or other institutions. The aim of this project was to integrate parts of SLU's Artdatabanken into the open source GIS tool QGIS. <br> <br>
 
+The development of this was achieved through Python, tools like QGIS Plugin builder and QT designer alongside using API and WFS that Artdatabanken provided. The results gave the user the possibility to retrieve information about observations and areas in Sweden with options of what type of attributes, searches and filtering on areas with the help of polygon layers. 
       
 # Plugin Structure
 The plugin consists of three different request which utilizes either APIs available at Artdatabanken, getAreas and ObservationsSearchByDwc, or the Species Observation System (SOS) WFS Service. <br>
