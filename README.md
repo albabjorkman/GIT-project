@@ -21,10 +21,11 @@ The plugin allows for case-insensitive input, meaning capital letters don’t ma
 Output is in the form of points which show the locations of different area classifications in Sweden. <br>
 <img src="Git_pictures/Areas.png" alt="Area request" width="400"/>
 
-Item 1: Selection window, the different area types created by Artdatabanken can be found here. More than one option can be chosen and for all area types, choose the empty box on the first row. <br>
-Item 2: Input box for the amount of observations the user wants output. <br>
-Item 3: Checkboxes for specifying which attributes the user wants the point objects to contain. <br>
-Item 4: Select/Clear all buttons, selects or clears all attributes in item 3. <br>
+**Item 1**: Selection window, the different area types created by Artdatabanken can be found here. More than one option can be chosen and for all area types, choose the empty box on the first row.  <br>
+**Item 2**: Input box for the amount of observations the user wants output.   <br>
+**Item 3**: Checkboxes for specifying which attributes the user wants the point objects to contain.  <br>
+**Item 4**: Select/Clear all buttons, selects or clears all attribute checkboxes in **Item 3**. At least one checkbox needs to be marked.
+
 
 ## Species Observations request
 
