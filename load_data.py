@@ -341,23 +341,28 @@ def to_map_art(self):
         # basic endpoint if nothing more added
         endpoint = ""
 
+
         # To handle requests with more than 1000 takes
+        # Initialize variables
         skips = 0
         nbr_points_left = nbr_points
         all_data = []
 
-        # Construct the query parameters and run API depending on the number of takes
         while nbr_points_left > 0:
+            # Set the `take` value, ensuring it doesn't exceed the API's limit or the remaining points
+            take_limit = min(1000, nbr_points_left)  # Adjust `1000` to the actual API limit if needed
+
+            # Construct query parameters
             params_art = {
                 "kingdom": ",".join(selected_art_types),
                 "scientificName": ",".join(scientific_names),
                 "minEventDate": startEventDate,
                 "maxEventDate": endEventDate,
                 "skip": skips,
-                "take": min(1000, nbr_points_left),  # Take up to 1000 records
+                "take": take_limit,
             }
 
-            # fetching data  with params and endpoint in API handler
+            # Fetch data from the API
             try:
                 data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
             except Exception as fetch_error:
@@ -366,19 +371,25 @@ def to_map_art(self):
                 )
                 return
 
+            # If the API response is empty or invalid, stop further requests
             if not data or not isinstance(data, list):
-                self.iface.messageBar().pushMessage(
-                    "Error", "Invalid or empty response from the API.", level=3
-                )
-                return
+                break  # No more data available or invalid response
 
-            all_data.extend(data)  # Add the new data to the existing data list
+            # Add fetched data to the results
+            all_data.extend(data)
 
-            # Update remaining points and skip for the next API call
-            nbr_points_left -= len(data)
-            skips += len(data)  # Increase skip based on the amount of data received
+            # Update skip and remaining points based on the actual number of results returned
+            result_count = len(data)
+            if result_count == 0:
+                break  # No more data to fetch, exit loop
 
-        # Check All data in `all_data`
+            skips += result_count
+            nbr_points_left -= result_count  # Decrease points left by actual results fetched
+
+            if result_count < take_limit:
+                break
+
+        # Check if any data was retrieved
         if not all_data:
             self.iface.messageBar().pushMessage(
                 "Error", "No data returned from the API.", level=3
