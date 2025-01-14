@@ -93,7 +93,7 @@ class ArtTypeDialog(QtWidgets.QDialog, SPECIES_TYPE):
         self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
 
         self.startDate.setDate(QDate(1900, 1, 1))
-        self.endDate.setDate(QDate(2025, 1, 1))
+        self.endDate.setDate(QDate.currentDate())
         self.maxNbr_art.setText("10")
 
 # class for Species attribute, adding the UI and working checkboxes, and options to select/clear all
@@ -126,7 +126,7 @@ class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
         self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
 
         self.startDate.setDate(QDate(1900, 1, 1))
-        self.endDate.setDate(QDate(2025, 1, 1))
+        self.endDate.setDate(QDate.currentDate())
         self.maxNbr_WFS.setText("10")
 
         # Populate polygon layer combo box
