@@ -33,11 +33,11 @@ def from_wfs(self):
                 )
 
         # Loading in the radiobuttom if want OR or AND in between scientific name and vernacular name
-        combine_with = "AND"  # Default logical operator
+        combine_with = " AND "  # Default logical operator
         if self.wfsS.AND.isChecked():
-            combine_with = "AND"
+            combine_with = " AND "
         elif self.wfsS.OR.isChecked():
-            combine_with = "OR"
+            combine_with = " OR "
 
         # Lists that hold different filters used to construct endpoint call
         filters_name = []
@@ -123,14 +123,13 @@ def from_wfs(self):
                             # loads() and dumps() are shapely function that in this case transform objects between geom and wkt objects
                             poly_geom = loads(polygon_wkt)
                             swapped_geom = swap_coordinates(poly_geom)
-                            swapped_wkt = dumps(swapped_geom)
 
                             # pointLocation geometry type required due to observations being output as points
-                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_wkt})")
+                            polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_geom})")
                             
                         if polygon_filters:
                             # This generates the CQL filter that can be appended to the URL
-                            filter_geom = f"({' OR '.join(polygon_filters)})"
+                            filter_geom = f"({" OR ".join(polygon_filters)})"
                             print(f"Polygon Filter: {filter_geom}")
 
             except IndexError:
