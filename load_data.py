@@ -165,7 +165,7 @@ def from_wfs(self):
                             
                         if polygon_filters:
                             # This generates the CQL filter that can be appended to the URL
-                            filter_geom = f"({" OR ".join(polygon_filters)})"
+                            filter_geom = "(" + " OR " .join(polygon_filters) + ")"
                             print(f"Polygon Filter: {filter_geom}")
 
             except IndexError:
@@ -238,7 +238,7 @@ def from_wfs(self):
 
             response = requests.get(endpoint)
 
-            # if not can fetch data
+            # If unable to fetch data
             if response.status_code != 200:
                 self.iface.messageBar().pushMessage(
                     "Error", f"Failed to retrieve data: HTTP {response.status_code}", level=2
