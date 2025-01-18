@@ -50,7 +50,7 @@
   <property name="text">
    <string>
 	&lt;html&gt;&lt;body style="line-height: 1.2;"&gt;
-    Constructed by three LTH students at GIS-Centrum in Lund, here you&lt;br/&gt;
+    Constructed by Matilda Bengtsson, Alba Björkman and Albin Röcklinger at LTH, here you&lt;br/&gt;
 	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt; 
 	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt;
       Points are loaded in the WGS84 coordinate system. &lt;br/&gt;
