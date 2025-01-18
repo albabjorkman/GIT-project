@@ -101,9 +101,11 @@ class ArtTypeDialog(QtWidgets.QDialog, SPECIES_TYPE):
         self.startDate = self.findChild(QtWidgets.QDateEdit, 'startDate')
         self.endDate = self.findChild(QtWidgets.QDateEdit, 'endDate')
 
+
         self.startDate.setDate(QDate(1900, 1, 1))
         self.endDate.setDate(QDate.currentDate())
         self.maxNbr_art.setText("10")
+        self.double_NO.setChecked(True)
 
 # class for Species attribute, adding the UI and working checkboxes, and options to select/clear all
 class ArtAttDialog(QtWidgets.QDialog, SPECIES_ATT):
@@ -150,7 +152,13 @@ class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
         self.combined_group.addButton(self.OR)
         self.combined_group.addButton(self.AND)
 
+        self.coord_group = QButtonGroup(self)
+        self.coord_group.addButton(self.double)
+        self.coord_group.addButton(self.double_NO)
+
+
         # Set default radio button states
+        self.double_NO.setChecked(True)
         self.OR.setChecked(True)
         self.isProtectedByLaw_no.setChecked(True)
         self.isRedlisted_no.setChecked(True)

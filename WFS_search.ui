@@ -31,6 +31,7 @@
     <string>
       font-size: 14px;
       font-family: "Arial";
+        font-weight: bold;
     </string>
    </property>
   </widget>
@@ -536,33 +537,67 @@
    </property>
   </widget>
   
+<!-- lable, coordinate multiple points-->
+  <widget class="QLabel" name="label">
+    <property name="geometry">
+        <rect>
+            <x>20</x>
+            <y>400</y>
+            <width>230</width>
+            <height>20</height>
+        </rect>
+    </property>
+    <property name="text">
+        <string>Multiple points on the same coordinates:</string>
+    </property>
+      <property name="styleSheet">
+    <string>
+      font-size: 12px;
+      font-family: "Arial";
+    </string>
+  </property>
+</widget>
+<!-- radiobutton, coordinate multiple points YES-->
+<widget class="QRadioButton" name="double">
+    <property name="geometry">
+        <rect>
+            <x>240</x>
+            <y>400</y>
+            <width>100</width>
+            <height>20</height>
+        </rect>
+    </property>
+    <property name="text">
+        <string>YES</string>
+    </property>
+</widget>
+<!-- radiobutton, coordinate multiple points NO-->
+<widget class="QRadioButton" name="double_NO">
+    <property name="geometry">
+        <rect>
+            <x>285</x>
+            <y>400</y>
+            <width>100</width>
+            <height>20</height>
+        </rect>
+    </property>
+    <property name="text">
+        <string>NO</string>
+    </property>
+</widget>
 
-  <!-- Checkbox, show multiple points with same coordinates -->
-  <widget class="QCheckBox" name="double">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>400</y>
-     <width>230</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Show multiple points on same coordinates</string>
-   </property>
-  </widget>
-
+<!-- lable, varning coordinate multiple points-->
     <widget class="QLabel" name="labelReminder">
    <property name="geometry">
     <rect>
-     <x>47</x>
+     <x>27</x>
      <y>417</y>
      <width>270</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>(If NOT checked LESS points than max can appear)</string>
+    <string>(LESS points than max can appear if NO)</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -577,8 +612,8 @@
   <widget class="QPushButton" name="loadDataButton">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>400</y>
+     <x>340</x>
+     <y>403</y>
      <width>120</width>
      <height>30</height>
     </rect>
