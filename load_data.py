@@ -9,12 +9,14 @@ import urllib.parse
 from shapely.wkt import loads, dumps
 from shapely.geometry import MultiPolygon, Polygon
 
+
 ## Support functions
 
 # Function to handle potential blanks before and after comma in input names
-def clean_blanks(input): 
+def clean_blanks(input):
     # Regex is used for this purpose
     return [re.sub(r"^\s+|\s+$", "", name) for name in re.split(r",\s*", input) if name.strip()]
+
 
 # function to convert WKT coordinates from long/lat to lat/long
 def swap_coordinates(geometry):
@@ -42,8 +44,7 @@ def swap_coordinates(geometry):
         raise ValueError("Only polygons and Multipolygons supported")
 
 
-
-## Main data-handling functions
+# Main data-handling functions
 
 def from_wfs(self):
     # fetch data from the WFS service and load it as points on the map with selectable attributes
@@ -57,6 +58,8 @@ def from_wfs(self):
         selected_vernacular_names = self.wfsS.vernacularName.text()
         start_date = self.wfsS.startDate.date().toString("yyyy-MM-dd")
         end_date = self.wfsS.endDate.date().toString("yyyy-MM-dd")
+        isRedlisted = self.wfsS.isRedlisted.isChecked()
+        isProtectedByLaw = self.wfsS.isProtectedByLaw.isChecked()
 
         # Validate input dates (shouldn't be an issue due to calendar input but still)
         if start_date and end_date:
@@ -69,7 +72,7 @@ def from_wfs(self):
                 )
 
         # Loading in the radiobuttom if want OR or AND in between scientific name and vernacular name
-        combine_with = " AND "  # Default logical operator
+        combine_with = " OR "  # Default logical operator
         if self.wfsS.AND.isChecked():
             combine_with = " AND "
         elif self.wfsS.OR.isChecked():
@@ -78,7 +81,6 @@ def from_wfs(self):
         # Lists that hold different filters used to construct endpoint call
         filters_name = []
         filter_date = []
-        filter_geom = []
         filter_area = []
 
         # Construct the endpoint based on scientific name input
@@ -136,7 +138,7 @@ def from_wfs(self):
         filter_geom = None
         selected_layer = self.wfsS.polygonLayerComboBox.currentText()
 
-        if selected_layer != "No polygon": #skip step if no added polygon
+        if selected_layer != "No polygon":  # skip step if no added polygon
             try:
                 polygon_layer = QgsProject.instance().mapLayersByName(selected_layer)[0]
                 if polygon_layer:
@@ -154,7 +156,7 @@ def from_wfs(self):
 
                             # Convert geometry to WKT
                             polygon_wkt = geometry.asWkt()
-                            
+
                             # Use swap_coordinates function to change order of long and lat
                             # loads() and dumps() are shapely function that in this case transform objects between geom and wkt objects
                             poly_geom = loads(polygon_wkt)
@@ -162,10 +164,10 @@ def from_wfs(self):
 
                             # pointLocation geometry type required due to observations being output as points
                             polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_geom})")
-                            
+
                         if polygon_filters:
                             # This generates the CQL filter that can be appended to the URL
-                            filter_geom = "(" + " OR " .join(polygon_filters) + ")"
+                            filter_geom = "(" + " OR ".join(polygon_filters) + ")"
                             print(f"Polygon Filter: {filter_geom}")
 
             except IndexError:
@@ -183,6 +185,10 @@ def from_wfs(self):
             all_filters.append(filter_geom)
         if filter_area:
             all_filters.append(" OR ".join(filter_area))
+        if isRedlisted:
+            all_filters.append("(isRedlisted=true)")
+        if isProtectedByLaw:
+            all_filters.append("(isProtectedByLaw=true)")
 
         # final endpoint and print control to see it correct
         cql_filter = urllib.parse.quote(" AND ".join(all_filters)) if all_filters else ""
@@ -295,7 +301,7 @@ def from_wfs(self):
                     # Add feature to the provider
                     provider.addFeature(qgis_feature)
 
-        # Finalize the layer and add it to the QGIS project 
+        # Finalize the layer and add it to the QGIS project
         layer.updateExtents()
         QgsProject.instance().addMapLayer(layer)
 
@@ -353,7 +359,6 @@ def to_map_art(self):
 
         # basic endpoint if nothing more added
         endpoint = ""
-
 
         # To handle requests with more than 1000 takes
         # Initialize variables
@@ -548,9 +553,7 @@ def to_map_area(self):
             )
             return
 
-
         nbr_points = int(selected_nbrPoints)
-
 
         # Check limits for each selected area type
         # Calculate the total maximum points across selected area types
