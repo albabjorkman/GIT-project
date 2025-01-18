@@ -131,7 +131,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>170</y>
+     <y>290</y>
      <width>130</width>
      <height>30</height>
     </rect>
@@ -152,19 +152,19 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>175</y>
+     <y>295</y>
      <width>130</width>
      <height>20</height>
     </rect>
    </property>
   </widget>
-   
-  <!-- Data and time box --> 
+
+  <!-- Data and time box -->
   <widget class="QGroupBox" name="dateAndTimeBox">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>210</y>
+     <y>170</y>
      <width>330</width>
      <height>100</height>
     </rect>
@@ -178,7 +178,7 @@
       font-family: "Arial";
     </string>
   </property>
-   
+
    <!-- Label, start date -->
    <widget class="QLabel" name="labelStartDate">
     <property name="geometry">
@@ -193,7 +193,7 @@
      <string>Start Date</string>
     </property>
    </widget>
-   
+
    <!-- Date, start date -->
    <widget class="QDateEdit" name="startDate">
     <property name="geometry">
@@ -214,7 +214,7 @@
      <date>1900-01-01</date>
     </property>
    </widget>
-   
+
    <!-- Label, end date -->
    <widget class="QLabel" name="labelEndDate">
     <property name="geometry">
@@ -229,7 +229,7 @@
      <string>End Date</string>
     </property>
    </widget>
-   
+
    <!-- Date, end date -->
    <widget class="QDateEdit" name="endDate">
     <property name="geometry">
@@ -251,7 +251,7 @@
     </property>
    </widget>
   </widget>
-  
+
   <!-- Checkbox, show multiple points with same coordinates -->
   <widget class="QCheckBox" name="double">
    <property name="geometry">
