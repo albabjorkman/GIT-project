@@ -3,11 +3,48 @@ from qgis.core import QgsProject, QgsVectorLayer, QgsPointXY, QgsWkbTypes, QgsCo
     QgsCoordinateTransform
 from PyQt5.QtCore import QVariant
 import requests
+import re
 from datetime import datetime
 import urllib.parse
 from shapely.wkt import loads, dumps
 from shapely.geometry import MultiPolygon, Polygon
 
+
+## Support functions
+
+# Function to handle potential blanks before and after comma in input names
+def clean_blanks(input):
+    # Regex is used for this purpose
+    return [re.sub(r"^\s+|\s+$", "", name) for name in re.split(r",\s*", input) if name.strip()]
+
+
+# function to convert WKT coordinates from long/lat to lat/long
+def swap_coordinates(geometry):
+    if geometry.geom_type == 'Polygon':
+        # Handle Polygon object
+        new_shell = [(y, x) for x, y in geometry.exterior.coords]
+        new_holes = [
+            [(y, x) for x, y in ring.coords]
+            for ring in geometry.interiors
+        ]
+        return Polygon(new_shell, new_holes)
+
+    elif geometry.geom_type == 'MultiPolygon':
+        # Handle MultiPolygon object
+        new_polygons = []
+        for polygon in geometry.geoms:
+            new_shell = [(y, x) for x, y in polygon.exterior.coords]
+            new_holes = [
+                [(y, x) for x, y in ring.coords]
+                for ring in polygon.interiors
+            ]
+            new_polygons.append(Polygon(new_shell, new_holes))
+        return MultiPolygon(new_polygons)
+    else:
+        raise ValueError("Only polygons and Multipolygons supported")
+
+
+# Main data-handling functions
 
 def from_wfs(self):
     # fetch data from the WFS service and load it as points on the map with selectable attributes
@@ -21,6 +58,8 @@ def from_wfs(self):
         selected_vernacular_names = self.wfsS.vernacularName.text()
         start_date = self.wfsS.startDate.date().toString("yyyy-MM-dd")
         end_date = self.wfsS.endDate.date().toString("yyyy-MM-dd")
+        isRedlisted = self.wfsS.isRedlisted.isChecked()
+        isProtectedByLaw = self.wfsS.isProtectedByLaw.isChecked()
 
         # Validate input dates (shouldn't be an issue due to calendar input but still)
         if start_date and end_date:
@@ -29,11 +68,11 @@ def from_wfs(self):
                 datetime.strptime(end_date, "%Y-%m-%d")
             except ValueError:
                 self.iface.messageBar().pushMessage(
-                    "Error", "Invalid date format."
+                    "Warning", "Invalid date format.", level=1
                 )
 
         # Loading in the radiobuttom if want OR or AND in between scientific name and vernacular name
-        combine_with = " AND "  # Default logical operator
+        combine_with = " OR "  # Default logical operator
         if self.wfsS.AND.isChecked():
             combine_with = " AND "
         elif self.wfsS.OR.isChecked():
@@ -42,15 +81,14 @@ def from_wfs(self):
         # Lists that hold different filters used to construct endpoint call
         filters_name = []
         filter_date = []
-        filter_geom = []
         filter_area = []
 
         # Construct the endpoint based on scientific name input
         if selected_scientific_names:
-            names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
+            names = clean_blanks(selected_scientific_names)
             if not names:
                 self.iface.messageBar().pushMessage(
-                    "Error", "Please provide valid scientific names.", level=3
+                    "Warning", "Please provide valid scientific names.", level=1
                 )
                 return
 
@@ -59,10 +97,10 @@ def from_wfs(self):
 
         # Construct the endpoint based on vernacular name input
         if selected_vernacular_names:
-            names = [name.strip() for name in selected_vernacular_names.split(",") if name.strip()]
+            names = clean_blanks(selected_vernacular_names)
             if not names:
                 self.iface.messageBar().pushMessage(
-                    "Error", "Please provide valid vernacular names.", level=3
+                    "Warning", "Please provide valid vernacular names.", level=1
                 )
                 return
 
@@ -77,13 +115,13 @@ def from_wfs(self):
             area = self.wfsS.AreaType.currentText()
             if not area or area == "":  # Check if no area is selected
                 self.iface.messageBar().pushMessage(
-                    "Error", "Please select an Area Type before providing area names.", level=3
+                    "Warning", "Please select an Area Type before providing area names.", level=1
                 )
                 return
             names = [name.strip() for name in selected_area_names.split(",") if name.strip()]
             if not names:
                 self.iface.messageBar().pushMessage(
-                    "Error", "Please provide valid scientific names.", level=3
+                    "Warning", "Please provide valid scientific names.", level=1
                 )
                 return
 
@@ -100,7 +138,7 @@ def from_wfs(self):
         filter_geom = None
         selected_layer = self.wfsS.polygonLayerComboBox.currentText()
 
-        if selected_layer != "No polygon": #skip step if no added polygon
+        if selected_layer != "No polygon":  # skip step if no added polygon
             try:
                 polygon_layer = QgsProject.instance().mapLayersByName(selected_layer)[0]
                 if polygon_layer:
@@ -118,7 +156,7 @@ def from_wfs(self):
 
                             # Convert geometry to WKT
                             polygon_wkt = geometry.asWkt()
-                            
+
                             # Use swap_coordinates function to change order of long and lat
                             # loads() and dumps() are shapely function that in this case transform objects between geom and wkt objects
                             poly_geom = loads(polygon_wkt)
@@ -126,16 +164,16 @@ def from_wfs(self):
 
                             # pointLocation geometry type required due to observations being output as points
                             polygon_filters.append(f"INTERSECTS(pointLocation,{swapped_geom})")
-                            
+
                         if polygon_filters:
                             # This generates the CQL filter that can be appended to the URL
-                            filter_geom = f"({" OR ".join(polygon_filters)})"
+                            filter_geom = "(" + " OR ".join(polygon_filters) + ")"
                             print(f"Polygon Filter: {filter_geom}")
 
             except IndexError:
-                self.iface.messageBar().pushMessage("Error", "Selected polygon layer not found.", level=3)
+                self.iface.messageBar().pushMessage("Error", "Selected polygon layer not found.", level=2)
             except Exception as e:
-                self.iface.messageBar().pushMessage("Error", f"Error processing polygon layer: {str(e)}", level=3)
+                self.iface.messageBar().pushMessage("Error", f"Error processing polygon layer: {str(e)}", level=2)
 
         # Join all filters together to contruct final endpoint
         all_filters = []
@@ -147,6 +185,10 @@ def from_wfs(self):
             all_filters.append(filter_geom)
         if filter_area:
             all_filters.append(" OR ".join(filter_area))
+        if isRedlisted:
+            all_filters.append("(isRedlisted=true)")
+        if isProtectedByLaw:
+            all_filters.append("(isProtectedByLaw=true)")
 
         # final endpoint and print control to see it correct
         cql_filter = urllib.parse.quote(" AND ".join(all_filters)) if all_filters else ""
@@ -167,7 +209,7 @@ def from_wfs(self):
         # error if not show anything in attribute table
         if not selected_attributes:
             self.iface.messageBar().pushMessage(
-                "Error", "Please select at least one attribute.", level=3
+                "Warning", "Please select at least one attribute.", level=1
             )
             return
 
@@ -180,7 +222,7 @@ def from_wfs(self):
         selected_nbrPoints = self.wfsS.maxNbr_WFS.text()
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
-                "Error", "Please input a positive numerical value.", level=3
+                "Warning", "Please input a positive numerical value.", level=1
             )
             return
 
@@ -202,10 +244,10 @@ def from_wfs(self):
 
             response = requests.get(endpoint)
 
-            # if not can fetch data
+            # If unable to fetch data
             if response.status_code != 200:
                 self.iface.messageBar().pushMessage(
-                    "Error", f"Failed to retrieve data: HTTP {response.status_code}", level=3
+                    "Error", f"Failed to retrieve data: HTTP {response.status_code}", level=2
                 )
                 return
 
@@ -213,6 +255,9 @@ def from_wfs(self):
             features = data.get("features", [])
 
             if not features:
+                self.iface.messageBar().pushMessage(
+                    "Warning", "No data returned.", level=1
+                )
                 return
 
             total_features.extend(features)
@@ -262,39 +307,14 @@ def from_wfs(self):
 
         # Notify the user of success
         self.iface.messageBar().pushMessage(
-            "Success", "WFS data loaded successfully as points.", level=1
+            "Success", "WFS data loaded successfully as points.", level=3
         )
 
     # Exception block
     except Exception as e:
         self.iface.messageBar().pushMessage(
-            "Error", f"Failed to load data: {str(e)}", level=3
+            "Error", f"Failed to load data: {str(e)}", level=2
         )
-
-# function to convert WKT coordinates from long/lat to lat/long
-def swap_coordinates(geometry):
-    if geometry.geom_type == 'Polygon':
-        # Handle Polygon object
-        new_shell = [(y, x) for x, y in geometry.exterior.coords]
-        new_holes = [
-            [(y, x) for x, y in ring.coords]
-            for ring in geometry.interiors
-        ]
-        return Polygon(new_shell, new_holes)
-
-    elif geometry.geom_type == 'MultiPolygon':
-        # Handle MultiPolygon object
-        new_polygons = []
-        for polygon in geometry.geoms:
-            new_shell = [(y, x) for x, y in polygon.exterior.coords]
-            new_holes = [
-                [(y, x) for x, y in ring.coords]
-                for ring in polygon.interiors
-            ]
-            new_polygons.append(Polygon(new_shell, new_holes))
-        return MultiPolygon(new_polygons)
-    else:
-        raise ValueError("Only polygons and Multipolygons supported")
 
 
 # loading data for species API
@@ -309,14 +329,14 @@ def to_map_art(self):
         print(f"Selected scientific names: {selected_scientific_names}")
 
         # if several added these are change for the API to work correctly
-        scientific_names = [name.strip() for name in selected_scientific_names.split(",") if name.strip()]
+        scientific_names = clean_blanks(selected_scientific_names)
 
         # read nbr of point wanting + error if this is not working as INT
         selected_nbrPoints = self.art.maxNbr_art.text()
 
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
-                "Error", "Please input a positive numerical value.", level=3
+                "Warning", "Please input a positive numerical value.", level=1
             )
             return
 
@@ -334,12 +354,11 @@ def to_map_art(self):
                 datetime.strptime(endEventDate, "%Y-%m-%d")
             except ValueError:
                 self.iface.messageBar().pushMessage(
-                    "Error", "Invalid date format."
+                    "Warning", "Invalid date format.", level=1
                 )
 
         # basic endpoint if nothing more added
         endpoint = ""
-
 
         # To handle requests with more than 1000 takes
         # Initialize variables
@@ -366,7 +385,7 @@ def to_map_art(self):
                 data = self.api_client_art.fetch_data(endpoint=endpoint, params=params_art)
             except Exception as fetch_error:
                 self.iface.messageBar().pushMessage(
-                    "Error", f"Failed to fetch data: {str(fetch_error)}", level=3
+                    "Error", f"Failed to fetch data: {str(fetch_error)}", level=2
                 )
                 return
 
@@ -391,7 +410,7 @@ def to_map_art(self):
         # Check if any data was retrieved
         if not all_data:
             self.iface.messageBar().pushMessage(
-                "Error", "No data returned from the API.", level=3
+                "Warning", "No data returned from the API.", level=1
             )
             return
 
@@ -410,7 +429,7 @@ def to_map_art(self):
         # error so no empty attribute table
         if not selected_attributes:
             self.iface.messageBar().pushMessage(
-                "Error", "Please select at least one attribute.", level=3
+                "Warning", "Please select at least one attribute.", level=1
             )
             return
 
@@ -466,11 +485,11 @@ def to_map_art(self):
 
         # Notify the user of success
         self.iface.messageBar().pushMessage(
-            "Success", "Data loaded successfully as points.", level=1
+            "Success", "Data loaded successfully as points.", level=3
         )
     except Exception as e:
         self.iface.messageBar().pushMessage(
-            "Error", f"Failed to load data: {str(e)}", level=3
+            "Error", f"Failed to load data: {str(e)}", level=2
         )
         print(f"Error: {str(e)}")
 
@@ -486,7 +505,7 @@ def to_map_area(self):
         # Ensure selected_area_types is not empty
         if not selected_area_types:
             self.iface.messageBar().pushMessage(
-                "Error", "Please select at least one area type.", level=3
+                "Error", "Please select at least one area type.", level=2
             )
             return
 
@@ -530,13 +549,11 @@ def to_map_area(self):
 
         if not selected_nbrPoints.isnumeric() or int(selected_nbrPoints) <= 0:
             self.iface.messageBar().pushMessage(
-                "Error", "Please input a positive numerical value.", level=3
+                "Warning", "Please input a positive numerical value.", level=1
             )
             return
 
-
         nbr_points = int(selected_nbrPoints)
-
 
         # Check limits for each selected area type
         # Calculate the total maximum points across selected area types
@@ -579,7 +596,7 @@ def to_map_area(self):
         if not data or "records" not in data:
             print(f"API Response Error: {data}")
             self.iface.messageBar().pushMessage(
-                "Error", "Invalid or empty response from the API.", level=3
+                "Warning", "Invalid or empty response from the API.", level=1
             )
             return
 
@@ -619,10 +636,10 @@ def to_map_area(self):
 
         layer.updateExtents()
         QgsProject.instance().addMapLayer(layer)
-        self.iface.messageBar().pushMessage("Success", "Data loaded successfully as points.", level=1)
+        self.iface.messageBar().pushMessage("Success", "Data loaded successfully as points.", level=3)
 
     except Exception as e:
         self.iface.messageBar().pushMessage(
-            "Error", f"Failed to load data: {str(e)}", level=3
+            "Error", f"Failed to load data: {str(e)}", level=2
         )
         print("Error:", str(e))

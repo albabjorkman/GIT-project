@@ -25,7 +25,16 @@
 import os
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
-from PyQt5.QtWidgets import QDialog, QCheckBox
+from PyQt5.QtWidgets import (
+    QDialog,
+    QDateEdit,
+    QRadioButton,
+    QComboBox,
+    QLabel,
+    QLineEdit,
+QCheckBox,
+QButtonGroup
+)
 from qgis.core import QgsProject, QgsWkbTypes, QgsVectorLayer
 from PyQt5.QtCore import QDate
 
@@ -128,6 +137,23 @@ class WFSSearchDialog(QtWidgets.QDialog, WFS_SEARCH):
         self.startDate.setDate(QDate(1900, 1, 1))
         self.endDate.setDate(QDate.currentDate())
         self.maxNbr_WFS.setText("10")
+
+        self.protected_by_law_group = QButtonGroup(self)
+        self.protected_by_law_group.addButton(self.isProtectedByLaw)
+        self.protected_by_law_group.addButton(self.isProtectedByLaw_no)
+
+        self.redListed_group = QButtonGroup(self)
+        self.redListed_group.addButton(self.isRedlisted)
+        self.redListed_group.addButton(self.isRedlisted_no)
+
+        self.combined_group = QButtonGroup(self)
+        self.combined_group.addButton(self.OR)
+        self.combined_group.addButton(self.AND)
+
+        # Set default radio button states
+        self.OR.setChecked(True)
+        self.isProtectedByLaw_no.setChecked(True)
+        self.isRedlisted_no.setChecked(True)
 
         # Populate polygon layer combo box
         self.polygonLayerComboBox.addItem("No polygon")
