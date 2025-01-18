@@ -505,7 +505,7 @@ def to_map_area(self):
         # Ensure selected_area_types is not empty
         if not selected_area_types:
             self.iface.messageBar().pushMessage(
-                "Error", "Please select at least one area type.", level=2
+                "Error", "Please select at least one area type.", level=1
             )
             return
 

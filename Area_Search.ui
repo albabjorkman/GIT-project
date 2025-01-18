@@ -140,6 +140,12 @@
    <property name="text">
     <string>Select attributes: </string>
    </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 12px;
+      font-family: "Arial";
+    </string>
+  </property>
   </widget>
 
   <!-- Checkboxes for the attributes -->
@@ -155,6 +161,12 @@
    <property name="text">
     <string>areaType</string>
    </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 12px;
+      font-family: "Arial";
+    </string>
+  </property>
   </widget>
   <widget class="QCheckBox" name="name">
    <property name="geometry">
@@ -168,6 +180,12 @@
    <property name="text">
     <string>name</string>
    </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 12px;
+      font-family: "Arial";
+    </string>
+  </property>
   </widget>
   <widget class="QCheckBox" name="featureId">
    <property name="geometry">
@@ -181,6 +199,12 @@
    <property name="text">
     <string>featureId</string>
    </property>
+   <property name="styleSheet">
+    <string>
+      font-size: 12px;
+      font-family: "Arial";
+    </string>
+  </property>
   </widget>
 
   <widget class="QLabel" name="Select_2">

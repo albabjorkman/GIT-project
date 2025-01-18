@@ -20,7 +20,7 @@
   <property name="geometry">
    <rect>
     <x>30</x>
-    <y>30</y>
+    <y>20</y>
     <width>420</width>
     <height>40</height>
    </rect>
@@ -32,7 +32,8 @@
    <string>
      font-size: 18px; 
      font-family: "Arial"; 
-     color: #0000FF; 
+     color: #006B3C;
+       font-weight:bold;
    </string>
   </property>
  </widget>
@@ -50,7 +51,7 @@
   <property name="text">
    <string>
 	&lt;html&gt;&lt;body style="line-height: 1.2;"&gt;
-    Constructed by Matilda Bengtsson, Alba Björkman and Albin Röcklinger at LTH, here you&lt;br/&gt;
+    Constructed by Matilda Bengtsson, Alba Björkman and Albin Röcklinger at LTH, &lt;br/&gt;here you
 	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt; 
 	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt;
       Points are loaded in the WGS84 coordinate system. &lt;br/&gt;
@@ -69,7 +70,7 @@
  </widget>
  
   <!-- Checkbox for area -->
-  <widget class="QCheckBox" name="form_class">
+  <widget class="QRadioButton" name="form_class">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -112,7 +113,7 @@
    </widget>
 
   <!-- checkbox for species -->
-  <widget class="QCheckBox" name="art_info">
+  <widget class="QRadioButton" name="art_info">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -155,7 +156,7 @@
    </widget>
 
   <!-- checkbox for WFS -->
-  <widget class="QCheckBox" name="WFS_info">
+  <widget class="QRadioButton" name="WFS_info">
    <property name="geometry">
     <rect>
      <x>30</x>

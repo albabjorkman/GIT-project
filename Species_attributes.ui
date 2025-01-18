@@ -42,16 +42,17 @@
  <widget class="QLabel" name="desc_art">
   <property name="geometry">
    <rect>
-    <x>50</x>
+    <x>40</x>
     <y>50</y>
-    <width>350</width>
+    <width>450</width>
     <height>40</height>
    </rect>
   </property>
   <property name="text">
    <string>
    For additional info about the different attributes, please visit:&lt;br/&gt;
-   https://api-portal.artdatabanken.se/api-details#api=sos-api-v1
+   https://api-portal.artdatabanken.se/api-details#api=sos-api-v1&amp;&lt;br/&gt;
+    operation=Observations_ObservationsBySearchDwc
    </string>
   </property>
      <property name="styleSheet">
@@ -79,6 +80,7 @@
     <string>
       font-size: 12px;
       font-family: "Arial";
+     font-weight: bold;
     </string>
   </property>
   </widget>
