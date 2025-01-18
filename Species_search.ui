@@ -311,7 +311,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>(If NOT checked LESS points than max can appear)</string>
+    <string>(LESS points than max can appear if NO)</string>
    </property>
    <property name="styleSheet">
     <string>
