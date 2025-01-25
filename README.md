@@ -1,6 +1,8 @@
 # Artdatabanken QGIS Plugin ReadMe
 Unofficial plugin for extracting data from the Swedish Artdatabankens database.\
-Created by **Matilda Bengtsson, Alba Björkman and Albin Röcklinger**, in the course EXTP40 - GIT Project with Python Programming, at Lund University in 2024/2025.
+Created by **Matilda Bengtsson, Alba Björkman and Albin Röcklinger**, in the course EXTP40 - GIT Project with Python Programming, at Lund University in 2024/2025. <br>
+
+The license  is under the terms of the GNU General Public License (GPL), either version 2 of the License or any later version if the user wishes. The program is free software that can be redistributed and/or modified. GPL requires the source code to be available to anyone who receives the software, this ensures transparency and allows others to improve the program.
 
 ## Introduction 
 Geospatial data analysis is essential for biodiversity and used for urban planning, and today this is not included in a good way to QGIS which is a way to visualize solutions and spatial information. The integration of the Swedish Artdatabankens, which provides species observations, datasets and a program like QGIS will make this process easiest for  municipalities or other institutions. The aim of this project was to integrate parts of SLU's Artdatabanken into the open source GIS tool QGIS. <br> 
