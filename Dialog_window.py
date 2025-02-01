@@ -90,7 +90,7 @@ class FirstPopupDialog(QtWidgets.QDialog, FIRST_POP):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-
+        self.form_class.setChecked(True)
 
 # class for Species first page for options
 class ArtTypeDialog(QtWidgets.QDialog, SPECIES_TYPE):

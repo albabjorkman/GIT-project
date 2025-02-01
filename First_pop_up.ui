@@ -80,7 +80,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Areas_GetAreas</string>
+    <string>Area request</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -102,7 +102,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>(API GET request, regions)</string>
+     <string> </string>
     </property>
 	<property name="styleSheet">
     <string>
@@ -123,7 +123,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Obs_ObservationsBySearchDwc</string>
+    <string>Species observations request</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -145,7 +145,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>(API GET request, species observations)</string>
+     <string> </string>
     </property>
 	<property name="styleSheet">
     <string>
@@ -161,12 +161,12 @@
     <rect>
      <x>30</x>
      <y>260</y>
-     <width>200</width>
+     <width>400</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>OGC WFS</string>
+    <string>Species observations request by polygon</string>
    </property>
    <property name="styleSheet">
     <string>
@@ -177,7 +177,7 @@
   </property>
   </widget>
   
-  <!-- Description for WFS-->
+  <!-- Description for WFS
   <widget class="QLabel" name="desc_WFS">
     <property name="geometry">
      <rect>
@@ -188,7 +188,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>(Using geoserver, species observations)</string>
+     <string> </string>
     </property>
 	<property name="styleSheet">
     <string>
@@ -196,7 +196,7 @@
       font-family: "Arial";
     </string>
   </property>
-   </widget>
+   </widget>-->
 
   <!-- Load buttom -->
   <widget class="QPushButton" name="loadDataButton">

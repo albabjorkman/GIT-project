@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Attributes for Observations_ObservationsBySearchDwc</string>
+   <string>Attributes for Species observations request</string>
   </property>
 
  <!-- Title label -->
@@ -21,13 +21,13 @@
     <property name="geometry">
      <rect>
       <x>30</x>´
-      <y>30</y>
+      <y>20</y>
       <width>400</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string> Attributes for Observations_ObservationsBySearchDwc </string>
+     <string> Attributes for Species observations request</string>
     </property>
 	<property name="styleSheet">
     <string>

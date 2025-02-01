@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>OGC WFS</string>
+   <string>Attributes for Species observations request by polygon </string>
   </property>
 
    <!-- Title label -->
@@ -20,13 +20,13 @@
     <property name="geometry">
      <rect>
       <x>30</x>´
-      <y>30</y>
+      <y>20</y>
       <width>400</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Attributes for OGC WFS </string>
+     <string>Attributes for Species observations request by polygon </string>
     </property>
 	<property name="styleSheet">
     <string>
