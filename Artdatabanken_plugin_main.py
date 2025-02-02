@@ -258,7 +258,7 @@ class Artdatabanken:
 
     # options for area types and the loading options
     def populate_area_types(self):
-        area_types_data = ["","Municipality", "Community", "Sea", "CountryRegion", "NatureType",
+        area_types_data = ["Municipality", "Community", "Sea", "CountryRegion", "NatureType",
             "Province", "Ramsar", "BirdValidationArea", "Parish", "Spa",
             "County", "ProtectedNature", "SwedishForestAgencyDistricts",
             "Sci", "WaterArea", "SfvDistricts", "Campus"
