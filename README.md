@@ -81,9 +81,9 @@ Link on dialog window is:
 
 ## Exemples in QGIS
 Below some examples will be shown how the points get presented in QGIS <br>
-<img src="Git_pictures/Exemple image.png.png" alt="WFS attributes" width="400"/> <br>
-<img src="Git_pictures/Area_attribute_table.png" alt="WFS attributes" width="400"/> <br>
-<img src="Git_pictures/Attribute_species_picture.png" alt="WFS attributes" width="400"/> <br>
-<img src="Git_pictures/Exemple attributes.png" alt="WFS attributes" width="400"/> <br>
+<img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="400"/> <br>
+<img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
+<img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="400"/> <br>
+<img src="Git_pictures/Exemple attributes.png" alt="WFS table" width="400"/> <br>
 
 
