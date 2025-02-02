@@ -81,9 +81,9 @@ WFS window can be accessed through the initial selection window by selecting OGC
 **Item 1**: Optional input text box that allows for selection of observations of one or more species by their scientific names, example inputs being “vulpes vulpes” or “corvus corvus”. <br>
 **Item 2**: Optional selection of which separation logic scientific and vernacular names should be parsed by.	 **AND** requires any observations to contain any input vernacular names and scientific names.  **OR** requires any observations to contain either any input vernacular names or scientific names. Default value is **AND**. <br>
 **Item 3**: Optional input text box that allows for selection of observations of one or more species by their vernacular names in Swedish, example inputs being “räv” or “kråka”.  <br>
-**Item 4**: Radio button to select if filter on attribute **is red listed**
-**Item 5**: Radio button to select if filter on attribute **is protected by law**
-**Item 6**: Optional selection of one or more localities, municipalities, counties or provinces of and add the same for the searches in the text input.
+**Item 4**: Radio button to select if filter on attribute **is red listed** <br>
+**Item 5**: Radio button to select if filter on attribute **is protected by law** <br>
+**Item 6**: Optional selection of one or more localities, municipalities, counties or provinces of and add the same for the searches in the text input. <br>
 **Item 7**: Optional selection of a QGIS polygon layer that limits observations that **INTERSECT**S the geographical area.  <br>
 **Item 8**: Desired date-range interval which limits output to the ones that were input during the time span. <br>
 **Item 9**: Input text box for maximum amount of desired observations. <br>
