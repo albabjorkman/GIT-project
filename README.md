@@ -91,7 +91,7 @@ WFS window can be accessed through the initial selection window by selecting OGC
 
 When **Next** button is clicked the attributes selection will open. Attributes selected will be the ones contained in each observation point that is loaded after **Load data** is pressed. <br>
 
-<img src="Git_pictures/WFS_attributes.png" alt="WFS attributes" width="400"/>
+<img src="Git_pictures/WFS_attributes.jpg" alt="WFS attributes" width="400"/>
 
 
 Link on dialog window is:
