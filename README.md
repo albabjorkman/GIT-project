@@ -9,9 +9,15 @@ The license  is under the terms of the GNU General Public License (GPL), either 
 Geospatial data analysis is essential for biodiversity and urban planning. Currently, QGIS does not effectively include this information in a way that is easy for use in the Swedish market. The integration of the Swedish Artdatabanken, which offers species observations and datasets, will simplify the process for municipalities and institutions. The aim of this project is to incorporate parts of SLU's Artdatabanken into the open-source GIS tool, QGIS. <br>
 
 The development of this was achieved through Python, tools like QGIS Plugin builder and QT designer alongside using API and WFS that Artdatabanken provided. The results gave the user the possibility to retrieve information about observations and areas in Sweden with options of what type of attributes, searches and filtering on areas with the help of polygon layers. 
+
+### Work process
+The general work flow is presented below <br>
+<img src="Git_pictures/General workflow.png" alt="Work process" width="400"/>
       
 # Plugin Structure
 The plugin consists of three different request which utilizes either APIs available at Artdatabanken, getAreas and ObservationsSearchByDwc, or the Species Observation System (SOS) WFS Service. <br>
+<img src="Git_pictures/Plugin_structure.png" alt="Plugin structure" width="400"/>
+
 ## Initial window
 The window includes a selection that can be made between three different types of output: regions, species observations and WFS. <br>
 <img src="Git_pictures/first_pop_up.png" alt="First dialog window" width="400"/>
@@ -23,7 +29,10 @@ Links on dialog window are:
 [WFS information GITHUB](https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md)
 
 ### Overall information about input
-The plugin allows for case-insensitive input, meaning capital letters don’t matter, and it supports letters like Å, Ä, and Ö. To search for multiple items, use a comma (,) between each species. Spelling is critical for accurate results, so ensure inputs are correct. The calendar works from 1752 onward, though Artdatabanken offers older data. By default, criteria are combined with an “AND” unless stated otherwise.
+The plugin allows for case-insensitive input, meaning capital letters don’t matter, and it supports letters like Å, Ä, and Ö. To search for multiple items, use a comma (,) between each species. Spelling is critical for accurate results, so ensure inputs are correct. The calendar works from 1752 onward, though Artdatabanken offers older data. By default, criteria are combined with an **OR** unless stated otherwise. <br>
+
+Overview of requests input and output: <br>
+<img src="Git_pictures/Request.png" alt="Requests" width="400"/>
 
 ## Areas request
 Output is in the form of points which show the locations of different area classifications in Sweden. <br>
@@ -37,7 +46,7 @@ Output is in the form of points which show the locations of different area class
 ### Area input and output
 A summary of the areas windows different elements, actions, input and output are showcased <br>
 
-<img src="Git_pictures/Table - Area.png" alt="Species request" width="400"/>
+<img src="Git_pictures/Table - Area.png" alt="Area request" width="400"/>
 
 ## Species Observations request
 The species observation dialog window which opens after selecting ObservationsBySearchDwc in the initial selection window. Output is in the form of points with data based on the criteria selected and the attributes chosen in the next step. <br>
@@ -92,7 +101,7 @@ Link on dialog window is:
 ### Species observations by polygon input and output
 A summary of the areas windows different elements, actions, input and output are showcased <br>
 
-<img src="Git_pictures/Table - WFS_1.png" alt="Species request" width="400"/>
+<img src="Git_pictures/Table - WFS_1.png" alt="WFS request" width="400"/>
 
 
 ## Exemples in QGIS
