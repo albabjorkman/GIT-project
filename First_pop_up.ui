@@ -19,9 +19,9 @@
  <widget class="QLabel" name="welcome_text">
   <property name="geometry">
    <rect>
-    <x>30</x>
+    <x>25</x>
     <y>20</y>
-    <width>420</width>
+    <width>450</width>
     <height>40</height>
    </rect>
   </property>
