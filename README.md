@@ -78,3 +78,12 @@ When **Next** button is clicked the attributes selection will open. Attributes s
 Link on dialog window is:
 <br>
 [Attribute information for WFS](https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md#fields)
+
+## Exemples in QGIS
+Below some examples will be shown how the points get presented in QGIS <br>
+<img src="Git_pictures/Exemple image.png.png" alt="WFS attributes" width="400"/> <br>
+<img src="Git_pictures/Area_attribute_table.png" alt="WFS attributes" width="400"/> <br>
+<img src="Git_pictures/Attribute_species_picture.png" alt="WFS attributes" width="400"/> <br>
+<img src="Git_pictures/Exemple attributes.png" alt="WFS attributes" width="400"/> <br>
+
+
