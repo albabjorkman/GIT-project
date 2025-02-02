@@ -41,10 +41,11 @@ The species observation dialog window which opens after selecting ObservationsBy
 
 **Item 1**: Multiple choice selection window where a user can select kingdoms, for all kingdoms select the empty box or none. <br>
 **Item 2**: Optional text box for searching for specific flora and fauna through their scientific name, for example “Vulpes Vulpes” is a potential input. <br>
-**Item 3**: Text box for amount of requested observations. <br>
-**Item 4**: Date range interval input criteria for including observations within a specific time span.  <br>
-**Item 5**: Checkbox to allow for output of several observations on the same coordinates, will not output more than one observation for each coordinate pair unless this is checked.  <br><br>
-When pressing the **Next** the attributes selection will open. **Select all** and **Clear all** will mark and unmark all the checkboxes, and at least one attribute needs to be marked. The attributes selected here will be the ones included in the observation points. **Load data** will start the request to the API, this can take some time depending on the amount of max points. 
+**Item 3**: Date range interval input criteria for including observations within a specific time span.  <br>
+**Item 4**: Text box for amount of requested observations. <br>
+**Item 5**: Radio button to allow for output of several observations on the same coordinates, will not output more than one observation for each coordinate pair unless this is yes.  <br><br>
+
+Pressing **Next** will open the attributes selection. **Select all** and **Clear all** will mark and unmark all the checkboxes, and at least one attribute needs to be marked. The attributes selected here will be the ones included in the observation points. **Load data** will start the request to the API, this can take some time depending on the amount of max points. 
 
 <img src="Git_pictures/Species_attributes.png" alt="Species attributes" width="400"/>
 
@@ -61,13 +62,15 @@ WFS window can be accessed through the initial selection window by selecting OGC
 **Item 1**: Optional input text box that allows for selection of observations of one or more species by their scientific names, example inputs being “vulpes vulpes” or “corvus corvus”. <br>
 **Item 2**: Optional selection of which separation logic scientific and vernacular names should be parsed by.	 **AND** requires any observations to contain any input vernacular names and scientific names.  **OR** requires any observations to contain either any input vernacular names or scientific names. Default value is **AND**. <br>
 **Item 3**: Optional input text box that allows for selection of observations of one or more species by their vernacular names in Swedish, example inputs being “räv” or “kråka”.  <br>
-**Item 4**: Optional selection of one or more localities, municipalities, counties or provinces of and add the same for the searches in the text input.
-**Item 5**: Optional selection of a QGIS polygon layer that limits observations that **INTERSECT**S the geographical area.  <br>
-**Item 6**: Input text box for maximum amount of desired observations. <br>
-**Item 7**: Desired date-range interval which limits output to the ones that were input during the time span. <br>
-**Item 8**: Optional checkbox that, if checked, shows observations made at the same coordinates. If unchecked, any duplicate observations with the same coordinates are hidden and the amount of points can be less than the maximum number of observations.  <br> <br> 
+**Item 4**: Radio button to select if filter on attribute **is red listed**
+**Item 5**: Radio button to select if filter on attribute **is protected by law**
+**Item 6**: Optional selection of one or more localities, municipalities, counties or provinces of and add the same for the searches in the text input.
+**Item 7**: Optional selection of a QGIS polygon layer that limits observations that **INTERSECT**S the geographical area.  <br>
+**Item 8**: Desired date-range interval which limits output to the ones that were input during the time span. <br>
+**Item 9**: Input text box for maximum amount of desired observations. <br>
+**Item 10**: Radio button to allow for output of several observations on the same coordinates, will not output more than one observation for each coordinate pair unless this is yes  <br> <br> 
 
-When all desired criterias are inputed and the **Next** button is clicked the attributes selection will open. Attributes selected will be the ones contained in each observation point that is loaded after **Load data** is pressed. <br>
+When **Next** button is clicked the attributes selection will open. Attributes selected will be the ones contained in each observation point that is loaded after **Load data** is pressed. <br>
 
 <img src="Git_pictures/WFS_attributes.png" alt="WFS attributes" width="400"/>
 
