@@ -32,7 +32,12 @@ Output is in the form of points which show the locations of different area class
 **Item 1**: Selection window, the different area types created by Artdatabanken can be found here. More than one option can be chosen and for all area types, choose the empty box on the first row.  <br>
 **Item 2**: Input box for the amount of observations the user wants output.   <br>
 **Item 3**: Checkboxes for specifying which attributes the user wants the point objects to contain.  <br>
-**Item 4**: Select/Clear all buttons, selects or clears all attribute checkboxes in **Item 3**. At least one checkbox needs to be marked.
+**Item 4**: Select/Clear all buttons, selects or clears all attribute checkboxes in **Item 3**. At least one checkbox needs to be marked. <br> <br>
+
+### Area input and output
+A summary of the areas windows different elements, actions, input and output are showcased <br>
+
+<img src="Git_pictures/Table - Area.png" alt="Species request" width="400"/>
 
 ## Species Observations request
 The species observation dialog window which opens after selecting ObservationsBySearchDwc in the initial selection window. Output is in the form of points with data based on the criteria selected and the attributes chosen in the next step. <br>
@@ -52,6 +57,12 @@ Pressing **Next** will open the attributes selection. **Select all** and **Clear
 Link on dialog window is:
 <br>
 [Attribute information for Observations](https://api-portal.artdatabanken.se/api-details#api=sos-api-v1&operation=Observations_ObservationsBySearchDwc)
+
+### Species observations input and output
+A summary of the areas windows different elements, actions, input and output are showcased <br>
+
+<img src="Git_pictures/Table - Species_1.png" alt="Species request" width="400"/>
+
 
 ## Species observation request by polygon
 WFS window can be accessed through the initial selection window by selecting OGC WFS. WFS and Observations requests are similar in nature, but WFS allows for input of multipolygons objects as a filter. For this to work it is necessary to first add a new polygon layer in QGIS. 
@@ -77,6 +88,12 @@ When **Next** button is clicked the attributes selection will open. Attributes s
 Link on dialog window is:
 <br>
 [Attribute information for WFS](https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md#fields)
+
+### Species observations by polygon input and output
+A summary of the areas windows different elements, actions, input and output are showcased <br>
+
+<img src="Git_pictures/Table - WFS_1.png" alt="Species request" width="400"/>
+
 
 ## Exemples in QGIS
 Below some examples will be shown how the points get presented in QGIS <br>
