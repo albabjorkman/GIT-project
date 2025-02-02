@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>(Unofficial) Artdatabankens plugin</string>
+   <string>An (Unofficial) Artdatabankens plugin</string>
   </property>
 
  <!-- Welcome label -->
@@ -26,7 +26,7 @@
    </rect>
   </property>
   <property name="text">
-   <string>Welcome to the (unofficial) Artdatabankens plugin! </string>
+   <string>Welcome to an (unofficial) Artdatabankens plugin! </string>
   </property>
      <property name="styleSheet">
    <string>
@@ -52,9 +52,8 @@
    <string>
 	&lt;html&gt;&lt;body style="line-height: 1.2;"&gt;
     Constructed by Matilda Bengtsson, Alba Björkman and Albin Röcklinger at 
-    &lt;br/&gt; Lunds Tekniska Högskola, Sweden
-    &lt;br/&gt;Here you
-	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt; 
+    &lt;br/&gt; LTH, Faculty of engineering, part of Lund University, Sweden.&lt;br/&gt;
+ Here you can search for data directly from SLU's Artdatabanken Species &lt;br/&gt;
 	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt;
       Points are loaded in the WGS84 coordinate system. &lt;br/&gt;
 	For more information, please visit the following links: &lt;br/&gt; 
