@@ -53,8 +53,7 @@ Link on dialog window is:
 <br>
 [Attribute information for Observations](https://api-portal.artdatabanken.se/api-details#api=sos-api-v1&operation=Observations_ObservationsBySearchDwc)
 
-## WFS request
-
+## Species observation request by polygon
 WFS window can be accessed through the initial selection window by selecting OGC WFS. WFS and Observations requests are similar in nature, but WFS allows for input of multipolygons objects as a filter. For this to work it is necessary to first add a new polygon layer in QGIS. 
 
 <img src="Git_pictures/WFS_search.png" alt="WFS search" width="400"/>
@@ -82,8 +81,11 @@ Link on dialog window is:
 ## Exemples in QGIS
 Below some examples will be shown how the points get presented in QGIS <br>
 <img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="600"/> <br>
+Attributes area request <br>
 <img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
+Attributes species observation request <br>
 <img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="600"/> <br>
+Attributes species observation request by polygon<br>
 <img src="Git_pictures/Exemple attributes.png" alt="WFS table" width="600"/> <br>
 
 
