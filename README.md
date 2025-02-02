@@ -105,7 +105,7 @@ A summary of the areas windows different elements, actions, input and output are
 
 
 ## Exemples in QGIS
-Below some examples will be shown how the points get presented in QGIS <br>
+Below some examples will be shown how the points get presented in QGIS. For species observation by polygon, the polygon below is as a filter. For the two requests other no filter is used. <br>
 <img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="600"/> <br>
 Attributes for area request <br>
 <img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
