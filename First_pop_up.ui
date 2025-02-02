@@ -26,7 +26,7 @@
    </rect>
   </property>
   <property name="text">
-   <string>Welcome to an (unofficial) Artdatabankens plugin! </string>
+   <string>Welcome to an (unofficial) Artdatabankens plugin </string>
   </property>
      <property name="styleSheet">
    <string>
