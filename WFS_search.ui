@@ -218,7 +218,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>IsRedlisted:</string>
+    <string>Redlisted:</string>
    </property>
    <property name="styleSheet">
     <string>
