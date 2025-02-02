@@ -461,26 +461,11 @@
    </property>
   </widget>
 
-  <!-- Checkbox, scientificNameAuthorship-->
-  <widget class="QCheckBox" name="scientificNameAuthorship">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>240</y>
-     <width>150</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>scientificNameAuthorship</string>
-   </property>
-  </widget>
-
   <!-- Checkbox, isNeverFoundObservation-->
   <widget class="QCheckBox" name="isNeverFoundObservation">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>150</x>
      <y>240</y>
      <width>150</width>
      <height>20</height>
