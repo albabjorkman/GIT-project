@@ -81,11 +81,11 @@ Link on dialog window is:
 ## Exemples in QGIS
 Below some examples will be shown how the points get presented in QGIS <br>
 <img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="600"/> <br>
-Attributes area request <br>
+Attributes for area request <br>
 <img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
-Attributes species observation request <br>
+Attributes for species observation request <br>
 <img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="600"/> <br>
-Attributes species observation request by polygon<br>
+Attributes for species observation request by polygon<br>
 <img src="Git_pictures/Exemple attributes.png" alt="WFS table" width="600"/> <br>
 
 
