@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Artdatabanken plugin</string>
+   <string>(Unofficial) Artdatabankens plugin</string>
   </property>
 
  <!-- Welcome label -->
@@ -26,7 +26,7 @@
    </rect>
   </property>
   <property name="text">
-   <string>Welcome to the (unofficial) Artdatabanken plugin! </string>
+   <string>Welcome to the (unofficial) Artdatabankens plugin! </string>
   </property>
      <property name="styleSheet">
    <string>
@@ -52,7 +52,7 @@
    <string>
 	&lt;html&gt;&lt;body style="line-height: 1.2;"&gt;
     Constructed by Matilda Bengtsson, Alba Björkman and Albin Röcklinger at 
-    &lt;br/&gt; Lunds Tekniska Högskola, a part of Lund University, Sweden 
+    &lt;br/&gt; Lunds Tekniska Högskola, Sweden
     &lt;br/&gt;Here you
 	can search for data directly from SLU's Artdatabanken Species &lt;br/&gt; 
 	Observation System API (Public) &amp; their Web Feature Service (WFS).&lt;br/&gt;
