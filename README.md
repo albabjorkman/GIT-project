@@ -2,6 +2,9 @@
 Unofficial plugin for extracting data from the Swedish Artdatabankens database.\
 Created by **Matilda Bengtsson, Alba Björkman and Albin Röcklinger**, in the course EXTP40 - GIT Project with Python Programming, at Lund University in 2024/2025. <br>
 
+## How to install 
+Here is a guide to a link how to install the plug-in in QGIS [LINK](https://www.ncesc.com/geographic-faq/how-do-i-manually-install-a-qgis-plugin/) <br>
+
 ## License
 The license  is under the terms of the GNU General Public License (GPL), either version 2 of the License or any later version if the user wishes. The program is free software that can be redistributed and/or modified. GPL requires the source code to be available to anyone who receives the software, this ensures transparency and allows others to improve the program.
 
