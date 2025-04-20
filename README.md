@@ -31,10 +31,6 @@ When **Next** button is clicked the attributes selection will open. Attributes s
 
 Attributes for species observation request by polygon<br>
 <img src="Git_pictures/Exemple attributes.png" alt="WFS table" width="600"/> <br>
-
-### Work process
-The general work flow is presented below <br>
-<img src="Git_pictures/General workflow.png" alt="Work process" width="400"/>
       
 # Plugin Structure
 The plugin consists of three different request which utilizes either APIs available at Artdatabanken, getAreas and ObservationsSearchByDwc, or the Species Observation System (SOS) WFS Service. <br>
@@ -129,6 +125,10 @@ Attributes for area request <br>
 <img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
 Attributes for species observation request <br>
 <img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="600"/> <br>
+
+### Work process
+The general work flow is presented below <br>
+<img src="Git_pictures/General workflow.png" alt="Work process" width="400"/>
 
 ## License
 The license  is under the terms of the GNU General Public License (GPL), either version 2 of the License or any later version if the user wishes. The program is free software that can be redistributed and/or modified. GPL requires the source code to be available to anyone who receives the software, this ensures transparency and allows others to improve the program.
