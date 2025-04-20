@@ -2,16 +2,23 @@
 Unofficial plugin for extracting data from the Swedish Artdatabankens database.\
 Created by **Matilda Bengtsson, Alba Björkman and Albin Röcklinger**, in the course EXTP40 - GIT Project with Python Programming, at Lund University in 2024/2025. <br>
 
-## How to install 
+### How to install 
 Here is a guide how to install the plug-in in [QGIS](https://www.ncesc.com/geographic-faq/how-do-i-manually-install-a-qgis-plugin/) <br>
-
-## License
-The license  is under the terms of the GNU General Public License (GPL), either version 2 of the License or any later version if the user wishes. The program is free software that can be redistributed and/or modified. GPL requires the source code to be available to anyone who receives the software, this ensures transparency and allows others to improve the program.
 
 ## Introduction 
 Geospatial data analysis is essential for biodiversity and urban planning. Currently, QGIS does not effectively include this information in a way that is easy for use in the Swedish market. The integration of the Swedish Artdatabanken, which offers species observations and datasets, will simplify the process for municipalities and institutions. The aim of this project is to incorporate parts of SLU's Artdatabanken into the open-source GIS tool, QGIS. <br>
 
 The development of this was achieved through Python, tools like QGIS Plugin builder and QT designer alongside using API and WFS that Artdatabanken provided. The results gave the user the possibility to retrieve information about observations and areas in Sweden with options of what type of attributes, searches and filtering on areas with the help of polygon layers. 
+
+## Exemples in QGIS
+Below some examples will be shown how the points get presented in QGIS. For species observation by polygon, the polygon below is as a filter. For the two requests other no filter is used. <br>
+<img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="600"/> <br>
+Attributes for area request <br>
+<img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
+Attributes for species observation request <br>
+<img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="600"/> <br>
+Attributes for species observation request by polygon<br>
+<img src="Git_pictures/Exemple attributes.png" alt="WFS table" width="600"/> <br>
 
 ### Work process
 The general work flow is presented below <br>
@@ -96,7 +103,6 @@ When **Next** button is clicked the attributes selection will open. Attributes s
 
 <img src="Git_pictures/WFS_attributes.jpg" alt="WFS attributes" width="400"/>
 
-
 Link on dialog window is:
 <br>
 [Attribute information for WFS](https://github.com/biodiversitydata-se/SOS/blob/master/Docs/WfsService.md#fields)
@@ -107,14 +113,5 @@ A summary of the areas windows different elements, actions, input and output are
 <img src="Git_pictures/Table - WFS_1.png" alt="WFS request" width="400"/>
 
 
-## Exemples in QGIS
-Below some examples will be shown how the points get presented in QGIS. For species observation by polygon, the polygon below is as a filter. For the two requests other no filter is used. <br>
-<img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="600"/> <br>
-Attributes for area request <br>
-<img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
-Attributes for species observation request <br>
-<img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="600"/> <br>
-Attributes for species observation request by polygon<br>
-<img src="Git_pictures/Exemple attributes.png" alt="WFS table" width="600"/> <br>
-
-
+## License
+The license  is under the terms of the GNU General Public License (GPL), either version 2 of the License or any later version if the user wishes. The program is free software that can be redistributed and/or modified. GPL requires the source code to be available to anyone who receives the software, this ensures transparency and allows others to improve the program.
