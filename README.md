@@ -25,7 +25,7 @@ Below some examples will be shown how the points get presented in QGIS. For spec
 **Item 7**: Optional selection of a QGIS polygon layer that limits observations that **INTERSECT**S the geographical area.  <br>
 **Item 8**: Desired date-range interval which limits output to the ones that were input during the time span. <br>
 **Item 9**: Input text box for maximum amount of desired observations. <br>
-**Item 10**: Radio button to allow for output of several observations on the same coordinates, will not output more than one observation for each coordinate pair unless this is yes  <br> <br> 
+**Item 10**: Radio button to allow for output of several observations on the same coordinates, will not output more than one observation for each coordinate pair unless this is yes  <br> 
 
 When **Next** button is clicked the attributes selection will open. Attributes selected will be the ones contained in each observation point that is loaded after **Load data** is pressed. <br>
 
