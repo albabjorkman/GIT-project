@@ -11,7 +11,7 @@ Geospatial data analysis is essential for biodiversity and urban planning. Curre
 The development of this was achieved through Python, tools like QGIS Plugin builder and QT designer alongside using API and WFS that Artdatabanken provided. The results gave the user the possibility to retrieve information about observations and areas in Sweden with options of what type of attributes, searches and filtering on areas with the help of polygon layers. 
 
 ## Exemples in QGIS
-Below some examples will be shown how the points get presented in QGIS. For species observation by polygon, the polygon below is as a filter. For the two requests other no filter is used. <br>
+Below some examples will be shown how the points get presented in QGIS. For species observation by polygon, the polygon below is as a filter. <br>
 <img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="600"/> <br>
 
 <img src="Git_pictures/WFS_search.png" alt="WFS search" width="400"/>
