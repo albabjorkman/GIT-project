@@ -13,10 +13,22 @@ The development of this was achieved through Python, tools like QGIS Plugin buil
 ## Exemples in QGIS
 Below some examples will be shown how the points get presented in QGIS. For species observation by polygon, the polygon below is as a filter. For the two requests other no filter is used. <br>
 <img src="Git_pictures/Exemple image.png" alt="Exemple Image" width="600"/> <br>
-Attributes for area request <br>
-<img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
-Attributes for species observation request <br>
-<img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="600"/> <br>
+
+<img src="Git_pictures/WFS_search.png" alt="WFS search" width="400"/>
+
+**Item 1**: Optional input text box that allows for selection of observations of one or more species by their scientific names, example inputs being “vulpes vulpes” or “corvus corvus”. <br>
+**Item 2**: Optional selection of which separation logic scientific and vernacular names should be parsed by.	 **AND** requires any observations to contain any input vernacular names and scientific names.  **OR** requires any observations to contain either any input vernacular names or scientific names. Default value is **AND**. <br>
+**Item 3**: Optional input text box that allows for selection of observations of one or more species by their vernacular names in Swedish, example inputs being “räv” or “kråka”.  <br>
+**Item 4**: Radio button to select if filter on attribute **is red listed** <br>
+**Item 5**: Radio button to select if filter on attribute **is protected by law** <br>
+**Item 6**: Optional selection of one or more localities, municipalities, counties or provinces of and add the same for the searches in the text input. <br>
+**Item 7**: Optional selection of a QGIS polygon layer that limits observations that **INTERSECT**S the geographical area.  <br>
+**Item 8**: Desired date-range interval which limits output to the ones that were input during the time span. <br>
+**Item 9**: Input text box for maximum amount of desired observations. <br>
+**Item 10**: Radio button to allow for output of several observations on the same coordinates, will not output more than one observation for each coordinate pair unless this is yes  <br> <br> 
+
+When **Next** button is clicked the attributes selection will open. Attributes selected will be the ones contained in each observation point that is loaded after **Load data** is pressed. <br>
+
 Attributes for species observation request by polygon<br>
 <img src="Git_pictures/Exemple attributes.png" alt="WFS table" width="600"/> <br>
 
@@ -112,6 +124,11 @@ A summary of the areas windows different elements, actions, input and output are
 
 <img src="Git_pictures/Table - WFS_1.png" alt="WFS request" width="400"/>
 
+## Output
+Attributes for area request <br>
+<img src="Git_pictures/Area_attribute_table.png" alt="Area table" width="400"/> <br>
+Attributes for species observation request <br>
+<img src="Git_pictures/Attribute_species_picture.png" alt="Species table" width="600"/> <br>
 
 ## License
 The license  is under the terms of the GNU General Public License (GPL), either version 2 of the License or any later version if the user wishes. The program is free software that can be redistributed and/or modified. GPL requires the source code to be available to anyone who receives the software, this ensures transparency and allows others to improve the program.
