@@ -1,4 +1,4 @@
-# Artdatabanken QGIS Plugin ReadMe
+# Artdatabanken QGIS Plugin
 Unofficial plugin for extracting data from the Swedish Artdatabankens database.\
 Created by **Matilda Bengtsson, Alba Björkman and Albin Röcklinger**, in the course EXTP40 - GIT Project with Python Programming, at Lund University in 2024/2025. <br>
 
